@@ -1,0 +1,20 @@
+{
+  "navigation": {
+    "leftSide": {
+      "title": "navigation",
+      "warehouses": "Warehouses",
+      "drinks": "Drinks",
+      "company": "Company",
+      "proformas": "Proforma"
+    },
+    "leftSidePage": {
+      "title": "navigation",
+      "warehouses": "Warehouses",
+      "drinks": "Drinks",
+      "company": "Company",
+      "profile": "Profile",
+      "proformas": "Proforma"
+    }
+  },
+  "welcome": "Welcome, {{name}}."
+}

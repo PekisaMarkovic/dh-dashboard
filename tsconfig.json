@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "es2015", "esnext"],
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["src"]
+}

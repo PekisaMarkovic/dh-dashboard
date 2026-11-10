@@ -1,0 +1,20 @@
+{
+  "info": {
+    "title": "Vaši podaci",
+    "subtitle": "Ime i e-pošta se ne menjaju. Ostala polja su opciona.",
+    "fields": {
+      "firstName": "Ime",
+      "firstNamePlh": "Unesite ime",
+      "lastName": "Prezime",
+      "lastNamePlh": "Unesite prezime",
+      "email": "E-pošta",
+      "emailPlh": "E-pošta",
+      "dateOfBirth": "Datum rođenja",
+      "dateOfBirthPlh": "Izaberite datum rođenja",
+      "phone": "Telefon",
+      "phonePlh": "Unesite telefon",
+      "language": "Jezik",
+      "languagePlh": "Izaberite jezik"
+    }
+  }
+}

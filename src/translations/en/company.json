@@ -1,0 +1,38 @@
+{
+  "info": {
+    "title": "Company",
+    "subtitle": "Basic company information.",
+    "name": "Name",
+    "created": "Created"
+  },
+  "users": {
+    "title": "Users",
+    "subtitle": "People that belong to this company.",
+    "name": "Name",
+    "email": "E-Mail",
+    "role": "Role",
+    "joined": "Joined",
+    "empty": "No users yet.",
+    "addEmployee": "Add employee"
+  },
+  "invite": {
+    "title": "Add employee",
+    "subtitle": "The person gets an email with a link to finish the registration.",
+    "email": "E-Mail",
+    "emailPlh": "Enter an e-mail..",
+    "button": "Send invite",
+    "sent": "Invite sent."
+  },
+  "invitations": {
+    "title": "Invitations",
+    "subtitle": "All invitations that were sent.",
+    "email": "E-Mail",
+    "status": "Status",
+    "sentAt": "Sent",
+    "expiresAt": "Expires",
+    "empty": "No invitations yet.",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "expired": "Expired"
+  }
+}

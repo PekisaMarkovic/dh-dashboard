@@ -1,0 +1,19 @@
+{
+  "title": "Prijavite se na svoj nalog",
+  "titleInvitation": "Završite registraciju",
+  "register": "Napravi nalog",
+  "invitation": {
+    "invalid": "Link za pozivnicu nije važeći ili je istekao. Zatražite novu pozivnicu."
+  },
+  "signIn": "Prijavi se",
+  "fields": {
+    "email": "E-pošta",
+    "emailPlh": "Unesite e-poštu..",
+    "firstName": "Ime",
+    "firstNamePlh": "Unesite ime..",
+    "lastName": "Prezime",
+    "lastNamePlh": "Unesite prezime..",
+    "password": "Lozinka",
+    "passwordPlh": "Unesite lozinku.."
+  }
+}

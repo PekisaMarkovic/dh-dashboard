@@ -1,0 +1,136 @@
+import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import CompanyApis from '@/src/api/companies'
+import InvitationApis from '@/src/api/invitations'
+import MainButton from '@/src/components/core/buttons/MainButton'
+import customToast from '@/src/components/core/toast/CustomToast'
+import Heading from '@/src/components/core/typography/Heading'
+import Paragraph from '@/src/components/core/typography/Paragraph'
+import ListPagination from '@/src/components/core/paggination/ListPagination'
+import { usePagedList } from '@/src/hooks/use-paged-list'
+import DataSection from '@/src/components/section/DataSection'
+import { useApi } from '@/src/hooks/use-api'
+import { ICompany, ICompanyUser, IInvitation } from '@/src/interfaces'
+import { ModalEnums } from '@/src/enum'
+import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
+import { openModal, selectModal } from '@/src/state/shared/modal'
+import { selectAuthUser } from '@/src/state/user/authSlice'
+import { getRoleTranslationKey } from '@/src/utils/roles'
+import { formatDate } from '@/src/utils/date'
+import { Color } from '@/src/interfaces'
+
+const STATUS_COLOR: Record<IInvitation['status'], Color> = { pending: 'orange', accepted: 'green', expired: 'red' }
+
+const Company = () => {
+  const { t } = useTranslation(['company', 'g'])
+  const api = useApi()
+  const dispatch = useAppDispatch()
+  const { user } = useAppSelector(selectAuthUser)
+  // bumped when the invite modal sent an invitation, so the tables reload
+  const { refreshKey } = useAppSelector(selectModal)
+  const companyId = user?.companyId
+  const [company, setCompany] = useState<ICompany | null>(null)
+  const [users, setUsers] = useState<ICompanyUser[]>([])
+  const [invitations, setInvitations] = useState<IInvitation[]>([])
+  const usersPage = usePagedList(users)
+  const invitationsPage = usePagedList(invitations)
+
+  const fetchInvitations = useCallback(async () => {
+    const { data } = await api.get<IInvitation[]>(InvitationApis.getInvitations())
+    setInvitations(data)
+  }, [])
+
+  const fetchData = useCallback(async () => {
+    if (!companyId) return
+
+    try {
+      const [companyRes, usersRes] = await Promise.all([
+        api.get<ICompany>(CompanyApis.getCompany(companyId)),
+        api.get<ICompanyUser[]>(CompanyApis.getCompanyUsers(companyId)),
+      ])
+      setCompany(companyRes.data)
+      setUsers(usersRes.data)
+      await fetchInvitations()
+    } catch {
+      customToast.error(t('g:errorMessage'))
+    }
+  }, [companyId])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData, refreshKey])
+
+  return (
+    <div className="pb-8">
+      <DataSection title={t('company:info.title')} subtitle={t('company:info.subtitle')}>
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Paragraph text={t('company:info.name')} size="sm" />
+            <Heading text={company?.name || ''} variant="3" size="base" color="black" />
+          </div>
+          <div>
+            <Paragraph text={t('company:info.created')} size="sm" />
+            <Heading text={company ? formatDate(company.createdAt) : ''} variant="3" size="base" color="black" />
+          </div>
+        </div>
+      </DataSection>
+
+      <DataSection
+        title={t('company:users.title')}
+        subtitle={t('company:users.subtitle')}
+        element={
+          <div className="mb-6">
+            <MainButton
+              text={t('company:users.addEmployee')}
+              variant="contained"
+              size="medium"
+              onClick={() => dispatch(openModal({ modal: ModalEnums.INVITE }))}
+            />
+          </div>
+        }
+      >
+        <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+          <div className="grid grid-cols-4">
+            <Heading text={t('company:users.name')} variant="2" size="sm" color="grey" weight="medium" />
+            <Heading text={t('company:users.email')} variant="2" size="sm" color="grey" weight="medium" />
+            <Heading text={t('company:users.role')} variant="2" size="sm" color="grey" weight="medium" />
+            <Heading text={t('company:users.joined')} variant="2" size="sm" color="grey" weight="medium" />
+          </div>
+        </div>
+        {usersPage.pageItems.map((u) => (
+          <div key={u.userId} className="grid grid-cols-4 px-4 py-3 border-b-1 border-b-light-grey-alt border-solid">
+            <Paragraph text={`${u.firstName} ${u.lastName}`} size="sm" color="black" />
+            <Paragraph text={u.email} size="sm" color="black" />
+            <Paragraph text={getRoleTranslationKey(u.roles) ? t(getRoleTranslationKey(u.roles)!) : ''} size="sm" color="black" />
+            <Paragraph text={formatDate(u.createdAt)} size="sm" color="black" />
+          </div>
+        ))}
+        {!users.length && <Paragraph text={t('company:users.empty')} size="sm" className="mt-3" />}
+        <ListPagination page={usersPage.page} totalPages={usersPage.totalPages} onPageChange={usersPage.setPage} />
+      </DataSection>
+
+      <DataSection title={t('company:invitations.title')} subtitle={t('company:invitations.subtitle')}>
+        <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+          <div className="grid grid-cols-4">
+            <Heading text={t('company:invitations.email')} variant="2" size="sm" color="grey" weight="medium" />
+            <Heading text={t('company:invitations.status')} variant="2" size="sm" color="grey" weight="medium" />
+            <Heading text={t('company:invitations.sentAt')} variant="2" size="sm" color="grey" weight="medium" />
+            <Heading text={t('company:invitations.expiresAt')} variant="2" size="sm" color="grey" weight="medium" />
+          </div>
+        </div>
+        {invitationsPage.pageItems.map((i) => (
+          <div key={i.invitationId} className="grid grid-cols-4 px-4 py-3 border-b-1 border-b-light-grey-alt border-solid">
+            <Paragraph text={i.email} size="sm" color="black" />
+            <Paragraph text={t(`company:invitations.${i.status}`)} size="sm" color={STATUS_COLOR[i.status]} />
+            <Paragraph text={formatDate(i.createdAt)} size="sm" color="black" />
+            <Paragraph text={formatDate(i.expiresAt)} size="sm" color="black" />
+          </div>
+        ))}
+        {!invitations.length && <Paragraph text={t('company:invitations.empty')} size="sm" className="mt-3" />}
+        <ListPagination page={invitationsPage.page} totalPages={invitationsPage.totalPages} onPageChange={invitationsPage.setPage} />
+      </DataSection>
+    </div>
+  )
+}
+
+export default Company

@@ -1,0 +1,19 @@
+{
+  "input": "Morate uneti {{field}}",
+  "custom": "{{field}}",
+  "select": "Morate izabrati {{field}}",
+  "upload": "Morate otpremiti {{field}}",
+  "fields": {
+    "password": "lozinku (najmanje 8 karaktera)",
+    "email": "ispravnu e-poštu",
+    "firstName": "ime",
+    "lastName": "prezime",
+    "name": "naziv",
+    "price": "cenu (broj, ne manje od 0)",
+    "quantity": "količinu (ceo broj, ne manje od 0)",
+    "phoneNumber": "broj telefona",
+    "dateOfBirth": "datum rođenja",
+    "warehouseId": "magacin",
+    "language": "jezik"
+  }
+}

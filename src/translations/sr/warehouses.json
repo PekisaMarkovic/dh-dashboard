@@ -1,0 +1,38 @@
+{
+  "empty": "Još nema magacina.",
+  "addWarehouse": "Dodaj magacin",
+  "addDrink": "Dodaj piće",
+  "noDrinks": "U ovom magacinu nema pića.",
+  "table": {
+    "name": "Naziv",
+    "price": "Cena",
+    "quantity": "Količina"
+  },
+  "totalValue": "Ukupna vrednost: {{value}}",
+  "warehouseModal": {
+    "addTitle": "Dodaj magacin",
+    "editTitle": "Izmeni magacin",
+    "name": "Naziv",
+    "namePlh": "Unesite naziv magacina.."
+  },
+  "drinkModal": {
+    "addTitle": "Dodaj piće",
+    "editTitle": "Izmeni piće",
+    "name": "Naziv",
+    "namePlh": "Unesite naziv pića..",
+    "price": "Cena",
+    "pricePlh": "npr. 2.50",
+    "quantity": "Količina",
+    "quantityPlh": "npr. 24",
+    "warehouse": "Magacin",
+    "warehousePlh": "Izaberite magacin"
+  },
+  "deleteWarehouseTitle": "Brisanje magacina",
+  "deleteWarehouseConfirm": "Da li ste sigurni da želite da obrišete magacin \"{{name}}\"? Ova radnja se ne može poništiti.",
+  "deleteDrinkTitle": "Brisanje pića",
+  "deleteDrinkConfirm": "Da li ste sigurni da želite da obrišete \"{{name}}\"?",
+  "notEmptyTitle": "Magacin nije prazan",
+  "notEmptyMessage_one": "U ovom magacinu je još {{count}} piće. Prvo ga obrišite, pa onda možete obrisati magacin.",
+  "notEmptyMessage_other": "U ovom magacinu ima još {{count}} pića. Prvo obrišite sva pića, pa onda možete obrisati magacin.",
+  "notEmptyMessage_few": "U ovom magacinu su još {{count}} pića. Prvo obrišite sva pića, pa onda možete obrisati magacin."
+}

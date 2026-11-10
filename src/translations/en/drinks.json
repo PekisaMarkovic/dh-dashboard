@@ -1,0 +1,15 @@
+{
+  "addDrink": "Add drink",
+  "empty": "No drinks found.",
+  "noWarehouses": "Create a warehouse first.",
+  "allWarehouses": "All warehouses",
+  "filterWarehouse": "Warehouse",
+  "search": "Search drinks..",
+  "table": {
+    "name": "Name",
+    "warehouse": "Warehouse",
+    "price": "Price",
+    "quantity": "Quantity"
+  },
+  "lowStock": "Out of stock"
+}

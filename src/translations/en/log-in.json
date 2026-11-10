@@ -1,0 +1,19 @@
+{
+  "title": "Sign in to your account",
+  "titleInvitation": "Complete your registration",
+  "register": "Create account",
+  "invitation": {
+    "invalid": "This invitation link is invalid or has expired. Please ask for a new invitation."
+  },
+  "signIn": "Sign in",
+  "fields": {
+    "email": "E-Mail",
+    "emailPlh": "Enter an e-mail..",
+    "firstName": "First name",
+    "firstNamePlh": "Enter an first name..",
+    "lastName": "Last name",
+    "lastNamePlh": "Enter an last name..",
+    "password": "Password",
+    "passwordPlh": "Enter an password.."
+  }
+}

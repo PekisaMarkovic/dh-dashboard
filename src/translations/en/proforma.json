@@ -1,0 +1,66 @@
+{
+  "builder": {
+    "warehouse": "Warehouse",
+    "warehousePlh": "Select a warehouse"
+  },
+  "noWarehouseTitle": "You need a warehouse first",
+  "noWarehouse": "A proforma is made from the drinks of a warehouse. Create a warehouse and add your drinks to start.",
+  "noWarehouseUser": "A proforma is made from the drinks of a warehouse. There is no warehouse yet, ask an admin to create one.",
+  "noDrinksTitle": "No drinks yet",
+  "noDrinks": "Add drinks to this warehouse to use them on a proforma.",
+  "noDrinksUser": "There are no drinks in this warehouse yet, ask an admin to add them.",
+  "createWarehouse": "Create warehouse",
+  "addDrinks": "Add drinks",
+  "table": {
+    "name": "Drink",
+    "inStock": "In stock",
+    "unitPrice": "Price per unit",
+    "quantity": "Quantity",
+    "lineTotal": "Total"
+  },
+  "outOfStock": "Out of stock",
+  "total": "Total",
+  "create": "Create proforma",
+  "created": "Proforma {{number}} created.",
+  "addAtLeastOne": "Add at least one drink first.",
+  "saved": {
+    "title": "Proformas",
+    "subtitle": "Click a proforma to see its items.",
+    "number": "Number",
+    "date": "Date",
+    "warehouse": "Warehouse",
+    "createdBy": "Created by",
+    "total": "Total",
+    "empty": "No proformas yet.",
+    "status": "Status"
+  },
+  "detail": {
+    "title": "Proforma {{number}}",
+    "warehouse": "Warehouse",
+    "date": "Date"
+  },
+  "remove": "Remove",
+  "createModal": {
+    "title": "Create proforma",
+    "subtitle": "Pick a warehouse, add the drinks and create the proforma. The drinks are taken off the stock.",
+    "items": "Drinks on the proforma",
+    "noItems": "No drinks added yet. Click \"Add drinks\" to choose them."
+  },
+  "pick": {
+    "title": "Add drinks",
+    "subtitle": "Set the quantity for every drink you want on the proforma. You can add one or more at once.",
+    "done": "Add to proforma"
+  },
+  "download": "Download",
+  "status": {
+    "active": "Active",
+    "returned": "Returned to stock"
+  },
+  "returnedToast": "Proforma {{number}} was returned to stock.",
+  "return": {
+    "option": "Return to stock",
+    "title": "Return to stock",
+    "message": "Return the drinks of proforma {{number}} to stock? The quantities are added back to the warehouse. This can be done only once.",
+    "confirm": "Return to stock"
+  }
+}

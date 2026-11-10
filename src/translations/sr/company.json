@@ -1,0 +1,38 @@
+{
+  "info": {
+    "title": "Kompanija",
+    "subtitle": "Osnovni podaci o kompaniji.",
+    "name": "Naziv",
+    "created": "Kreirana"
+  },
+  "users": {
+    "title": "Korisnici",
+    "subtitle": "Ljudi koji pripadaju ovoj kompaniji.",
+    "name": "Ime",
+    "email": "E-pošta",
+    "role": "Uloga",
+    "joined": "Pridružio se",
+    "empty": "Još nema korisnika.",
+    "addEmployee": "Dodaj zaposlenog"
+  },
+  "invite": {
+    "title": "Dodaj zaposlenog",
+    "subtitle": "Osoba dobija e-poštu sa linkom za završetak registracije.",
+    "email": "E-pošta",
+    "emailPlh": "Unesite e-poštu..",
+    "button": "Pošalji pozivnicu",
+    "sent": "Pozivnica je poslata."
+  },
+  "invitations": {
+    "title": "Pozivnice",
+    "subtitle": "Sve poslate pozivnice.",
+    "email": "E-pošta",
+    "status": "Status",
+    "sentAt": "Poslata",
+    "expiresAt": "Ističe",
+    "empty": "Još nema pozivnica.",
+    "pending": "Na čekanju",
+    "accepted": "Prihvaćena",
+    "expired": "Istekla"
+  }
+}

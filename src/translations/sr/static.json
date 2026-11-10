@@ -1,0 +1,20 @@
+{
+  "navigation": {
+    "leftSide": {
+      "title": "navigacija",
+      "warehouses": "Magacini",
+      "drinks": "Pića",
+      "company": "Kompanija",
+      "proformas": "Predračun"
+    },
+    "leftSidePage": {
+      "title": "navigacija",
+      "warehouses": "Magacini",
+      "drinks": "Pića",
+      "company": "Kompanija",
+      "profile": "Profil",
+      "proformas": "Predračun"
+    }
+  },
+  "welcome": "Dobrodošli, {{name}}."
+}

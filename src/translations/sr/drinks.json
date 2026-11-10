@@ -1,0 +1,15 @@
+{
+  "addDrink": "Dodaj piće",
+  "empty": "Nema pronađenih pića.",
+  "noWarehouses": "Prvo napravite magacin.",
+  "allWarehouses": "Svi magacini",
+  "filterWarehouse": "Magacin",
+  "search": "Pretraži pića..",
+  "table": {
+    "name": "Naziv",
+    "warehouse": "Magacin",
+    "price": "Cena",
+    "quantity": "Količina"
+  },
+  "lowStock": "Nema na stanju"
+}

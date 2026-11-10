@@ -1,0 +1,36 @@
+{
+  "button": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "okey": "OK",
+    "addNew": "Add New",
+    "edit": "Edit",
+    "delete": "Delete",
+    "next": "Next",
+    "upload": "Upload",
+    "yes": "Yes",
+    "no": "No",
+    "submit": "Submit",
+    "back": "Back",
+    "confirm": "Confirm",
+    "or": "or"
+  },
+  "fields": {
+    "maxChar": "Max. Characters: {{numberOfChars}}",
+    "maxCharError": "You have exceeded the maximum number of characters"
+  },
+  "errorMessage": "Something went wrong. Please try again later.",
+  "screenWraning": "This web application is not optimized for screens smaller than 768px. Please use a device with a higher resolution.",
+  "profile": "Profile",
+  "profileSaved": "Profile saved.",
+  "logout": "Log out",
+  "language": "Language",
+  "search": "Search",
+  "roles": {
+    "superAdmin": "Super admin",
+    "admin": "Admin",
+    "user": "User"
+  }
+}

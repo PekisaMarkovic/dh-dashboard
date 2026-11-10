@@ -1,0 +1,66 @@
+{
+  "builder": {
+    "warehouse": "Magacin",
+    "warehousePlh": "Izaberite magacin"
+  },
+  "noWarehouseTitle": "Prvo vam treba magacin",
+  "noWarehouse": "Predračun se pravi od pića iz magacina. Napravite magacin i dodajte pića da biste počeli.",
+  "noWarehouseUser": "Predračun se pravi od pića iz magacina. Magacin još ne postoji, zamolite administratora da ga napravi.",
+  "noDrinksTitle": "Još nema pića",
+  "noDrinks": "Dodajte pića u ovaj magacin da biste ih mogli koristiti na predračunu.",
+  "noDrinksUser": "U ovom magacinu još nema pića, zamolite administratora da ih doda.",
+  "createWarehouse": "Napravi magacin",
+  "addDrinks": "Dodaj pića",
+  "table": {
+    "name": "Piće",
+    "inStock": "Na stanju",
+    "unitPrice": "Cena po komadu",
+    "quantity": "Količina",
+    "lineTotal": "Ukupno"
+  },
+  "outOfStock": "Nema na stanju",
+  "total": "Ukupno",
+  "create": "Napravi predračun",
+  "created": "Predračun {{number}} je napravljen.",
+  "addAtLeastOne": "Prvo dodajte bar jedno piće.",
+  "saved": {
+    "title": "Predračuni",
+    "subtitle": "Kliknite na predračun da vidite stavke.",
+    "number": "Broj",
+    "date": "Datum",
+    "warehouse": "Magacin",
+    "createdBy": "Napravio",
+    "total": "Ukupno",
+    "empty": "Još nema predračuna.",
+    "status": "Status"
+  },
+  "detail": {
+    "title": "Predračun {{number}}",
+    "warehouse": "Magacin",
+    "date": "Datum"
+  },
+  "remove": "Ukloni",
+  "createModal": {
+    "title": "Napravi predračun",
+    "subtitle": "Izaberite magacin, dodajte pića i napravite predračun. Pića se skidaju sa stanja.",
+    "items": "Pića na predračunu",
+    "noItems": "Još nema dodatih pića. Kliknite \"Dodaj pića\" da ih izaberete."
+  },
+  "pick": {
+    "title": "Dodaj pića",
+    "subtitle": "Unesite količinu za svako piće koje želite na predračunu. Možete dodati jedno ili više odjednom.",
+    "done": "Dodaj na predračun"
+  },
+  "download": "Preuzmi",
+  "status": {
+    "active": "Aktivan",
+    "returned": "Vraćen na stanje"
+  },
+  "returnedToast": "Predračun {{number}} je vraćen na stanje.",
+  "return": {
+    "option": "Vrati na stanje",
+    "title": "Vraćanje na stanje",
+    "message": "Vratiti pića sa predračuna {{number}} na stanje? Količine se vraćaju u magacin. Ovo se može uraditi samo jednom.",
+    "confirm": "Vrati na stanje"
+  }
+}

@@ -1,0 +1,11 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import 'general/general-layout';
+@import 'general/fonts.scss';
+@import 'general/default.scss';
+@import 'general/toastify';
+@import 'general/loader';
+@import 'general/tooltip';
+@import 'general/scrollbar';

@@ -1,0 +1,36 @@
+{
+  "button": {
+    "signIn": "Prijavi se",
+    "signUp": "Registruj se",
+    "saveChanges": "Sačuvaj izmene",
+    "cancel": "Otkaži",
+    "okey": "U redu",
+    "addNew": "Dodaj novo",
+    "edit": "Izmeni",
+    "delete": "Obriši",
+    "next": "Dalje",
+    "upload": "Otpremi",
+    "back": "Nazad",
+    "confirm": "Potvrdi",
+    "submit": "Pošalji",
+    "or": "ili",
+    "yes": "Da",
+    "no": "Ne"
+  },
+  "fields": {
+    "maxChar": "Maks. broj karaktera: {{numberOfChars}}",
+    "maxCharError": "Prekoračen je maksimalan broj karaktera"
+  },
+  "errorMessage": "Nešto je pošlo naopako. Pokušajte ponovo kasnije.",
+  "screenWraning": "Ova veb aplikacija nije prilagođena ekranima užim od 768px. Koristite uređaj sa većom rezolucijom.",
+  "profile": "Profil",
+  "profileSaved": "Profil je sačuvan.",
+  "logout": "Odjavi se",
+  "language": "Jezik",
+  "search": "Pretraga",
+  "roles": {
+    "superAdmin": "Super administrator",
+    "admin": "Administrator",
+    "user": "Korisnik"
+  }
+}

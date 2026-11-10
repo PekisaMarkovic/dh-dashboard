@@ -1,0 +1,37 @@
+{
+  "empty": "No warehouses yet.",
+  "addWarehouse": "Add warehouse",
+  "addDrink": "Add drink",
+  "noDrinks": "No drinks in this warehouse.",
+  "table": {
+    "name": "Name",
+    "price": "Price",
+    "quantity": "Quantity"
+  },
+  "totalValue": "Total value: {{value}}",
+  "warehouseModal": {
+    "addTitle": "Add warehouse",
+    "editTitle": "Edit warehouse",
+    "name": "Name",
+    "namePlh": "Enter a warehouse name.."
+  },
+  "drinkModal": {
+    "addTitle": "Add drink",
+    "editTitle": "Edit drink",
+    "name": "Name",
+    "namePlh": "Enter a drink name..",
+    "price": "Price",
+    "pricePlh": "e.g. 2.50",
+    "quantity": "Quantity",
+    "quantityPlh": "e.g. 24",
+    "warehouse": "Warehouse",
+    "warehousePlh": "Select a warehouse"
+  },
+  "deleteWarehouseTitle": "Delete warehouse",
+  "deleteWarehouseConfirm": "Are you sure you want to delete the warehouse \"{{name}}\"? This can not be undone.",
+  "deleteDrinkTitle": "Delete drink",
+  "deleteDrinkConfirm": "Are you sure you want to delete \"{{name}}\"?",
+  "notEmptyTitle": "Warehouse is not empty",
+  "notEmptyMessage_one": "This warehouse still has {{count}} drink. Delete it first, then you can delete the warehouse.",
+  "notEmptyMessage_other": "This warehouse still has {{count}} drinks. Delete all of them first, then you can delete the warehouse."
+}

@@ -1,0 +1,38 @@
+.tooltip {
+  &__container {
+    z-index: 10;
+    left: 50%;
+    top: 1px;
+    transform: translate(-50%, 50%);
+    min-width: 260px;
+    max-width: 300px;
+
+    &--tooltip-icon {
+      top: 30px;
+      transform: translate(-50%, 0%);
+    }
+
+    &--tooltip-btn {
+      top: 20px;
+      transform: translate(-50%, 0%);
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
+  &-hover-zone {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 10px;
+    transform: translate(-50%, 0);
+    min-width: 275px;
+    max-width: 315px;
+    height: 20px;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "info": {
+    "title": "Your details",
+    "subtitle": "Tell us more about you, we need some information.",
+    "fields": {
+      "firstName": "First name",
+      "firstNamePlh": "Enter a first name",
+      "lastName": "Last name",
+      "lastNamePlh": "Enter a last name",
+      "email": "email",
+      "emailPlh": "Select email",
+      "dateOfBirth": "Date of birth",
+      "dateOfBirthPlh": "Select a date of birth",
+      "phone": "Phone",
+      "phonePlh": "Enter a Phone",
+      "language": "Language",
+      "languagePlh": "Select a language"
+    }
+  }
+}

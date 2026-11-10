@@ -1,13 +1,14 @@
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
-import WarehouseApis from '@/src/api/warehouses'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import DataSection from '@/src/components/section/DataSection'
 import { ModalEnums } from '@/src/enum'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
-import { useApi } from '@/src/hooks/use-api'
+import { formatCents, lineCents } from '@/src/utils/money'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
+import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import { CustomDropdown, IDrink, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
@@ -21,19 +22,25 @@ type Props = {
 
 const WarehouseCard = ({ warehouse, drinks }: Props) => {
   const { t } = useTranslation(['warehouse', 'g'])
-  const api = useApi()
+  const { deleteWarehouse: removeWarehouse } = useWarehouseService()
+  const showError = useErrorToast()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
 
-  const totalValue = drinks.reduce((sum, drink) => sum + drink.price * drink.quantity, 0)
+  const totalValueCents = drinks.reduce((sum, drink) => sum + lineCents(drink.price, drink.quantity), 0)
 
   const deleteWarehouse = async () => {
     try {
-      await api.delete(WarehouseApis.deleteWarehouse(warehouse.warehouseId))
+      await removeWarehouse(warehouse.warehouseId)
       dispatch(refresh())
-    } catch (e) {
+    } catch (error) {
       // 409: somebody added a drink in the meantime
-      customToast.error(axios.isAxiosError(e) && e.response?.status === 409 ? t('warehouse:notEmptyTitle') : t('g:errorMessage'))
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        customToast.error(t('warehouse:notEmptyTitle'))
+      } else {
+        showError(error)
+      }
+
       dispatch(refresh())
     }
   }
@@ -73,7 +80,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
   return (
     <DataSection
       title={warehouse.name}
-      subtitle={t('warehouse:totalValue', { value: totalValue.toFixed(2) })}
+      subtitle={t('warehouse:totalValue', { value: formatCents(totalValueCents) })}
       dropdownOptions={isAdmin ? options : []}
       element={
         isAdmin ? (

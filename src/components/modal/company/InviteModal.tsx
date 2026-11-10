@@ -1,30 +1,31 @@
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import InvitationApis from '@/src/api/invitations'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
-import { useApi } from '@/src/hooks/use-api'
+import { useInvitationService } from '@/src/services/use-invitation-service'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { refresh, removeModal } from '@/src/state/shared/modal'
 import { INVITE_VALIDATION } from '@/src/validations/inventory/invite'
 
 const InviteModal = () => {
   const { t } = useTranslation(['company', 'g'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { invite } = useInvitationService()
   const dispatch = useAppDispatch()
   const methods = useForm({ resolver: INVITE_VALIDATION, defaultValues: { email: '' } })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
-      await api.post(InvitationApis.invite(), { email: values.email })
+      await invite(values.email)
       customToast.success(t('company:invite.sent'))
       dispatch(refresh())
       dispatch(removeModal())
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
     }
   }
 

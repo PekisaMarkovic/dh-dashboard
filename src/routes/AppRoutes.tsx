@@ -4,6 +4,8 @@ import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { RoleEnums } from '@/src/enum'
 import WarehousesPage from '@/src/pages/warehouses/WarehousesPage'
 import DrinksPage from '@/src/pages/drinks/DrinksPage'
+import CreateProformaPage from '@/src/pages/proformas/CreateProformaPage'
+import CustomersPage from '@/src/pages/customers/CustomersPage'
 import ProformasPage from '@/src/pages/proformas/ProformasPage'
 import CompanyPage from '@/src/pages/company/CompanyPage'
 import LogInPage from '@/src/pages/log-in/LogInPage'
@@ -56,6 +58,24 @@ const AppRoutes = () => {
       element: (
         <ProtectedRoute allowedRoles={ALL_ROLES}>
           <DrinksPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: ROUTE_NAMES.customers,
+      element: (
+        <ProtectedRoute allowedRoles={ALL_ROLES}>
+          <CustomersPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: ROUTE_NAMES.createProforma,
+      element: (
+        <ProtectedRoute allowedRoles={ALL_ROLES}>
+          <CreateProformaPage />
         </ProtectedRoute>
       ),
     },

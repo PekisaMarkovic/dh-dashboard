@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import UserApis from '@/src/api/user'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
-import customToast from '@/src/components/core/toast/CustomToast'
-import { useApi } from '@/src/hooks/use-api'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
+import { useUserService } from '@/src/services/use-user-service'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { selectAuthUser, setUserProfileData } from '@/src/state/user/authSlice'
 import { applyLanguage, isLanguage, LANGUAGE_OPTIONS, languageToOption } from '@/src/utils/language'
@@ -14,7 +13,8 @@ import { applyLanguage, isLanguage, LANGUAGE_OPTIONS, languageToOption } from '@
  */
 const LanguageSelect = () => {
   const { t, i18n } = useTranslation(['g'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { updateProfile } = useUserService()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(selectAuthUser)
   const methods = useForm({ defaultValues: { language: languageToOption(i18n.resolvedLanguage) } })
@@ -32,7 +32,15 @@ const LanguageSelect = () => {
 
     dispatch(setUserProfileData({ user: { ...user, language: next } }))
 
-    api.patch(UserApis.patchUserProfile(), { language: next }).catch(() => customToast.error(t('g:errorMessage')))
+    const saveLanguage = async () => {
+      try {
+        await updateProfile({ language: next })
+      } catch (error) {
+        showError(error)
+      }
+    }
+
+    saveLanguage()
   }, [selected?.value])
 
   // the language changed somewhere else (login, profile page), keep the dropdown in sync

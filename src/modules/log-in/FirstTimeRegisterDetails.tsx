@@ -1,32 +1,33 @@
 import { FieldValues, SubmitHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import AuthApis from '@/src/api/auth'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
-import { useApi } from '@/src/hooks/use-api'
+import { useAuthService } from '@/src/services/use-auth-service'
 import { signIn } from '@/src/utils/auth'
 import { decodeToken } from '@/src/utils/token'
 
 const FirstTimeRegisterDetails = () => {
   const { t } = useTranslation(['log-in', 'g', 'static'])
+  const showError = useErrorToast()
   const { handleSubmit } = useFormContext()
-  const api = useApi()
+  const { firstTimeRegister } = useAuthService()
   const navigate = useNavigate()
   const { invitationId } = useParams()
 
   const handleSubmitForm: SubmitHandler<FieldValues> = async (values) => {
     try {
-      const { data } = await api.post(AuthApis.firstTimeRegister(), { invitationId, ...values })
+      const data = await firstTimeRegister({ invitationId, ...values })
       const tokenPayload = decodeToken(data.access_token)
 
       signIn(data)
       customToast.success(t('static:welcome', { name: `${tokenPayload.firstName} ${tokenPayload.lastName}` }))
       navigate(ROUTE_NAMES.proformas)
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
     }
   }
 

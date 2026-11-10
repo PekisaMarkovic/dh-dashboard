@@ -1,8 +1,13 @@
 export interface IDrink {
   drinkId: number
+  code: string
   name: string
   price: number
   quantity: number
+  // below this quantity the drink is orange (0 = off)
+  warningQuantity: number
+  // below this quantity the drink has to be bought again and is red (0 = off)
+  criticalQuantity: number
   warehouseId: number
   companyId: number
 }

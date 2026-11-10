@@ -7,6 +7,7 @@ import enStatic from './en/static.json'
 import enWarehouses from './en/warehouses.json'
 import enCompany from './en/company.json'
 import enDrinks from './en/drinks.json'
+import enCustomers from './en/customers.json'
 import enProforma from './en/proforma.json'
 import profile from './en/user/profile.json'
 
@@ -16,6 +17,7 @@ import srErrors from './sr/errors.json'
 import srStatic from './sr/static.json'
 import srWarehouses from './sr/warehouses.json'
 import srDrinks from './sr/drinks.json'
+import srCustomers from './sr/customers.json'
 import srCompany from './sr/company.json'
 import srProforma from './sr/proforma.json'
 import srProfile from './sr/user/profile.json'
@@ -31,6 +33,7 @@ export const resources = {
     user: profile,
     warehouse: enWarehouses,
     drink: enDrinks,
+    customer: enCustomers,
     company: enCompany,
     proforma: enProforma,
   },
@@ -42,6 +45,7 @@ export const resources = {
     user: srProfile,
     warehouse: srWarehouses,
     drink: srDrinks,
+    customer: srCustomers,
     company: srCompany,
     proforma: srProforma,
   },

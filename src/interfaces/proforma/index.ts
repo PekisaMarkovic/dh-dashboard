@@ -1,8 +1,10 @@
 export interface IProformaItem {
   proformaItemId: number
+  code?: string | null
   name: string
   unitPrice: number
   quantity: number
+  discountPercent: number
   lineTotal: number
 }
 
@@ -13,7 +15,11 @@ export interface IProforma {
   number: string
   warehouseId: number
   warehouseName: string
+  customerName?: string | null
+  // the amount without VAT, the VAT and what is to be paid
   total: number
+  vatAmount: number
+  totalWithVat: number
   createdAt: string
   status: ProformaStatus
   returnedAt?: string | null

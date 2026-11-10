@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import AuthApis from '@/src/api/auth'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { removeUserData, setUserData } from '@/src/state/user/authSlice'
 import { clearLocalStorageTokens, getAccessToken, getTokenPayload } from '@/src/utils/token'
-import { useApi } from '@/src/hooks/use-api'
+import { useAuthService } from '@/src/services/use-auth-service'
 
 const unprotectedRoutes = [ROUTE_NAMES.index, ROUTE_NAMES.notFound]
 
 export const useAuth = () => {
-  const api = useApi()
+  const { isTokenValid } = useAuthService()
   const [isLoad, setIsLoad] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -24,20 +23,23 @@ export const useAuth = () => {
 
   const initializeAuth = useCallback(async () => {
     try {
-      const accessToken = getAccessToken()
-      const tokenPayload = getTokenPayload()
-
-      if (!tokenPayload || !accessToken) {
+      if (!getAccessToken() || !getTokenPayload()) {
         if (!unprotectedRoutes.includes(pathname) && !pathname.includes('/first-time-register')) {
           handleUnauthorized()
         }
         return
       }
 
-      const { data } = await api.post(AuthApis.isUserTokenValid())
+      const isValid = await isTokenValid()
 
-      if (data) {
+      // read the tokens again, the call above may have renewed them
+      const accessToken = getAccessToken()
+      const tokenPayload = getTokenPayload()
+
+      if (isValid && accessToken && tokenPayload) {
         dispatch(setUserData({ tokenPayload, accessToken }))
+      } else {
+        handleUnauthorized()
       }
     } catch {
       handleUnauthorized()

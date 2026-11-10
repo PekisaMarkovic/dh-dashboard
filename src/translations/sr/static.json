@@ -4,6 +4,7 @@
       "title": "navigacija",
       "warehouses": "Magacini",
       "drinks": "Pića",
+      "customers": "Kupci",
       "company": "Kompanija",
       "proformas": "Predračun"
     },
@@ -11,6 +12,7 @@
       "title": "navigacija",
       "warehouses": "Magacini",
       "drinks": "Pića",
+      "customers": "Kupci",
       "company": "Kompanija",
       "profile": "Profil",
       "proformas": "Predračun"

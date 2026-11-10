@@ -4,20 +4,19 @@ import { TokenPayload } from '@/src/interfaces'
 export const ACCESS_TOKEN = 'access_token'
 export const REFRESH_TOKEN = 'refresh_token'
 
+// treat the token as expired a few seconds early, so it never dies while the request is on its way
+const EXPIRE_SKEW_MS = 10_000
+
 export const isTokenExpired = (token: string) => {
   if (!token) return true
+
   try {
-    const decoded = jwtDecode(token) as TokenPayload
+    const { exp } = jwtDecode<TokenPayload>(token)
 
-    const currentTime = new Date().getTime()
-
-    if (decoded.expires && decoded.expires < currentTime) {
-      return true
-    }
-
-    return false
+    // `exp` is in seconds
+    return !exp || exp * 1000 - EXPIRE_SKEW_MS < Date.now()
   } catch {
-    return false
+    return true
   }
 }
 

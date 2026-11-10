@@ -22,6 +22,7 @@
     "email": "email",
     "role": "role",
     "firstName": "first name",
+    "code": "article code",
     "name": "name",
     "description": "description",
     "lastName": "last name",
@@ -31,7 +32,7 @@
     "startDate": "start date",
     "endDate": "end date",
     "title": "title",
-    "price": "price",
+    "price": "a price (a number with up to 3 decimals, e.g. 2,304.500)",
     "priceNum": "price, must be number",
     "category": "category",
     "status": "status",
@@ -68,6 +69,8 @@
     "dateOfDeathCannotBeInFuture": "date that isn't in future",
     "quantity": "quantity, must be a whole number",
     "warehouseId": "warehouse",
-    "language": "language"
+    "language": "language",
+    "warningQuantity": "a warning quantity (whole number, not less than 0)",
+    "criticalQuantity": "a \"has to be bought again\" quantity (whole number, lower than the warning quantity)"
   }
 }

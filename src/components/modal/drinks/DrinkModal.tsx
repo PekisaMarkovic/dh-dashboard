@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import DrinkApis from '@/src/api/drinks'
-import WarehouseApis from '@/src/api/warehouses'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
-import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
-import { useApi } from '@/src/hooks/use-api'
+import { useDrinkService } from '@/src/services/use-drink-service'
+import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { refresh, removeModal, selectModal } from '@/src/state/shared/modal'
+import { formatPrice, parsePriceInput } from '@/src/utils/money'
 import { DRINK_VALIDATION } from '@/src/validations/inventory/drink'
 
 const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) })
@@ -20,19 +20,24 @@ type DrinkModalData = { warehouseId?: number; drink?: IDrink } | null
 
 const DrinkModal = () => {
   const { t } = useTranslation(['warehouse', 'g'])
+  const showError = useErrorToast()
   const { data } = useAppSelector(selectModal)
   const { warehouseId: presetWarehouseId, drink } = (data as DrinkModalData) || {}
   const [warehouses, setWarehouses] = useState<IWarehouse[]>([])
   // the warehouse can be picked only when adding a drink and none was preselected
   const needsWarehouse = !drink && !presetWarehouseId
-  const api = useApi()
+  const { getWarehouses } = useWarehouseService()
+  const { createDrink, updateDrink } = useDrinkService()
   const dispatch = useAppDispatch()
   const methods = useForm<FieldValues>({
     resolver: DRINK_VALIDATION as unknown as Resolver<FieldValues>,
     defaultValues: {
+      code: drink?.code || '',
       name: drink?.name || '',
-      price: drink ? String(drink.price) : '',
+      price: drink ? formatPrice(drink.price) : '',
       quantity: drink ? String(drink.quantity) : '',
+      warningQuantity: String(drink?.warningQuantity ?? 0),
+      criticalQuantity: String(drink?.criticalQuantity ?? 0),
       warehouse: undefined,
     },
   })
@@ -40,29 +45,41 @@ const DrinkModal = () => {
   useEffect(() => {
     if (!needsWarehouse) return
 
-    api
-      .get<IWarehouse[]>(WarehouseApis.getWarehouses())
-      .then(({ data: list }) => {
+    const fetchWarehouses = async () => {
+      try {
+        const list = await getWarehouses()
+
         setWarehouses(list)
         if (list.length) methods.setValue('warehouse', toOption(list[0]))
-      })
-      .catch(() => customToast.error(t('g:errorMessage')))
+      } catch (error) {
+        showError(error)
+      }
+    }
+
+    fetchWarehouses()
   }, [])
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
-    const body = { name: values.name, price: Number(values.price), quantity: Number(values.quantity) }
+    const body = {
+      code: values.code.trim(),
+      name: values.name,
+      price: parsePriceInput(values.price) ?? 0,
+      quantity: Number(values.quantity),
+      warningQuantity: Number(values.warningQuantity),
+      criticalQuantity: Number(values.criticalQuantity),
+    }
 
     try {
       if (drink) {
-        await api.patch(DrinkApis.patchDrink(drink.drinkId), body)
+        await updateDrink(drink.drinkId, body)
       } else {
-        await api.post(DrinkApis.createDrink(), { ...body, warehouseId: Number(values.warehouse?.value || presetWarehouseId) })
+        await createDrink({ ...body, warehouseId: Number(values.warehouse?.value || presetWarehouseId) })
       }
 
       dispatch(refresh())
       dispatch(removeModal())
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
     }
   }
 
@@ -82,6 +99,14 @@ const DrinkModal = () => {
 
         <InputText
           isRequired
+          name="code"
+          initValue={drink?.code}
+          label={t('warehouse:drinkModal.code')}
+          placeholder={t('warehouse:drinkModal.codePlh')}
+        />
+
+        <InputText
+          isRequired
           name="name"
           initValue={drink?.name}
           label={t('warehouse:drinkModal.name')}
@@ -91,7 +116,7 @@ const DrinkModal = () => {
         <InputText
           isRequired
           name="price"
-          initValue={drink ? String(drink.price) : undefined}
+          initValue={drink ? formatPrice(drink.price) : undefined}
           label={t('warehouse:drinkModal.price')}
           placeholder={t('warehouse:drinkModal.pricePlh')}
         />
@@ -102,6 +127,22 @@ const DrinkModal = () => {
           initValue={drink ? String(drink.quantity) : undefined}
           label={t('warehouse:drinkModal.quantity')}
           placeholder={t('warehouse:drinkModal.quantityPlh')}
+        />
+
+        <InputText
+          isRequired
+          name="warningQuantity"
+          initValue={String(drink?.warningQuantity ?? 0)}
+          label={t('warehouse:drinkModal.warningQuantity')}
+          placeholder={t('warehouse:drinkModal.warningQuantityPlh')}
+        />
+
+        <InputText
+          isRequired
+          name="criticalQuantity"
+          initValue={String(drink?.criticalQuantity ?? 0)}
+          label={t('warehouse:drinkModal.criticalQuantity')}
+          placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
         />
 
         <div className="flex justify-center">

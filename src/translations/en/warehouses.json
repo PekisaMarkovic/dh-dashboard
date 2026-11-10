@@ -4,6 +4,7 @@
   "addDrink": "Add drink",
   "noDrinks": "No drinks in this warehouse.",
   "table": {
+    "code": "Code",
     "name": "Name",
     "price": "Price",
     "quantity": "Quantity"
@@ -18,12 +19,18 @@
   "drinkModal": {
     "addTitle": "Add drink",
     "editTitle": "Edit drink",
+    "code": "Article code",
+    "codePlh": "e.g. 352",
     "name": "Name",
     "namePlh": "Enter a drink name..",
     "price": "Price",
-    "pricePlh": "e.g. 2.50",
+    "pricePlh": "e.g. 2,304.500",
     "quantity": "Quantity",
     "quantityPlh": "e.g. 24",
+    "warningQuantity": "Warning below",
+    "warningQuantityPlh": "e.g. 12 (0 = off)",
+    "criticalQuantity": "Has to be bought again below",
+    "criticalQuantityPlh": "e.g. 5 (0 = off)",
     "warehouse": "Warehouse",
     "warehousePlh": "Select a warehouse"
   },

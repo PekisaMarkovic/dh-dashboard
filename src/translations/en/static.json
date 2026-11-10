@@ -4,6 +4,7 @@
       "title": "navigation",
       "warehouses": "Warehouses",
       "drinks": "Drinks",
+      "customers": "Customers",
       "company": "Company",
       "proformas": "Proforma"
     },
@@ -11,6 +12,7 @@
       "title": "navigation",
       "warehouses": "Warehouses",
       "drinks": "Drinks",
+      "customers": "Customers",
       "company": "Company",
       "profile": "Profile",
       "proformas": "Proforma"

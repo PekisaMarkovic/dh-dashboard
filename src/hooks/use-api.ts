@@ -1,92 +1,111 @@
-import { useMemo } from 'react'
-import axios from 'axios'
-import { AxiosError, AxiosResponse } from 'axios'
-import { ACCESS_TOKEN, REFRESH_TOKEN, clearLocalStorageTokens, isTokenExpired } from '@/src/utils/token'
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import AuthApis from '@/src/api/auth'
-import { signIn } from '@/src/utils/auth'
-import { removeUserData } from '@/src/state/user/authSlice'
+import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { store } from '@/src/state/store'
+import { removeUserData } from '@/src/state/user/authSlice'
+import { signIn } from '@/src/utils/auth'
+import { ACCESS_TOKEN, REFRESH_TOKEN, clearLocalStorageTokens, isTokenExpired } from '@/src/utils/token'
+
+type RetriableConfig = InternalAxiosRequestConfig & { _retried?: boolean }
+
+// these calls must never trigger a refresh, they are part of signing in/out
+const AUTH_URLS = [AuthApis.logIn(), AuthApis.refresh(), AuthApis.firstTimeRegister()]
+const isAuthUrl = (url?: string) => !!url && AUTH_URLS.some((authUrl) => url.includes(authUrl))
 
 export const refreshToken = async () => {
   const refreshToken = localStorage.getItem(REFRESH_TOKEN) || ''
 
-  // plain axios on purpose: the instance from useApi would try to refresh again
+  // plain axios on purpose: the instance below would try to refresh again
   const { data } = await axios.post(AuthApis.refresh(), { refreshToken }, { baseURL: import.meta.env.VITE_API_URL })
 
   return data
 }
 
-export const useApi = () => {
-  const api = useMemo(
-    () =>
-      axios.create({
-        baseURL: import.meta.env.VITE_API_URL,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }),
-    [],
-  )
-  const { dispatch } = store
+// The refresh token works only once, so when several requests find the token expired
+// at the same time they all have to wait for the same refresh call.
+let refreshing: Promise<string> | null = null
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onRequest = async (config: any) => {
-    let token = localStorage.getItem(ACCESS_TOKEN) || ''
+const refreshAccessToken = () => {
+  if (!refreshing) {
+    refreshing = refreshToken()
+      .then((data) => {
+        signIn(data)
 
-    if (token) {
-      if (isTokenExpired(token)) {
-        try {
-          const data = await refreshToken()
-          token = data.access_token
-          clearLocalStorageTokens()
-          dispatch(removeUserData())
-          signIn(data)
-          config.headers['Authorization'] = `Bearer ${token}`
-        } catch {
-          dispatch(removeUserData())
-          clearLocalStorageTokens()
-        }
-      } else {
-        config.headers = { ...config.headers, Authorization: `Bearer ${token}` }
+        return data.access_token as string
+      })
+      .finally(() => {
+        refreshing = null
+      })
+  }
+
+  return refreshing
+}
+
+const logOut = () => {
+  store.dispatch(removeUserData())
+  clearLocalStorageTokens()
+
+  if (window.location.pathname !== ROUTE_NAMES.index) {
+    window.location.assign(ROUTE_NAMES.index)
+  }
+}
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+})
+
+api.interceptors.request.use(async (config: RetriableConfig) => {
+  let token = localStorage.getItem(ACCESS_TOKEN) || ''
+
+  if (token && !isAuthUrl(config.url) && isTokenExpired(token)) {
+    try {
+      token = await refreshAccessToken()
+    } catch {
+      // the refresh token is gone or too old, the user has to sign in again
+      logOut()
+
+      return Promise.reject(new axios.Cancel('Session expired'))
+    }
+  }
+
+  if (token) {
+    config.headers.set('Authorization', `Bearer ${token}`)
+  }
+
+  return config
+})
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const config = error.config as RetriableConfig | undefined
+
+    // the server did not accept the token (for example it was revoked): try once with a fresh one
+    if (error.response?.status === 401 && config && !isAuthUrl(config.url) && localStorage.getItem(ACCESS_TOKEN)) {
+      if (config._retried) {
+        logOut()
+
+        return Promise.reject(error)
+      }
+
+      try {
+        const token = await refreshAccessToken()
+
+        config._retried = true
+        config.headers.set('Authorization', `Bearer ${token}`)
+
+        return api(config)
+      } catch {
+        logOut()
       }
     }
-    return config
-  }
-
-  const onRequestError = (error: AxiosError): Promise<AxiosError> => {
-    console.error(`[response error] [${JSON.stringify(error)}]`)
 
     return Promise.reject(error)
-  }
+  },
+)
 
-  const onResponse = (response: AxiosResponse): AxiosResponse => {
-    // Do something with response data
-    if (response.status === 201) {
-      // Do something
-    }
-
-    if (response.status === 202) {
-      // Do something
-    }
-
-    return response
-  }
-
-  const onResponseError = (error: AxiosError): Promise<AxiosError> => {
-    if (error.response && error.response.status === 400) {
-      // Do something
-    }
-
-    if (error.response && error.response.status === 500) {
-      // Do something
-    }
-
-    return Promise.reject(error)
-  }
-
-  api.interceptors.response.use(onResponse, onResponseError)
-  api.interceptors.request.use(onRequest, onRequestError)
-
-  return api
-}
+export const useApi = () => api

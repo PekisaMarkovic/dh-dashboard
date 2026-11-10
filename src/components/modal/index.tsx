@@ -6,8 +6,8 @@ import WarehouseModal from '@/src/components/modal/warehouses/WarehouseModal'
 import ConfirmModal from '@/src/components/modal/ConfirmModal'
 import InviteModal from '@/src/components/modal/company/InviteModal'
 import ProformaDetailModal from '@/src/components/modal/proformas/ProformaDetailModal'
-import CreateProformaModal from '@/src/components/modal/proformas/CreateProformaModal'
 import DrinkModal from '@/src/components/modal/drinks/DrinkModal'
+import CustomerModal from '@/src/components/modal/customers/CustomerModal'
 
 type Props = {
   variant?: ModalVariant
@@ -24,8 +24,8 @@ const MainModal = ({ variant }: Props) => {
       case ModalEnums.DRINK:
         return <DrinkModal />
 
-      case ModalEnums.CREATE_PROFORMA:
-        return <CreateProformaModal />
+      case ModalEnums.CUSTOMER:
+        return <CustomerModal />
 
       case ModalEnums.PROFORMA_DETAIL:
         return <ProformaDetailModal />

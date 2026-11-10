@@ -28,7 +28,8 @@ const GeneralLayoutContent = ({ backButton, children, cancelButton, isBottomHidd
       </div>
       <div className={`relative w-full general-layout-content ${isBottomHidden ? 'general-layout-content--buttom-0' : ''} bg-light-grey-transparent`}>
         <TopMenu backButton={backButton} />
-        <div className={`${isScrollDisabled ? 'overflow-hidden' : 'overflow-y-scroll'} h-full pt-5 px-8`}>{children}</div>
+        {/* the scrollbar space is always reserved, otherwise the content jumps sideways when a dropdown locks the scroll */}
+        <div className={`${isScrollDisabled ? 'overflow-hidden' : 'overflow-y-scroll'} [scrollbar-gutter:stable] h-full pt-5 px-8`}>{children}</div>
         {!isBottomHidden && <BottomMenu cancelButton={cancelButton} />}
       </div>
     </>

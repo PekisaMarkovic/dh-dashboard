@@ -9,6 +9,8 @@ interface DefaultTableRowContainerProps {
   isOptionsHidden?: boolean
   dropdownOptions?: CustomDropdown[]
   onRowClick?: () => void
+  // extra classes of the row, e.g. a background color
+  className?: string
 }
 
 const DefaultTableRowContainer = ({
@@ -17,6 +19,7 @@ const DefaultTableRowContainer = ({
   dropdownOptions = [],
   isOptionsHidden = false,
   onRowClick,
+  className = '',
 }: PropsWithChildren<DefaultTableRowContainerProps>) => {
   const [open, setOpen] = useState<boolean>(false)
 
@@ -28,7 +31,7 @@ const DefaultTableRowContainer = ({
 
   return (
     <div
-      className={`relative pl-4 pr-6 grid grid-cols-${cols} border-b-1 border-b-light-grey-alt border-solid ${open ? 'z-4' : 'z-2'} ${onRowClick ? 'cursor-pointer hover:bg-light-grey-transparent' : ''}`}
+      className={`relative pl-4 pr-6 grid grid-cols-${cols} border-b-1 border-b-light-grey-alt border-solid ${open ? 'z-4' : 'z-2'} ${onRowClick ? 'cursor-pointer hover:bg-light-grey-transparent' : ''} ${className}`}
       onClick={onRowClick}
     >
       {children}

@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import AuthApis from '@/src/api/auth'
 import CustomDropdowns from '@/src/components/core/dropdowns/CustomDropdowns'
-import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { TOP_MENU_LINKS_FOR_TRANSLATIONS } from '@/src/constatns/navigation'
-import { useApi } from '@/src/hooks/use-api'
+import { useAuthService } from '@/src/services/use-auth-service'
 import GeneralIcons from '@/src/icons/general'
 import { CustomDropdown } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
@@ -25,7 +24,8 @@ type Props = {
 
 const TopMenu = ({ backButton }: Props) => {
   const { t } = useTranslation(['g', 'info', 'static'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { logOut } = useAuthService()
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [open, setOpen] = useState<boolean>(false)
@@ -42,9 +42,9 @@ const TopMenu = ({ backButton }: Props) => {
 
   const handleLogout = useCallback(async () => {
     try {
-      await api.post(AuthApis.logout())
-    } catch {
-      customToast.error(t('g:errorMessage'))
+      await logOut()
+    } catch (error) {
+      showError(error)
     } finally {
       dispatch(removeUserData())
       clearLocalStorageTokens()
@@ -100,7 +100,7 @@ const TopMenu = ({ backButton }: Props) => {
               <span className="font-medium text-gray-600 dark:text-gray-300">{extractFirstLetters(fullName)}</span>
             </div>
             <GeneralIcons type="ArrowDown" className={`ml-2 ${open ? 'rotate-180' : ''}`} />
-            {open && <CustomDropdowns dropdownOptions={checkOptions()} position="top-full -right-1/4 z-10" />}
+            {open && <CustomDropdowns dropdownOptions={checkOptions()} position="top-full right-0 z-10" />}
           </div>
         </div>
       )}

@@ -1,0 +1,18 @@
+{
+  "add": "Add customer",
+  "empty": "No customers found.",
+  "search": "Search customers..",
+  "table": {
+    "name": "Name",
+    "createdAt": "Created",
+    "updatedAt": "Updated"
+  },
+  "modal": {
+    "addTitle": "Add customer",
+    "editTitle": "Edit customer",
+    "name": "Name",
+    "namePlh": "Enter the name of the customer.."
+  },
+  "deleteTitle": "Delete customer",
+  "deleteConfirm": "Are you sure you want to delete \"{{name}}\"? Proformas that were already made keep the name."
+}

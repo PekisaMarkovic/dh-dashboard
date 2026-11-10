@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import CompanyApis from '@/src/api/companies'
-import InvitationApis from '@/src/api/invitations'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePagedList } from '@/src/hooks/use-paged-list'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import DataSection from '@/src/components/section/DataSection'
-import { useApi } from '@/src/hooks/use-api'
+import { useCompanyService } from '@/src/services/use-company-service'
+import { useInvitationService } from '@/src/services/use-invitation-service'
 import { CustomDropdown, ICompany, ICompanyUser, IInvitation } from '@/src/interfaces'
 import { ModalEnums } from '@/src/enum'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
@@ -24,7 +24,9 @@ const STATUS_COLOR: Record<IInvitation['status'], Color> = { pending: 'orange', 
 
 const Company = () => {
   const { t } = useTranslation(['company', 'g'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { getCompany, getCompanyUsers } = useCompanyService()
+  const { getInvitations, resendInvitation: resend } = useInvitationService()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(selectAuthUser)
   // bumped when the invite modal sent an invitation, so the tables reload
@@ -37,33 +39,30 @@ const Company = () => {
   const invitationsPage = usePagedList(invitations)
 
   const fetchInvitations = useCallback(async () => {
-    const { data } = await api.get<IInvitation[]>(InvitationApis.getInvitations())
-    setInvitations(data)
+    setInvitations(await getInvitations())
   }, [])
 
   const fetchData = useCallback(async () => {
     if (!companyId) return
 
     try {
-      const [companyRes, usersRes] = await Promise.all([
-        api.get<ICompany>(CompanyApis.getCompany(companyId)),
-        api.get<ICompanyUser[]>(CompanyApis.getCompanyUsers(companyId)),
-      ])
-      setCompany(companyRes.data)
-      setUsers(usersRes.data)
+      const [companyData, usersList] = await Promise.all([getCompany(companyId), getCompanyUsers(companyId)])
+
+      setCompany(companyData)
+      setUsers(usersList)
       await fetchInvitations()
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
     }
   }, [companyId])
 
   // sends the email again and starts the 7 days again, the link stays the same
   const resendInvitation = async (invitation: IInvitation) => {
     try {
-      await api.post(InvitationApis.resend(invitation.invitationId))
+      await resend(invitation.invitationId)
       customToast.success(t('company:invitations.resent', { email: invitation.email }))
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
     }
 
     // the list is loaded again either way, e.g. the person may have registered in the meantime

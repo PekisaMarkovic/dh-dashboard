@@ -8,12 +8,15 @@
     "email": "ispravnu e-poštu",
     "firstName": "ime",
     "lastName": "prezime",
+    "code": "šifru artikla",
     "name": "naziv",
-    "price": "cenu (broj, ne manje od 0)",
+    "price": "cenu (broj sa najviše 3 decimale, npr. 2,304.500)",
     "quantity": "količinu (ceo broj, ne manje od 0)",
     "phoneNumber": "broj telefona",
     "dateOfBirth": "datum rođenja",
     "warehouseId": "magacin",
-    "language": "jezik"
+    "language": "jezik",
+    "warningQuantity": "količinu za upozorenje (ceo broj, ne manje od 0)",
+    "criticalQuantity": "količinu za dokupljivanje (ceo broj, manji od količine za upozorenje)"
   }
 }

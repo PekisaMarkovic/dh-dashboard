@@ -1,7 +1,9 @@
 {
   "builder": {
     "warehouse": "Magacin",
-    "warehousePlh": "Izaberite magacin"
+    "warehousePlh": "Izaberite magacin",
+    "customer": "Kupac",
+    "customerPlh": "Izaberite kupca (nije obavezno)"
   },
   "noWarehouseTitle": "Prvo vam treba magacin",
   "noWarehouse": "Predračun se pravi od pića iz magacina. Napravite magacin i dodajte pića da biste počeli.",
@@ -14,9 +16,10 @@
   "table": {
     "name": "Piće",
     "inStock": "Na stanju",
-    "unitPrice": "Cena po komadu",
+    "unitPrice": "Cena po komadu bez PDV",
     "quantity": "Količina",
-    "lineTotal": "Ukupno"
+    "lineTotal": "Ukupno bez PDV",
+    "discount": "Rabat"
   },
   "outOfStock": "Nema na stanju",
   "total": "Ukupno",
@@ -30,14 +33,15 @@
     "date": "Datum",
     "warehouse": "Magacin",
     "createdBy": "Napravio",
-    "total": "Ukupno",
+    "total": "Za plaćanje (sa PDV)",
     "empty": "Još nema predračuna.",
     "status": "Status"
   },
   "detail": {
     "title": "Predračun {{number}}",
     "warehouse": "Magacin",
-    "date": "Datum"
+    "date": "Datum",
+    "customer": "Kupac"
   },
   "remove": "Ukloni",
   "createModal": {
@@ -53,8 +57,8 @@
   },
   "download": "Preuzmi",
   "status": {
-    "active": "Aktivan",
-    "returned": "Vraćen na stanje"
+    "active": "Izdat",
+    "returned": "Vraćen"
   },
   "returnedToast": "Predračun {{number}} je vraćen na stanje.",
   "return": {
@@ -62,5 +66,12 @@
     "title": "Vraćanje na stanje",
     "message": "Vratiti pića sa predračuna {{number}} na stanje? Količine se vraćaju u magacin. Ovo se može uraditi samo jednom.",
     "confirm": "Vrati na stanje"
+  },
+  "print": "Štampaj",
+  "popupBlocked": "Predračun je napravljen, ali je pregledač blokirao novi tab. Dozvolite iskačuće prozore za ovaj sajt ili ga štampajte iz liste.",
+  "totals": {
+    "net": "Ukupno bez PDV",
+    "vat": "PDV {{rate}}%",
+    "gross": "Za plaćanje"
   }
 }

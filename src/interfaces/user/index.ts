@@ -29,7 +29,6 @@ export type TokenPayload = {
   companyId: Nullable<number>
   exp: number
   iat: number
-  expires: number
 }
 
 export interface User {

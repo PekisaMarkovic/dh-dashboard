@@ -1,7 +1,9 @@
 {
   "builder": {
     "warehouse": "Warehouse",
-    "warehousePlh": "Select a warehouse"
+    "warehousePlh": "Select a warehouse",
+    "customer": "Customer",
+    "customerPlh": "Select a customer (optional)"
   },
   "noWarehouseTitle": "You need a warehouse first",
   "noWarehouse": "A proforma is made from the drinks of a warehouse. Create a warehouse and add your drinks to start.",
@@ -14,9 +16,10 @@
   "table": {
     "name": "Drink",
     "inStock": "In stock",
-    "unitPrice": "Price per unit",
+    "unitPrice": "Price per unit (excl. VAT)",
     "quantity": "Quantity",
-    "lineTotal": "Total"
+    "lineTotal": "Total (excl. VAT)",
+    "discount": "Discount"
   },
   "outOfStock": "Out of stock",
   "total": "Total",
@@ -30,14 +33,15 @@
     "date": "Date",
     "warehouse": "Warehouse",
     "createdBy": "Created by",
-    "total": "Total",
+    "total": "To pay (incl. VAT)",
     "empty": "No proformas yet.",
     "status": "Status"
   },
   "detail": {
     "title": "Proforma {{number}}",
     "warehouse": "Warehouse",
-    "date": "Date"
+    "date": "Date",
+    "customer": "Customer"
   },
   "remove": "Remove",
   "createModal": {
@@ -53,8 +57,8 @@
   },
   "download": "Download",
   "status": {
-    "active": "Active",
-    "returned": "Returned to stock"
+    "active": "Issued",
+    "returned": "Returned"
   },
   "returnedToast": "Proforma {{number}} was returned to stock.",
   "return": {
@@ -62,5 +66,12 @@
     "title": "Return to stock",
     "message": "Return the drinks of proforma {{number}} to stock? The quantities are added back to the warehouse. This can be done only once.",
     "confirm": "Return to stock"
+  },
+  "print": "Print",
+  "popupBlocked": "The proforma was created, but the browser blocked the new tab. Allow pop-ups for this site, or print it from the list.",
+  "totals": {
+    "net": "Total excl. VAT",
+    "vat": "VAT {{rate}}%",
+    "gross": "To pay"
   }
 }

@@ -4,8 +4,9 @@
   "noWarehouses": "Create a warehouse first.",
   "allWarehouses": "All warehouses",
   "filterWarehouse": "Warehouse",
-  "search": "Search drinks..",
+  "search": "Search drinks by name or code..",
   "table": {
+    "code": "Code",
     "name": "Name",
     "warehouse": "Warehouse",
     "price": "Price",

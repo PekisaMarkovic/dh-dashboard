@@ -1,0 +1,18 @@
+{
+  "add": "Dodaj kupca",
+  "empty": "Nema pronađenih kupaca.",
+  "search": "Pretraži kupce..",
+  "table": {
+    "name": "Naziv",
+    "createdAt": "Kreiran",
+    "updatedAt": "Izmenjen"
+  },
+  "modal": {
+    "addTitle": "Dodaj kupca",
+    "editTitle": "Izmeni kupca",
+    "name": "Naziv",
+    "namePlh": "Unesite naziv kupca.."
+  },
+  "deleteTitle": "Brisanje kupca",
+  "deleteConfirm": "Da li ste sigurni da želite da obrišete kupca \"{{name}}\"? Već napravljeni predračuni zadržavaju naziv."
+}

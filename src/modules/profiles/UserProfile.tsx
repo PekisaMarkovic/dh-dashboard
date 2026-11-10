@@ -1,9 +1,9 @@
 import { FieldValues, SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import UserApis from '@/src/api/user'
 import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { SaveDisabledEnums } from '@/src/enum'
-import { useApi } from '@/src/hooks/use-api'
+import { useUserService } from '@/src/services/use-user-service'
 import GeneralLayout from '@/src/layouts/GeneralLayout'
 import UserInfo from '@/src/pages/profile/partials/UserInfo'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
@@ -15,7 +15,8 @@ import { formatToIsoDate } from '@/src/utils/date'
 const UserProfile = () => {
   const { user } = useAppSelector(selectAuthUser)
   const { t } = useTranslation(['g'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { updateProfile } = useUserService()
   const dispatch = useAppDispatch()
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
@@ -29,7 +30,7 @@ const UserProfile = () => {
     try {
       dispatch(handleDisableSave(SaveDisabledEnums.EDIT_PROFILE))
 
-      await api.patch(UserApis.patchUserProfile(), body)
+      await updateProfile(body)
 
       if (user) {
         dispatch(setUserProfileData({ user: { ...user, ...body, dateOfBirth: body.dateOfBirth ? new Date(body.dateOfBirth) : null } }))
@@ -37,8 +38,8 @@ const UserProfile = () => {
 
       applyLanguage(body.language)
       customToast.success(t('g:profileSaved'))
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
     } finally {
       dispatch(handleAllowSave(SaveDisabledEnums.EDIT_PROFILE))
     }

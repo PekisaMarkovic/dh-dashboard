@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import ProformaApis from '@/src/api/proformas'
+import { useNavigate } from 'react-router-dom'
+import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import MainButton from '@/src/components/core/buttons/MainButton'
@@ -10,11 +12,12 @@ import { usePagedList } from '@/src/hooks/use-paged-list'
 import DataSection from '@/src/components/section/DataSection'
 import { ModalEnums } from '@/src/enum'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
-import { useApi } from '@/src/hooks/use-api'
+import { useProformaService } from '@/src/services/use-proforma-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import { CustomDropdown, IProforma } from '@/src/interfaces'
-import { downloadBlob } from '@/src/utils/files'
+import { useProformaDownload } from '@/src/hooks/use-proforma-download'
+import { useProformaPrint } from '@/src/hooks/use-proforma-print'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal, refresh, selectModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
@@ -22,37 +25,53 @@ import { formatMoney } from '@/src/utils/money'
 
 const SavedProformas = () => {
   const { t } = useTranslation(['proforma', 'g'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { getProformas, returnProforma } = useProformaService()
+  const downloadProforma = useProformaDownload()
+  const printProforma = useProformaPrint()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { isAdmin } = useRoles()
   const { refreshKey } = useAppSelector(selectModal)
   const [proformas, setProformas] = useState<IProforma[]>([])
   const { pageItems, page, setPage, totalPages } = usePagedList(proformas)
 
   useEffect(() => {
-    api
-      .get<IProforma[]>(ProformaApis.getProformas())
-      .then(({ data }) => setProformas(data))
-      .catch(() => customToast.error(t('g:errorMessage')))
+    const fetchProformas = async () => {
+      try {
+        setProformas(await getProformas())
+      } catch (error) {
+        showError(error)
+      }
+    }
+
+    fetchProformas()
   }, [refreshKey])
 
   const handleDownload = async (proforma: IProforma) => {
     try {
-      const { data } = await api.get<Blob>(ProformaApis.getProformaPdf(proforma.proformaId), { responseType: 'blob' })
-      downloadBlob(data, `${proforma.number}.pdf`)
-    } catch {
-      customToast.error(t('g:errorMessage'))
+      await downloadProforma(proforma)
+    } catch (error) {
+      showError(error)
+    }
+  }
+
+  const handlePrint = async (proforma: IProforma) => {
+    try {
+      await printProforma(proforma.proformaId)
+    } catch (error) {
+      showError(error)
     }
   }
 
   const returnToStock = async (proforma: IProforma) => {
     try {
-      await api.post(ProformaApis.returnProforma(proforma.proformaId))
+      await returnProforma(proforma.proformaId)
       customToast.success(t('proforma:returnedToast', { number: proforma.number }))
       // the stock changed, so everything that shows drinks reloads
       dispatch(refresh())
-    } catch {
-      customToast.error(t('g:errorMessage'))
+    } catch (error) {
+      showError(error)
       dispatch(refresh())
     }
   }
@@ -72,6 +91,7 @@ const SavedProformas = () => {
     )
 
   const options = (proforma: IProforma): CustomDropdown[] => [
+    { content: { type: 'button', text: t('proforma:print'), onClick: () => handlePrint(proforma) } },
     { content: { type: 'button', text: t('proforma:download'), onClick: () => handleDownload(proforma) } },
     // only admins, and only while the drinks are still taken off the stock
     ...(isAdmin && proforma.status === 'active'
@@ -85,12 +105,7 @@ const SavedProformas = () => {
       subtitle={t('proforma:saved.subtitle')}
       element={
         <div className="mb-6">
-          <MainButton
-            text={t('proforma:create')}
-            variant="contained"
-            size="medium"
-            onClick={() => dispatch(openModal({ modal: ModalEnums.CREATE_PROFORMA }))}
-          />
+          <MainButton text={t('proforma:create')} variant="contained" size="medium" onClick={() => navigate(ROUTE_NAMES.createProforma)} />
         </div>
       }
     >
@@ -126,7 +141,7 @@ const SavedProformas = () => {
             <Paragraph text={p.createdByName || ''} size="sm" color="black" />
           </div>
           <div className="py-3">
-            <Paragraph text={formatMoney(p.total)} size="sm" color="black" />
+            <Paragraph text={formatMoney(p.totalWithVat)} size="sm" color="black" />
           </div>
           <div className="py-3">
             <Paragraph text={t(`proforma:status.${p.status}`)} size="sm" color={p.status === 'returned' ? 'orange' : 'green'} />

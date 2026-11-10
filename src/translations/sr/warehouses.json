@@ -4,6 +4,7 @@
   "addDrink": "Dodaj piće",
   "noDrinks": "U ovom magacinu nema pića.",
   "table": {
+    "code": "Šifra",
     "name": "Naziv",
     "price": "Cena",
     "quantity": "Količina"
@@ -18,12 +19,18 @@
   "drinkModal": {
     "addTitle": "Dodaj piće",
     "editTitle": "Izmeni piće",
+    "code": "Šifra artikla",
+    "codePlh": "npr. 352",
     "name": "Naziv",
     "namePlh": "Unesite naziv pića..",
     "price": "Cena",
-    "pricePlh": "npr. 2.50",
+    "pricePlh": "npr. 2,304.500",
     "quantity": "Količina",
     "quantityPlh": "npr. 24",
+    "warningQuantity": "Upozorenje kad padne ispod",
+    "warningQuantityPlh": "npr. 12 (0 = isključeno)",
+    "criticalQuantity": "Mora da se dokupi kad padne ispod",
+    "criticalQuantityPlh": "npr. 5 (0 = isključeno)",
     "warehouse": "Magacin",
     "warehousePlh": "Izaberite magacin"
   },

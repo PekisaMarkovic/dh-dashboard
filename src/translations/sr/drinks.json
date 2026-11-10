@@ -4,8 +4,9 @@
   "noWarehouses": "Prvo napravite magacin.",
   "allWarehouses": "Svi magacini",
   "filterWarehouse": "Magacin",
-  "search": "Pretraži pića..",
+  "search": "Pretraži pića po nazivu ili šifri..",
   "table": {
+    "code": "Šifra",
     "name": "Naziv",
     "warehouse": "Magacin",
     "price": "Cena",

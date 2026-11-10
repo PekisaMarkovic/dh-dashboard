@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import DrinkApis from '@/src/api/drinks'
-import WarehouseApis from '@/src/api/warehouses'
 import MainButton from '@/src/components/core/buttons/MainButton'
-import customToast from '@/src/components/core/toast/CustomToast'
+import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ModalEnums } from '@/src/enum'
-import { useApi } from '@/src/hooks/use-api'
+import { useDrinkService } from '@/src/services/use-drink-service'
+import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import { IDrink, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
@@ -15,7 +14,9 @@ import WarehouseCard from '@/src/modules/warehouses/WarehouseCard'
 
 const Warehouses = () => {
   const { t } = useTranslation(['warehouse', 'g'])
-  const api = useApi()
+  const showError = useErrorToast()
+  const { getWarehouses } = useWarehouseService()
+  const { getDrinks } = useDrinkService()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
   const { refreshKey } = useAppSelector(selectModal)
@@ -25,14 +26,12 @@ const Warehouses = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const [warehousesRes, drinksRes] = await Promise.all([
-        api.get<IWarehouse[]>(WarehouseApis.getWarehouses()),
-        api.get<IDrink[]>(DrinkApis.getDrinks()),
-      ])
-      setWarehouses(warehousesRes.data)
-      setDrinks(drinksRes.data)
-    } catch {
-      customToast.error(t('g:errorMessage'))
+      const [warehousesList, drinksList] = await Promise.all([getWarehouses(), getDrinks()])
+
+      setWarehouses(warehousesList)
+      setDrinks(drinksList)
+    } catch (error) {
+      showError(error)
     } finally {
       setIsLoad(true)
     }

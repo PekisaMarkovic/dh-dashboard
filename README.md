@@ -47,7 +47,7 @@ Where you land after login: **Proforma**. A user without the right role is sent 
 - **Proforma.** A table of the proformas of the company with a status (Active or Returned to stock). The **Create proforma** button opens a window: pick a warehouse (one is already selected), press **Add drinks**, search the drinks and set quantities for one or more at once, then create. Creating takes the drinks off the stock. The three dots on a row: **Download** (PDF) and, for admins, **Return to stock**. If there is no warehouse or no drinks yet, the window says so and offers to create them.
 - **Drinks.** All drinks of the company, with search and a filter by warehouse. Admins add, edit and delete.
 - **Warehouses.** A card for each warehouse with its drinks and the total value of the stock. A warehouse can only be deleted when it is empty.
-- **Company.** Company info, the users (with their role), the **Add employee** button that sends an invitation, and the table of invitations (Pending, Accepted, Expired).
+- **Company.** Company info, the users (with their role), the **Add employee** button that sends an invitation, and the table of invitations (Pending, Accepted, Expired). The three dots on a Pending or Expired invitation have **Resend invitation**: the email goes out again and the link is valid for 7 more days.
 - **Profile.** Name and email are read only. Phone, date of birth and **language** can be changed. Log out is in the top menu.
 
 ## How it works

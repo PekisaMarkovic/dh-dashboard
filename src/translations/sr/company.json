@@ -33,6 +33,8 @@
     "empty": "Još nema pozivnica.",
     "pending": "Na čekanju",
     "accepted": "Prihvaćena",
-    "expired": "Istekla"
+    "expired": "Istekla",
+    "resend": "Pošalji ponovo",
+    "resent": "Pozivnica je ponovo poslata na {{email}}."
   }
 }

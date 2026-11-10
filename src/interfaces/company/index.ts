@@ -23,6 +23,8 @@ export interface IInvitation {
   email: string
   status: InvitationStatus
   createdAt: string
+  // when the email went out last (changes when the invitation is sent again)
+  sentAt: string
   expiresAt: string
   acceptedAt: string | null
 }

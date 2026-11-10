@@ -8,9 +8,10 @@ import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePagedList } from '@/src/hooks/use-paged-list'
+import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import DataSection from '@/src/components/section/DataSection'
 import { useApi } from '@/src/hooks/use-api'
-import { ICompany, ICompanyUser, IInvitation } from '@/src/interfaces'
+import { CustomDropdown, ICompany, ICompanyUser, IInvitation } from '@/src/interfaces'
 import { ModalEnums } from '@/src/enum'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal, selectModal } from '@/src/state/shared/modal'
@@ -55,6 +56,25 @@ const Company = () => {
       customToast.error(t('g:errorMessage'))
     }
   }, [companyId])
+
+  // sends the email again and starts the 7 days again, the link stays the same
+  const resendInvitation = async (invitation: IInvitation) => {
+    try {
+      await api.post(InvitationApis.resend(invitation.invitationId))
+      customToast.success(t('company:invitations.resent', { email: invitation.email }))
+    } catch {
+      customToast.error(t('g:errorMessage'))
+    }
+
+    // the list is loaded again either way, e.g. the person may have registered in the meantime
+    await fetchInvitations()
+  }
+
+  // only an invitation that was not used can be sent again (also an expired one)
+  const invitationOptions = (invitation: IInvitation): CustomDropdown[] =>
+    invitation.status === 'accepted'
+      ? []
+      : [{ content: { type: 'button', text: t('company:invitations.resend'), onClick: () => resendInvitation(invitation) } }]
 
   useEffect(() => {
     fetchData()
@@ -111,20 +131,29 @@ const Company = () => {
 
       <DataSection title={t('company:invitations.title')} subtitle={t('company:invitations.subtitle')}>
         <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
-          <div className="grid grid-cols-4">
+          <div className="grid grid-cols-5">
             <Heading text={t('company:invitations.email')} variant="2" size="sm" color="grey" weight="medium" />
             <Heading text={t('company:invitations.status')} variant="2" size="sm" color="grey" weight="medium" />
             <Heading text={t('company:invitations.sentAt')} variant="2" size="sm" color="grey" weight="medium" />
             <Heading text={t('company:invitations.expiresAt')} variant="2" size="sm" color="grey" weight="medium" />
+            <span />
           </div>
         </div>
         {invitationsPage.pageItems.map((i) => (
-          <div key={i.invitationId} className="grid grid-cols-4 px-4 py-3 border-b-1 border-b-light-grey-alt border-solid">
-            <Paragraph text={i.email} size="sm" color="black" />
-            <Paragraph text={t(`company:invitations.${i.status}`)} size="sm" color={STATUS_COLOR[i.status]} />
-            <Paragraph text={formatDate(i.createdAt)} size="sm" color="black" />
-            <Paragraph text={formatDate(i.expiresAt)} size="sm" color="black" />
-          </div>
+          <DefaultTableRowContainer key={i.invitationId} cols={5} dropdownOptions={invitationOptions(i)}>
+            <div className="py-3">
+              <Paragraph text={i.email} size="sm" color="black" />
+            </div>
+            <div className="py-3">
+              <Paragraph text={t(`company:invitations.${i.status}`)} size="sm" color={STATUS_COLOR[i.status]} />
+            </div>
+            <div className="py-3">
+              <Paragraph text={formatDate(i.sentAt)} size="sm" color="black" />
+            </div>
+            <div className="py-3">
+              <Paragraph text={formatDate(i.expiresAt)} size="sm" color="black" />
+            </div>
+          </DefaultTableRowContainer>
         ))}
         {!invitations.length && <Paragraph text={t('company:invitations.empty')} size="sm" className="mt-3" />}
         <ListPagination page={invitationsPage.page} totalPages={invitationsPage.totalPages} onPageChange={invitationsPage.setPage} />

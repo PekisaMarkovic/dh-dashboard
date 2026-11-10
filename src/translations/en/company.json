@@ -33,6 +33,8 @@
     "empty": "No invitations yet.",
     "pending": "Pending",
     "accepted": "Accepted",
-    "expired": "Expired"
+    "expired": "Expired",
+    "resend": "Resend invitation",
+    "resent": "Invitation sent again to {{email}}."
   }
 }

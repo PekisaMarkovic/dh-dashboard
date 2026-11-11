@@ -6,10 +6,11 @@ import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePageState } from '@/src/hooks/use-page-state'
-import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
+import CompanyInfoItem from '@/src/components/company/CompanyInfoItem'
+import CompanyUserRow from '@/src/components/company/CompanyUserRow'
+import InvitationRow from '@/src/components/company/InvitationRow'
 import InfoGridSkeleton from '@/src/components/skeleton/InfoGridSkeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
-import TableCell from '@/src/components/table/TableCell'
 import DataSection from '@/src/components/section/DataSection'
 import GeneralIcons from '@/src/icons/general'
 import { useCompanyQuery, useCompanyUsersQuery, useInvitationsQuery } from '@/src/hooks/queries/use-company-queries'
@@ -20,14 +21,10 @@ import { ModalEnums } from '@/src/enum'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import { selectAuthUser } from '@/src/state/user/authSlice'
-import { getRoleTranslationKey } from '@/src/utils/roles'
 import { formatDate } from '@/src/utils/date'
-import { Color } from '@/src/interfaces'
 
 const NO_USERS: ICompanyUser[] = []
 const NO_INVITATIONS: IInvitation[] = []
-
-const STATUS_COLOR: Record<IInvitation['status'], Color> = { pending: 'orange', accepted: 'green', expired: 'red' }
 
 const Company = () => {
   const { t } = useTranslation(['company', 'g'])
@@ -110,10 +107,7 @@ const Company = () => {
               { label: t('company:info.bankAccount'), value: company?.bankAccount },
               { label: t('company:info.created'), value: company ? formatDate(company.createdAt) : '' },
             ].map(({ label, value }) => (
-              <div key={label}>
-                <Paragraph text={label} size="sm" />
-                <Heading text={value || '-'} variant="3" size="base" color="black" />
-              </div>
+              <CompanyInfoItem key={label} label={label} value={value} />
             ))}
           </div>
         )}
@@ -141,23 +135,7 @@ const Company = () => {
               </div>
             </div>
             {users.map((u) => (
-              <div
-                key={u.userId}
-                className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-0 pl-1 pr-1 md:px-4 py-3 md:py-0 border-b-1 border-b-light-grey-alt border-solid"
-              >
-                <TableCell isTitle label={t('company:users.name')} className="col-span-2 md:col-span-1">
-                  <Paragraph text={`${u.firstName} ${u.lastName}`} size="sm" color="black" />
-                </TableCell>
-                <TableCell isTitle label={t('company:users.email')} className="col-span-2 md:col-span-1 -mt-1.5 md:mt-0">
-                  <Paragraph text={u.email} size="sm" color="black" />
-                </TableCell>
-                <TableCell label={t('company:users.role')}>
-                  <Paragraph text={getRoleTranslationKey(u.roles) ? t(getRoleTranslationKey(u.roles)!) : ''} size="sm" color="black" />
-                </TableCell>
-                <TableCell label={t('company:users.joined')}>
-                  <Paragraph text={formatDate(u.createdAt)} size="sm" color="black" />
-                </TableCell>
-              </div>
+              <CompanyUserRow key={u.userId} user={u} />
             ))}
             {!users.length && <Paragraph text={t('company:users.empty')} size="sm" className="mt-3" />}
             <ListPagination page={usersPage} totalPages={usersQuery.data?.meta.totalPages ?? 1} onPageChange={setUsersPage} />
@@ -179,25 +157,11 @@ const Company = () => {
                 <span />
               </div>
             </div>
-            {invitations.map((i) => (
-              <DefaultTableRowContainer key={i.invitationId} cols={5} dropdownOptions={invitationOptions(i)}>
-                <TableCell isTitle label={t('company:invitations.email')} className="col-span-2 md:col-span-1 md:pr-4">
-                  <Paragraph text={i.email} size="sm" color="black" />
-                </TableCell>
-                {/* status and dates in one row on a phone, on a tablet and up they are columns of the table */}
-                <div className="col-span-2 grid grid-cols-3 gap-x-3 md:contents">
-                  <TableCell label={t('company:invitations.status')}>
-                    <Paragraph text={t(`company:invitations.${i.status}`)} size="sm" color={STATUS_COLOR[i.status]} />
-                  </TableCell>
-                  <TableCell label={t('company:invitations.sentAt')}>
-                    <Paragraph text={formatDate(i.sentAt)} size="sm" color="black" />
-                  </TableCell>
-                  <TableCell label={t('company:invitations.expiresAt')}>
-                    <Paragraph text={formatDate(i.expiresAt)} size="sm" color="black" />
-                  </TableCell>
-                </div>
-              </DefaultTableRowContainer>
-            ))}
+            <div>
+              {invitations.map((i) => (
+                <InvitationRow key={i.invitationId} invitation={i} dropdownOptions={invitationOptions(i)} />
+              ))}
+            </div>
             {!invitations.length && <Paragraph text={t('company:invitations.empty')} size="sm" className="mt-3" />}
             <ListPagination page={invitationsPage} totalPages={invitationsQuery.data?.meta.totalPages ?? 1} onPageChange={setInvitationsPage} />
           </>

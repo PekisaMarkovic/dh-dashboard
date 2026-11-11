@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import Skeleton from '@/src/components/skeleton/Skeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
-import TableCell from '@/src/components/table/TableCell'
+import ProformaItemRow from '@/src/components/proformas/ProformaItemRow'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { useProformaQuery } from '@/src/hooks/queries/use-proforma-queries'
@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHoo
 import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
 import ProformaTotals from '@/src/components/proformas/ProformaTotals'
-import { formatMoney, formatPrice } from '@/src/utils/money'
 
 const ProformaDetailModal = () => {
   const { t } = useTranslation(['proforma', 'g'])
@@ -65,28 +64,7 @@ const ProformaDetailModal = () => {
           </div>
         </div>
 
-        {proforma.items?.map((item) => (
-          <div
-            key={item.proformaItemId}
-            className="grid grid-cols-2 md:grid-cols-6 gap-x-4 gap-y-1 py-2.5 border-b-1 border-b-light-grey-alt border-solid"
-          >
-            <div className="col-span-2">
-              <Paragraph text={item.name} size="sm" color="black" />
-            </div>
-            <TableCell isDense label={t('proforma:table.quantity')}>
-              <Paragraph text={`${item.quantity}`} size="sm" color="black" />
-            </TableCell>
-            <TableCell isDense label={t('proforma:table.unitPrice')}>
-              <Paragraph text={formatPrice(item.unitPrice)} size="sm" color="black" />
-            </TableCell>
-            <TableCell isDense label={t('proforma:table.discount')}>
-              <Paragraph text={`${formatMoney(item.discountPercent)}%`} size="sm" color="black" />
-            </TableCell>
-            <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
-              <Paragraph text={formatMoney(item.lineTotal)} size="sm" color="black" />
-            </TableCell>
-          </div>
-        ))}
+        {proforma.items?.map((item) => <ProformaItemRow key={item.proformaItemId} item={item} />)}
 
         <div className="pt-4">
           <ProformaTotals netCents={Math.round(proforma.total * 100)} vatCents={Math.round(proforma.vatAmount * 100)} />

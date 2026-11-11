@@ -1,13 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
-import Paragraph from '@/src/components/core/typography/Paragraph'
-import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
-import TableCell from '@/src/components/table/TableCell'
+import DrinkRow from '@/src/components/drinks/DrinkRow'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import { ModalEnums } from '@/src/enum'
-import { formatPrice } from '@/src/utils/money'
-import { getStockLevel, STOCK_ROW_CLASS, STOCK_TEXT_CLASS } from '@/src/utils/stock'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useDrinkService } from '@/src/services/use-drink-service'
 import { useRoles } from '@/src/hooks/use-roles'
@@ -72,33 +68,14 @@ const DrinksList = ({ drinks, warehouses }: Props) => {
         </div>
       </div>
 
-      {drinks.map((drink) => {
-        const level = getStockLevel(drink)
-
-        return (
-          <DefaultTableRowContainer key={drink.drinkId} cols={6} className={STOCK_ROW_CLASS[level]} dropdownOptions={isAdmin ? options(drink) : []}>
-            <TableCell label={t('drink:table.code')}>
-              <Paragraph text={drink.code || '-'} size="sm" color="black" noWrap />
-            </TableCell>
-            <TableCell isTitle label={t('drink:table.name')} className="col-span-2 order-first md:order-none">
-              <Paragraph text={drink.name} size="sm" color="black" />
-            </TableCell>
-            <TableCell label={t('drink:table.warehouse')}>
-              <Paragraph text={warehouseName(drink.warehouseId)} size="sm" color="black" />
-            </TableCell>
-            <TableCell label={t('drink:table.price')}>
-              <Paragraph text={formatPrice(drink.price)} size="sm" color="black" noWrap />
-            </TableCell>
-            <TableCell label={t('drink:table.quantity')}>
-              <p
-                className={`font-poppins text-sm whitespace-nowrap ${level === 'ok' && drink.quantity === 0 ? 'text-red' : STOCK_TEXT_CLASS[level]}`}
-              >
-                {drink.quantity === 0 ? t('drink:lowStock') : drink.quantity}
-              </p>
-            </TableCell>
-          </DefaultTableRowContainer>
-        )
-      })}
+      {drinks.map((drink) => (
+        <DrinkRow
+          key={drink.drinkId}
+          drink={drink}
+          warehouseName={warehouseName(drink.warehouseId)}
+          dropdownOptions={isAdmin ? options(drink) : []}
+        />
+      ))}
     </div>
   )
 }

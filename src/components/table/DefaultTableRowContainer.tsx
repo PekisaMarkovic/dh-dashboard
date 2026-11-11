@@ -45,7 +45,7 @@ const DefaultTableRowContainer = ({
 
   return (
     <div
-      className={`relative pl-1 md:pl-4 pr-10 py-2 md:py-0 grid grid-cols-2 gap-x-3 md:gap-x-0 ${COLUMNS_FROM_TABLET[cols]} border-b-1 border-b-light-grey-alt border-solid ${open ? 'z-4' : 'z-2'} ${onRowClick ? 'cursor-pointer hover:bg-light-grey-transparent' : ''} ${className}`}
+      className={`relative pl-1 md:pl-4 pr-10 py-2 md:py-0 grid grid-cols-2 gap-x-3 md:gap-x-0 ${COLUMNS_FROM_TABLET[cols]} border-b-1 border-b-light-grey-alt border-solid last:border-b-0 ${open ? 'z-4' : 'z-2'} ${onRowClick ? 'cursor-pointer hover:bg-light-grey-transparent' : ''} ${className}`}
       onClick={onRowClick}
     >
       {children}

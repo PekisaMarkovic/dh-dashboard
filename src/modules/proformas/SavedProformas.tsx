@@ -16,15 +16,12 @@ import { useProformasQuery } from '@/src/hooks/queries/use-proforma-queries'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useProformaService } from '@/src/services/use-proforma-service'
 import { useRoles } from '@/src/hooks/use-roles'
-import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
-import TableCell from '@/src/components/table/TableCell'
+import ProformaRow from '@/src/components/proformas/ProformaRow'
 import { CustomDropdown, IProforma } from '@/src/interfaces'
 import { useProformaDownload } from '@/src/hooks/use-proforma-download'
 import { useProformaPrint } from '@/src/hooks/use-proforma-print'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
-import { formatDate } from '@/src/utils/date'
-import { formatMoney } from '@/src/utils/money'
 
 const NO_PROFORMAS: IProforma[] = []
 
@@ -123,33 +120,16 @@ const SavedProformas = () => {
             </div>
           </div>
 
-          {proformas.map((p) => (
-            <DefaultTableRowContainer
-              key={p.proformaId}
-              cols={7}
-              onRowClick={() => dispatch(openModal({ modal: ModalEnums.PROFORMA_DETAIL, data: { proformaId: p.proformaId } }))}
-              dropdownOptions={options(p)}
-            >
-              <TableCell isTitle label={t('proforma:saved.number')} className="col-span-2 md:col-span-1">
-                <Paragraph text={p.number} size="sm" color="black" />
-              </TableCell>
-              <TableCell label={t('proforma:saved.date')}>
-                <Paragraph text={formatDate(p.createdAt)} size="sm" color="black" />
-              </TableCell>
-              <TableCell label={t('proforma:saved.warehouse')}>
-                <Paragraph text={p.warehouseName} size="sm" color="black" />
-              </TableCell>
-              <TableCell label={t('proforma:saved.createdBy')}>
-                <Paragraph text={p.createdByName || ''} size="sm" color="black" />
-              </TableCell>
-              <TableCell label={t('proforma:saved.total')}>
-                <Paragraph text={formatMoney(p.totalWithVat)} size="sm" color="black" />
-              </TableCell>
-              <TableCell label={t('proforma:saved.status')}>
-                <Paragraph text={t(`proforma:status.${p.status}`)} size="sm" color={p.status === 'returned' ? 'orange' : 'green'} />
-              </TableCell>
-            </DefaultTableRowContainer>
-          ))}
+          <div>
+            {proformas.map((p) => (
+              <ProformaRow
+                key={p.proformaId}
+                proforma={p}
+                dropdownOptions={options(p)}
+                onClick={() => dispatch(openModal({ modal: ModalEnums.PROFORMA_DETAIL, data: { proformaId: p.proformaId } }))}
+              />
+            ))}
+          </div>
 
           {!proformas.length && <Paragraph text={t('proforma:saved.empty')} size="sm" className="mt-3" />}
           <ListPagination page={page} totalPages={data?.meta.totalPages ?? 1} onPageChange={setPage} />

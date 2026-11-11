@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import Skeleton from '@/src/components/skeleton/Skeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
-import TableCell from '@/src/components/table/TableCell'
-import DecimalInput from '@/src/components/core/input/DecimalInput'
-import QuantityInput from '@/src/components/core/input/QuantityInput'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
 import customToast from '@/src/components/core/toast/CustomToast'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
@@ -31,8 +28,9 @@ import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import { openPdfTab } from '@/src/utils/files'
 import ProformaTotals from '@/src/components/proformas/ProformaTotals'
-import { formatCents, formatPrice, lineCents, vatCents } from '@/src/utils/money'
-import { getStockLevel, STOCK_ROW_CLASS, STOCK_TEXT_CLASS } from '@/src/utils/stock'
+import ProformaPickList from '@/src/components/proformas/ProformaPickList'
+import ProformaLinesList from '@/src/components/proformas/ProformaLinesList'
+import { lineCents, vatCents } from '@/src/utils/money'
 
 const NO_WAREHOUSES: IWarehouse[] = []
 const NO_CUSTOMERS: ICustomerOption[] = []
@@ -209,7 +207,7 @@ const CreateProforma = () => {
   const handleBackToLines = () => setView('lines')
 
   // one handler for every "remove" in the list: it takes the drink off the proforma
-  const handleRemoveLine = (drinkId: number) => () => {
+  const handleRemoveLine = (drinkId: number) => {
     setLines((prev) => withoutKey(prev, drinkId))
     setPrices((prev) => withoutKey(prev, drinkId))
     setDiscounts((prev) => withoutKey(prev, drinkId))
@@ -249,121 +247,6 @@ const CreateProforma = () => {
   const isPick = view === 'pick'
   // the warehouse can be changed until drinks are on the proforma, a new warehouse starts the proforma again
   const isWarehouseLocked = isPick && added.length > 0
-
-  const pickHeader = (
-    <div className="hidden md:block sticky top-0 z-2 bg-white border-b-1 border-b-light-grey-alt border-solid px-2 pb-3">
-      <div className="grid grid-cols-[minmax(0,1fr)_110px_110px_150px_110px] gap-x-4">
-        <div>
-          <Heading text={t('proforma:table.name')} variant="2" size="sm" color="grey" weight="medium" />
-        </div>
-        <Heading text={t('proforma:table.inStock')} variant="2" size="sm" color="grey" weight="medium" />
-        <Heading text={t('proforma:table.unitPrice')} variant="2" size="sm" color="grey" weight="medium" />
-        <Heading text={t('proforma:table.quantity')} variant="2" size="sm" color="grey" weight="medium" />
-        <div className="flex justify-end">
-          <Heading text={t('proforma:table.lineTotal')} variant="2" size="sm" color="grey" weight="medium" />
-        </div>
-      </div>
-    </div>
-  )
-
-  const pickRows = drinks.map((drink) => {
-    const quantity = draft[drink.drinkId] || 0
-    const level = getStockLevel(drink)
-
-    return (
-      <div
-        key={drink.drinkId}
-        className={`grid grid-cols-2 gap-x-3 gap-y-2 md:grid-cols-[minmax(0,1fr)_110px_110px_150px_110px] md:gap-x-4 items-center px-2 py-3 md:py-2 border-b-1 border-b-light-grey-alt border-solid ${STOCK_ROW_CLASS[level]}`}
-      >
-        <TableCell isDense className="col-span-2 md:col-span-1">
-          <Paragraph text={drink.name} size="sm" color="black" />
-        </TableCell>
-        <TableCell isDense label={t('proforma:table.inStock')}>
-          <p className={`font-poppins text-sm ${level === 'ok' && drink.quantity === 0 ? 'text-red' : STOCK_TEXT_CLASS[level]}`}>
-            {drink.quantity === 0 ? t('proforma:outOfStock') : drink.quantity}
-          </p>
-        </TableCell>
-        <TableCell isDense label={t('proforma:table.unitPrice')}>
-          <Paragraph text={formatPrice(priceOf(drink))} size="sm" color="black" />
-        </TableCell>
-        <TableCell isDense label={t('proforma:table.quantity')}>
-          <QuantityInput
-            ariaLabel={drink.name}
-            value={quantity}
-            max={drink.quantity}
-            disabled={drink.quantity === 0}
-            onChange={(value) => setDraft((prev) => ({ ...prev, [drink.drinkId]: value }))}
-          />
-        </TableCell>
-        <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
-          <Paragraph text={quantity ? formatCents(lineTotalCents(drink, quantity)) : '-'} size="sm" color="black" />
-        </TableCell>
-      </div>
-    )
-  })
-
-  const linesHeader = (
-    <div className="hidden md:block sticky top-0 z-2 bg-white border-b-1 border-b-light-grey-alt border-solid px-2 pb-3">
-      <div className="grid grid-cols-[minmax(0,1fr)_150px_120px_100px_110px_80px] gap-x-4">
-        <div>
-          <Heading text={t('proforma:table.name')} variant="2" size="sm" color="grey" weight="medium" />
-        </div>
-        <Heading text={t('proforma:table.quantity')} variant="2" size="sm" color="grey" weight="medium" />
-        <Heading text={t('proforma:table.unitPrice')} variant="2" size="sm" color="grey" weight="medium" />
-        <Heading text={t('proforma:table.discount')} variant="2" size="sm" color="grey" weight="medium" />
-        <div className="flex justify-end">
-          <Heading text={t('proforma:table.lineTotal')} variant="2" size="sm" color="grey" weight="medium" />
-        </div>
-        <span />
-      </div>
-    </div>
-  )
-
-  const linesRows = linesPage.pageItems.map((drink) => (
-    <div
-      key={drink.drinkId}
-      className={`grid grid-cols-2 gap-x-3 gap-y-3 md:grid-cols-[minmax(0,1fr)_150px_120px_100px_110px_80px] md:gap-x-4 items-center px-2 py-3 md:py-2 border-b-1 border-b-light-grey-alt border-solid ${STOCK_ROW_CLASS[getStockLevel(drink)]}`}
-    >
-      <TableCell isDense className="col-span-2 md:col-span-1">
-        <Paragraph text={drink.name} size="sm" color="black" />
-      </TableCell>
-      <TableCell isDense label={t('proforma:table.quantity')}>
-        <QuantityInput
-          ariaLabel={drink.name}
-          value={lines[drink.drinkId]}
-          min={1}
-          max={drink.quantity}
-          onChange={(value) => setLines((prev) => ({ ...prev, [drink.drinkId]: value }))}
-        />
-      </TableCell>
-      <TableCell isDense label={t('proforma:table.unitPrice')}>
-        <DecimalInput
-          ariaLabel={`${t('proforma:table.unitPrice')} ${drink.name}`}
-          value={priceOf(drink)}
-          decimals={3}
-          isPrice
-          onChange={(value) => setPrices((prev) => ({ ...prev, [drink.drinkId]: value }))}
-        />
-      </TableCell>
-      <TableCell isDense label={t('proforma:table.discount')}>
-        <DecimalInput
-          ariaLabel={`${t('proforma:table.discount')} ${drink.name}`}
-          value={discountOf(drink)}
-          max={100}
-          suffix="%"
-          onChange={(value) => setDiscounts((prev) => ({ ...prev, [drink.drinkId]: value }))}
-        />
-      </TableCell>
-      <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
-        <Paragraph text={formatCents(lineTotalCents(drink, lines[drink.drinkId]))} size="sm" color="black" />
-      </TableCell>
-      <div className="flex justify-end">
-        <button type="button" className="font-poppins text-sm text-red hover:underline py-1 px-2" onClick={handleRemoveLine(drink.drinkId)}>
-          {t('proforma:remove')}
-        </button>
-      </div>
-    </div>
-  ))
 
   return (
     <FormProvider {...methods}>
@@ -423,19 +306,28 @@ const CreateProforma = () => {
                 )}
               </div>
             ) : (
-              <div>
-                {pickHeader}
-                {pickRows}
-                {!drinks.length && <Paragraph text={t('drink:empty')} size="sm" color="grey" className="py-4" />}
-              </div>
+              <ProformaPickList
+                drinks={drinks}
+                quantities={draft}
+                priceOf={priceOf}
+                lineCentsOf={lineTotalCents}
+                onQuantityChange={(drinkId, value) => setDraft((prev) => ({ ...prev, [drinkId]: value }))}
+              />
             )
           ) : (
             <div>
               {added.length ? (
-                <div>
-                  {linesHeader}
-                  {linesRows}
-                </div>
+                <ProformaLinesList
+                  drinks={linesPage.pageItems}
+                  quantities={lines}
+                  priceOf={priceOf}
+                  discountOf={discountOf}
+                  lineCentsOf={lineTotalCents}
+                  onQuantityChange={(drinkId, value) => setLines((prev) => ({ ...prev, [drinkId]: value }))}
+                  onPriceChange={(drinkId, value) => setPrices((prev) => ({ ...prev, [drinkId]: value }))}
+                  onDiscountChange={(drinkId, value) => setDiscounts((prev) => ({ ...prev, [drinkId]: value }))}
+                  onRemove={handleRemoveLine}
+                />
               ) : (
                 <Paragraph text={t('proforma:createModal.noItems')} size="sm" color="grey" className="py-4" />
               )}

@@ -7,8 +7,7 @@ import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
-import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
-import TableCell from '@/src/components/table/TableCell'
+import CustomerRow from '@/src/components/customers/CustomerRow'
 import { ModalEnums } from '@/src/enum'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { useDebouncedValue } from '@/src/hooks/use-debounced-value'
@@ -20,7 +19,6 @@ import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useCustomerService } from '@/src/services/use-customer-service'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
-import { formatDate } from '@/src/utils/date'
 
 const NO_CUSTOMERS: ICustomer[] = []
 
@@ -101,14 +99,7 @@ const Customers = () => {
             </div>
 
             {customers.map((customer) => (
-              <DefaultTableRowContainer key={customer.customerId} cols={3} dropdownOptions={isAdmin ? options(customer) : []}>
-                <TableCell isTitle label={t('customer:table.name')} className="col-span-2">
-                  <Paragraph text={customer.name} size="sm" color="black" />
-                </TableCell>
-                <TableCell label={t('customer:table.createdAt')}>
-                  <Paragraph text={formatDate(customer.createdAt)} size="sm" color="black" noWrap />
-                </TableCell>
-              </DefaultTableRowContainer>
+              <CustomerRow key={customer.customerId} customer={customer} dropdownOptions={isAdmin ? options(customer) : []} />
             ))}
           </div>
         ) : (

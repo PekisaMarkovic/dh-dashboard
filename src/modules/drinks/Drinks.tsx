@@ -65,11 +65,11 @@ const Drinks = () => {
     <div className="pb-8">
       <div className="flex flex-wrap items-center gap-4 mb-4">
         <FormProvider {...filterForm}>
-          <div className="w-72">
+          <div className="w-full sm:w-72">
             <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
           </div>
 
-          <div className="w-64">
+          <div className="w-full sm:w-64">
             <SingleSelect
               name="warehouse"
               label={t('drink:filterWarehouse')}

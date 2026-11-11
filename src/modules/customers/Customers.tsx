@@ -9,6 +9,7 @@ import Paragraph from '@/src/components/core/typography/Paragraph'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
+import TableCell from '@/src/components/table/TableCell'
 import { ModalEnums } from '@/src/enum'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { usePagedList } from '@/src/hooks/use-paged-list'
@@ -74,7 +75,7 @@ const Customers = () => {
     <div className="pb-8">
       <div className="flex flex-wrap items-center gap-4 mb-4">
         <FormProvider {...filterForm}>
-          <div className="w-72">
+          <div className="w-full sm:w-72">
             <InputText name="search" label={t('g:search')} placeholder={t('customer:search')} />
           </div>
         </FormProvider>
@@ -91,7 +92,7 @@ const Customers = () => {
           <TableSkeleton columns={[2, 1]} rows={8} />
         ) : visible.length ? (
           <div>
-            <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+            <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
               <div className="grid grid-cols-3">
                 <div className="col-span-2">
                   <Heading text={t('customer:table.name')} variant="2" size="sm" color="grey" weight="medium" />
@@ -102,12 +103,12 @@ const Customers = () => {
 
             {pageItems.map((customer) => (
               <DefaultTableRowContainer key={customer.customerId} cols={3} dropdownOptions={isAdmin ? options(customer) : []}>
-                <div className="col-span-2 py-3">
+                <TableCell isTitle label={t('customer:table.name')} className="col-span-2">
                   <Paragraph text={customer.name} size="sm" color="black" />
-                </div>
-                <div className="py-3">
+                </TableCell>
+                <TableCell label={t('customer:table.createdAt')}>
                   <Paragraph text={formatDate(customer.createdAt)} size="sm" color="black" noWrap />
-                </div>
+                </TableCell>
               </DefaultTableRowContainer>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { PropsWithChildren, useCallback } from 'react'
 import Modal from 'react-modal'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
+import { useMediaQuery } from '@/src/hooks/use-media-query'
 import { removeModal } from '@/src/state/shared/modal'
 
 export type ModalVariant = 'new' | 'old'
@@ -32,11 +33,22 @@ const customStylesNewVariant = {
   },
 }
 
-const getCustomStyles = (variant: ModalVariant) => ({
+// on a phone the window takes the whole width (with a small margin) and has less padding
+const phoneStyles = {
+  content: {
+    width: 'calc(100% - 1.5rem)',
+    minWidth: 0,
+    padding: '16px',
+    maxHeight: '92dvh',
+  },
+}
+
+const getCustomStyles = (variant: ModalVariant, isPhone: boolean) => ({
   ...customStyles,
   content: {
     ...customStyles.content,
     ...(variant === 'new' ? customStylesNewVariant.content : undefined),
+    ...(isPhone ? phoneStyles.content : undefined),
   },
 })
 
@@ -46,6 +58,7 @@ type Props = {
 
 const ModalConfiguration = ({ variant = 'old', children }: PropsWithChildren<Props>) => {
   const dispatch = useAppDispatch()
+  const isPhone = useMediaQuery('(max-width: 767px)')
 
   const handleClose = useCallback(() => {
     dispatch(removeModal())
@@ -53,7 +66,7 @@ const ModalConfiguration = ({ variant = 'old', children }: PropsWithChildren<Pro
 
   Modal.setAppElement('#root')
   return (
-    <Modal isOpen onRequestClose={handleClose} style={getCustomStyles(variant)}>
+    <Modal isOpen onRequestClose={handleClose} style={getCustomStyles(variant, isPhone)}>
       {children}
     </Modal>
   )

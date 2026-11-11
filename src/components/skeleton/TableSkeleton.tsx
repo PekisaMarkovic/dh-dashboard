@@ -19,7 +19,7 @@ const TableSkeleton = ({ columns = [2, 1, 1], rows = 6, withHeader = true }: Pro
   return (
     <div role="status" aria-busy="true" aria-live="polite">
       {withHeader && (
-        <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+        <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
           <div className="grid gap-x-4" style={{ gridTemplateColumns: template }}>
             {columns.map((_, index) => (
               <Skeleton key={index} className="h-3 w-1/2" />
@@ -31,8 +31,8 @@ const TableSkeleton = ({ columns = [2, 1, 1], rows = 6, withHeader = true }: Pro
       {Array.from({ length: rows }, (_, row) => (
         <div
           key={row}
-          className="grid gap-x-4 items-center px-4 py-4 border-b-1 border-b-light-grey-alt border-solid"
-          style={{ gridTemplateColumns: template }}
+          className="grid grid-cols-2 gap-x-4 gap-y-3 items-center px-4 py-4 border-b-1 border-b-light-grey-alt border-solid md:[grid-template-columns:var(--columns)]"
+          style={{ ['--columns' as string]: template }}
         >
           {columns.map((_, column) => (
             <Skeleton key={column} className={`h-4 ${WIDTHS[(row + column) % WIDTHS.length]}`} />

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Skeleton from '@/src/components/skeleton/Skeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
+import TableCell from '@/src/components/table/TableCell'
 import DecimalInput from '@/src/components/core/input/DecimalInput'
 import QuantityInput from '@/src/components/core/input/QuantityInput'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
@@ -197,13 +198,13 @@ const CreateProforma = () => {
 
   if (!isLoad) {
     return (
-      <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
+      <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-4 md:p-6">
         <Skeleton className="h-6 w-56" />
         <Skeleton className="h-4 w-96 max-w-full mt-3" />
         <div className="flex flex-wrap gap-4 mt-6">
-          <Skeleton className="h-12 w-60" />
-          <Skeleton className="h-12 w-60" />
-          <Skeleton className="h-12 w-60" />
+          <Skeleton className="h-12 w-full sm:w-60" />
+          <Skeleton className="h-12 w-full sm:w-60" />
+          <Skeleton className="h-12 w-full sm:w-60" />
         </div>
         <div className="mt-6">
           <TableSkeleton columns={[2, 1, 1, 1.4, 1]} rows={6} />
@@ -215,7 +216,7 @@ const CreateProforma = () => {
   // a proforma is made of the drinks of a warehouse, so a warehouse comes first
   if (!warehouses.length) {
     return (
-      <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6 max-w-xl">
+      <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-4 md:p-6 max-w-xl">
         <Heading text={t('proforma:noWarehouseTitle')} variant="2" size="base" color="black" />
         <Paragraph text={isAdmin ? t('proforma:noWarehouse') : t('proforma:noWarehouseUser')} size="sm" color="grey" className="mt-3" />
         <div className="flex justify-end gap-x-4 mt-8">
@@ -231,7 +232,7 @@ const CreateProforma = () => {
   const isWarehouseLocked = isPick && added.length > 0
 
   const pickHeader = (
-    <div className="sticky top-0 z-2 bg-white border-b-1 border-b-light-grey-alt border-solid px-2 pb-3">
+    <div className="hidden md:block sticky top-0 z-2 bg-white border-b-1 border-b-light-grey-alt border-solid px-2 pb-3">
       <div className="grid grid-cols-[minmax(0,1fr)_110px_110px_150px_110px] gap-x-4">
         <div>
           <Heading text={t('proforma:table.name')} variant="2" size="sm" color="grey" weight="medium" />
@@ -248,22 +249,25 @@ const CreateProforma = () => {
 
   const pickRows = pickPage.pageItems.map((drink) => {
     const quantity = draft[drink.drinkId] || 0
+    const level = getStockLevel(drink)
 
     return (
       <div
         key={drink.drinkId}
-        className={`grid grid-cols-[minmax(0,1fr)_110px_110px_150px_110px] gap-x-4 items-center px-2 py-2 border-b-1 border-b-light-grey-alt border-solid ${STOCK_ROW_CLASS[getStockLevel(drink)]}`}
+        className={`grid grid-cols-2 gap-x-3 gap-y-2 md:grid-cols-[minmax(0,1fr)_110px_110px_150px_110px] md:gap-x-4 items-center px-2 py-3 md:py-2 border-b-1 border-b-light-grey-alt border-solid ${STOCK_ROW_CLASS[level]}`}
       >
-        <div>
+        <TableCell isDense className="col-span-2 md:col-span-1">
           <Paragraph text={drink.name} size="sm" color="black" />
-        </div>
-        <p
-          className={`font-poppins text-sm ${getStockLevel(drink) === 'ok' && drink.quantity === 0 ? 'text-red' : STOCK_TEXT_CLASS[getStockLevel(drink)]}`}
-        >
-          {drink.quantity === 0 ? t('proforma:outOfStock') : drink.quantity}
-        </p>
-        <Paragraph text={formatPrice(priceOf(drink))} size="sm" color="black" />
-        <div>
+        </TableCell>
+        <TableCell isDense label={t('proforma:table.inStock')}>
+          <p className={`font-poppins text-sm ${level === 'ok' && drink.quantity === 0 ? 'text-red' : STOCK_TEXT_CLASS[level]}`}>
+            {drink.quantity === 0 ? t('proforma:outOfStock') : drink.quantity}
+          </p>
+        </TableCell>
+        <TableCell isDense label={t('proforma:table.unitPrice')}>
+          <Paragraph text={formatPrice(priceOf(drink))} size="sm" color="black" />
+        </TableCell>
+        <TableCell isDense label={t('proforma:table.quantity')}>
           <QuantityInput
             ariaLabel={drink.name}
             value={quantity}
@@ -271,16 +275,16 @@ const CreateProforma = () => {
             disabled={drink.quantity === 0}
             onChange={(value) => setDraft((prev) => ({ ...prev, [drink.drinkId]: value }))}
           />
-        </div>
-        <div className="flex justify-end">
+        </TableCell>
+        <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
           <Paragraph text={quantity ? formatCents(lineTotalCents(drink, quantity)) : '-'} size="sm" color="black" />
-        </div>
+        </TableCell>
       </div>
     )
   })
 
   const linesHeader = (
-    <div className="sticky top-0 z-2 bg-white border-b-1 border-b-light-grey-alt border-solid px-2 pb-3">
+    <div className="hidden md:block sticky top-0 z-2 bg-white border-b-1 border-b-light-grey-alt border-solid px-2 pb-3">
       <div className="grid grid-cols-[minmax(0,1fr)_150px_120px_100px_110px_80px] gap-x-4">
         <div>
           <Heading text={t('proforma:table.name')} variant="2" size="sm" color="grey" weight="medium" />
@@ -299,12 +303,12 @@ const CreateProforma = () => {
   const linesRows = linesPage.pageItems.map((drink) => (
     <div
       key={drink.drinkId}
-      className={`grid grid-cols-[minmax(0,1fr)_150px_120px_100px_110px_80px] gap-x-4 items-center px-2 py-2 border-b-1 border-b-light-grey-alt border-solid ${STOCK_ROW_CLASS[getStockLevel(drink)]}`}
+      className={`grid grid-cols-2 gap-x-3 gap-y-3 md:grid-cols-[minmax(0,1fr)_150px_120px_100px_110px_80px] md:gap-x-4 items-center px-2 py-3 md:py-2 border-b-1 border-b-light-grey-alt border-solid ${STOCK_ROW_CLASS[getStockLevel(drink)]}`}
     >
-      <div>
+      <TableCell isDense className="col-span-2 md:col-span-1">
         <Paragraph text={drink.name} size="sm" color="black" />
-      </div>
-      <div>
+      </TableCell>
+      <TableCell isDense label={t('proforma:table.quantity')}>
         <QuantityInput
           ariaLabel={drink.name}
           value={lines[drink.drinkId]}
@@ -312,26 +316,30 @@ const CreateProforma = () => {
           max={drink.quantity}
           onChange={(value) => setLines((prev) => ({ ...prev, [drink.drinkId]: value }))}
         />
-      </div>
-      <DecimalInput
-        ariaLabel={`${t('proforma:table.unitPrice')} ${drink.name}`}
-        value={priceOf(drink)}
-        decimals={3}
-        isPrice
-        onChange={(value) => setPrices((prev) => ({ ...prev, [drink.drinkId]: value }))}
-      />
-      <DecimalInput
-        ariaLabel={`${t('proforma:table.discount')} ${drink.name}`}
-        value={discountOf(drink)}
-        max={100}
-        suffix="%"
-        onChange={(value) => setDiscounts((prev) => ({ ...prev, [drink.drinkId]: value }))}
-      />
-      <div className="flex justify-end">
+      </TableCell>
+      <TableCell isDense label={t('proforma:table.unitPrice')}>
+        <DecimalInput
+          ariaLabel={`${t('proforma:table.unitPrice')} ${drink.name}`}
+          value={priceOf(drink)}
+          decimals={3}
+          isPrice
+          onChange={(value) => setPrices((prev) => ({ ...prev, [drink.drinkId]: value }))}
+        />
+      </TableCell>
+      <TableCell isDense label={t('proforma:table.discount')}>
+        <DecimalInput
+          ariaLabel={`${t('proforma:table.discount')} ${drink.name}`}
+          value={discountOf(drink)}
+          max={100}
+          suffix="%"
+          onChange={(value) => setDiscounts((prev) => ({ ...prev, [drink.drinkId]: value }))}
+        />
+      </TableCell>
+      <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
         <Paragraph text={formatCents(lineTotalCents(drink, lines[drink.drinkId]))} size="sm" color="black" />
-      </div>
+      </TableCell>
       <div className="flex justify-end">
-        <button type="button" className="font-poppins text-sm text-red hover:underline" onClick={handleRemoveLine(drink.drinkId)}>
+        <button type="button" className="font-poppins text-sm text-red hover:underline py-1 px-2" onClick={handleRemoveLine(drink.drinkId)}>
           {t('proforma:remove')}
         </button>
       </div>
@@ -341,14 +349,14 @@ const CreateProforma = () => {
   return (
     <FormProvider {...methods}>
       {/* three parts: the top and the bottom are always there, only the middle scrolls */}
-      <div className="flex flex-col h-full bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
+      <div className="flex flex-col md:h-full mb-6 md:mb-0 bg-white rounded-sm border-1 border-light-grey-alt border-solid p-4 md:p-6">
         <div className="shrink-0">
           <Heading text={isPick ? t('proforma:pick.title') : t('proforma:createModal.title')} variant="2" size="base" color="black" />
           <Paragraph text={isPick ? t('proforma:pick.subtitle') : t('proforma:createModal.subtitle')} size="sm" color="grey" className="mt-1" />
 
           {/* warehouse and search side by side */}
           <div className="flex flex-wrap items-start gap-4 mt-6">
-            <div className="w-60">
+            <div className="w-full sm:w-60">
               <SingleSelect
                 name="warehouse"
                 label={t('proforma:builder.warehouse')}
@@ -358,7 +366,7 @@ const CreateProforma = () => {
               />
             </div>
 
-            <div className="w-60">
+            <div className="w-full sm:w-60">
               <SingleSelect
                 name="customer"
                 label={t('proforma:builder.customer')}
@@ -368,7 +376,7 @@ const CreateProforma = () => {
             </div>
 
             {isPick && drinks.length > 0 && (
-              <div className="w-60">
+              <div className="w-full sm:w-60">
                 <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
               </div>
             )}
@@ -382,7 +390,7 @@ const CreateProforma = () => {
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto mt-4">
+        <div className="md:flex-1 md:min-h-0 md:overflow-y-auto mt-4">
           {isPick && !drinksLoad ? (
             <TableSkeleton columns={[2, 1, 1, 1.4, 1]} rows={6} />
           ) : isPick ? (

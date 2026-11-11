@@ -5,6 +5,7 @@ import { usePagedList } from '@/src/hooks/use-paged-list'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
+import TableCell from '@/src/components/table/TableCell'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import { ModalEnums } from '@/src/enum'
 import { formatPrice } from '@/src/utils/money'
@@ -59,7 +60,7 @@ const DrinksTable = ({ drinks }: Props) => {
 
   return (
     <div>
-      <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+      <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
         <div className="grid grid-cols-5">
           <Heading text={t('warehouse:table.code')} variant="2" size="sm" color="grey" weight="medium" />
           <div className="col-span-2">
@@ -75,22 +76,22 @@ const DrinksTable = ({ drinks }: Props) => {
 
         return (
           <DefaultTableRowContainer key={drink.drinkId} cols={5} className={STOCK_ROW_CLASS[level]} dropdownOptions={isAdmin ? options(drink) : []}>
-            <div className="py-3">
+            <TableCell label={t('warehouse:table.code')}>
               <Paragraph text={drink.code || '-'} size="sm" color="black" noWrap />
-            </div>
-            <div className="col-span-2 py-3">
+            </TableCell>
+            <TableCell isTitle label={t('warehouse:table.name')} className="col-span-2 order-first md:order-none">
               <Paragraph text={drink.name} size="sm" color="black" />
-            </div>
-            <div className="py-3">
+            </TableCell>
+            <TableCell label={t('warehouse:table.price')}>
               <Paragraph text={formatPrice(drink.price)} size="sm" color="black" noWrap />
-            </div>
-            <div className="py-3">
+            </TableCell>
+            <TableCell label={t('warehouse:table.quantity')}>
               <p
                 className={`font-poppins text-sm whitespace-nowrap ${level === 'ok' && drink.quantity === 0 ? 'text-red' : STOCK_TEXT_CLASS[level]}`}
               >
                 {drink.quantity}
               </p>
-            </div>
+            </TableCell>
           </DefaultTableRowContainer>
         )
       })}

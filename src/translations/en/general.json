@@ -22,7 +22,6 @@
     "maxCharError": "You have exceeded the maximum number of characters"
   },
   "errorMessage": "Something went wrong. Please try again later.",
-  "screenWraning": "This web application is not optimized for screens smaller than 768px. Please use a device with a higher resolution.",
   "profile": "Profile",
   "profileSaved": "Profile saved.",
   "logout": "Log out",

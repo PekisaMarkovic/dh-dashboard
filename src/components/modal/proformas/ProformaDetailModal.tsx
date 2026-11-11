@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import Skeleton from '@/src/components/skeleton/Skeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
+import TableCell from '@/src/components/table/TableCell'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { useProformaQuery } from '@/src/hooks/queries/use-proforma-queries'
@@ -50,7 +51,7 @@ const ProformaDetailModal = () => {
       />
 
       <div className="mt-6">
-        <div className="border-b-1 border-b-light-grey-alt border-solid pb-2">
+        <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pb-2">
           <div className="grid grid-cols-6 gap-x-4">
             <div className="col-span-2">
               <Heading text={t('proforma:table.name')} variant="2" size="sm" color="grey" weight="medium" />
@@ -65,16 +66,25 @@ const ProformaDetailModal = () => {
         </div>
 
         {proforma.items?.map((item) => (
-          <div key={item.proformaItemId} className="grid grid-cols-6 gap-x-4 py-2.5 border-b-1 border-b-light-grey-alt border-solid">
+          <div
+            key={item.proformaItemId}
+            className="grid grid-cols-2 md:grid-cols-6 gap-x-4 gap-y-1 py-2.5 border-b-1 border-b-light-grey-alt border-solid"
+          >
             <div className="col-span-2">
               <Paragraph text={item.name} size="sm" color="black" />
             </div>
-            <Paragraph text={`${item.quantity}`} size="sm" color="black" />
-            <Paragraph text={formatPrice(item.unitPrice)} size="sm" color="black" />
-            <Paragraph text={`${formatMoney(item.discountPercent)}%`} size="sm" color="black" />
-            <div className="flex justify-end">
+            <TableCell isDense label={t('proforma:table.quantity')}>
+              <Paragraph text={`${item.quantity}`} size="sm" color="black" />
+            </TableCell>
+            <TableCell isDense label={t('proforma:table.unitPrice')}>
+              <Paragraph text={formatPrice(item.unitPrice)} size="sm" color="black" />
+            </TableCell>
+            <TableCell isDense label={t('proforma:table.discount')}>
+              <Paragraph text={`${formatMoney(item.discountPercent)}%`} size="sm" color="black" />
+            </TableCell>
+            <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
               <Paragraph text={formatMoney(item.lineTotal)} size="sm" color="black" />
-            </div>
+            </TableCell>
           </div>
         ))}
 

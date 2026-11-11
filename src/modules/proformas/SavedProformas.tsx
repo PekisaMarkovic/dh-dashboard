@@ -17,6 +17,7 @@ import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useProformaService } from '@/src/services/use-proforma-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
+import TableCell from '@/src/components/table/TableCell'
 import { CustomDropdown, IProforma } from '@/src/interfaces'
 import { useProformaDownload } from '@/src/hooks/use-proforma-download'
 import { useProformaPrint } from '@/src/hooks/use-proforma-print'
@@ -110,7 +111,7 @@ const SavedProformas = () => {
         <TableSkeleton columns={[1, 1, 1, 1, 1, 1, 0.3]} rows={8} />
       ) : (
         <>
-          <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+          <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
             <div className="grid grid-cols-7">
               <Heading text={t('proforma:saved.number')} variant="2" size="sm" color="grey" weight="medium" />
               <Heading text={t('proforma:saved.date')} variant="2" size="sm" color="grey" weight="medium" />
@@ -129,24 +130,24 @@ const SavedProformas = () => {
               onRowClick={() => dispatch(openModal({ modal: ModalEnums.PROFORMA_DETAIL, data: { proformaId: p.proformaId } }))}
               dropdownOptions={options(p)}
             >
-              <div className="py-3">
+              <TableCell isTitle label={t('proforma:saved.number')} className="col-span-2 md:col-span-1">
                 <Paragraph text={p.number} size="sm" color="black" />
-              </div>
-              <div className="py-3">
+              </TableCell>
+              <TableCell label={t('proforma:saved.date')}>
                 <Paragraph text={formatDate(p.createdAt)} size="sm" color="black" />
-              </div>
-              <div className="py-3">
+              </TableCell>
+              <TableCell label={t('proforma:saved.warehouse')}>
                 <Paragraph text={p.warehouseName} size="sm" color="black" />
-              </div>
-              <div className="py-3">
+              </TableCell>
+              <TableCell label={t('proforma:saved.createdBy')}>
                 <Paragraph text={p.createdByName || ''} size="sm" color="black" />
-              </div>
-              <div className="py-3">
+              </TableCell>
+              <TableCell label={t('proforma:saved.total')}>
                 <Paragraph text={formatMoney(p.totalWithVat)} size="sm" color="black" />
-              </div>
-              <div className="py-3">
+              </TableCell>
+              <TableCell label={t('proforma:saved.status')}>
                 <Paragraph text={t(`proforma:status.${p.status}`)} size="sm" color={p.status === 'returned' ? 'orange' : 'green'} />
-              </div>
+              </TableCell>
             </DefaultTableRowContainer>
           ))}
 

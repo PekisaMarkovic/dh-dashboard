@@ -9,6 +9,7 @@ import { usePagedList } from '@/src/hooks/use-paged-list'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import InfoGridSkeleton from '@/src/components/skeleton/InfoGridSkeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
+import TableCell from '@/src/components/table/TableCell'
 import DataSection from '@/src/components/section/DataSection'
 import GeneralIcons from '@/src/icons/general'
 import { useCompanyQuery, useCompanyUsersQuery, useInvitationsQuery } from '@/src/hooks/queries/use-company-queries'
@@ -96,7 +97,7 @@ const Company = () => {
         {!isLoad ? (
           <InfoGridSkeleton items={8} />
         ) : (
-          <div className="grid grid-cols-3 gap-4 gap-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 gap-y-6">
             {[
               { label: t('company:info.name'), value: company?.name },
               { label: t('company:info.street'), value: company?.street },
@@ -129,7 +130,7 @@ const Company = () => {
           <TableSkeleton columns={[1, 1, 1, 1]} rows={4} />
         ) : (
           <>
-            <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+            <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
               <div className="grid grid-cols-4">
                 <Heading text={t('company:users.name')} variant="2" size="sm" color="grey" weight="medium" />
                 <Heading text={t('company:users.email')} variant="2" size="sm" color="grey" weight="medium" />
@@ -138,11 +139,22 @@ const Company = () => {
               </div>
             </div>
             {usersPage.pageItems.map((u) => (
-              <div key={u.userId} className="grid grid-cols-4 px-4 py-3 border-b-1 border-b-light-grey-alt border-solid">
-                <Paragraph text={`${u.firstName} ${u.lastName}`} size="sm" color="black" />
-                <Paragraph text={u.email} size="sm" color="black" />
-                <Paragraph text={getRoleTranslationKey(u.roles) ? t(getRoleTranslationKey(u.roles)!) : ''} size="sm" color="black" />
-                <Paragraph text={formatDate(u.createdAt)} size="sm" color="black" />
+              <div
+                key={u.userId}
+                className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-0 pl-1 pr-1 md:px-4 py-3 md:py-0 border-b-1 border-b-light-grey-alt border-solid"
+              >
+                <TableCell isTitle label={t('company:users.name')} className="col-span-2 md:col-span-1">
+                  <Paragraph text={`${u.firstName} ${u.lastName}`} size="sm" color="black" />
+                </TableCell>
+                <TableCell isTitle label={t('company:users.email')} className="col-span-2 md:col-span-1 -mt-1.5 md:mt-0">
+                  <Paragraph text={u.email} size="sm" color="black" />
+                </TableCell>
+                <TableCell label={t('company:users.role')}>
+                  <Paragraph text={getRoleTranslationKey(u.roles) ? t(getRoleTranslationKey(u.roles)!) : ''} size="sm" color="black" />
+                </TableCell>
+                <TableCell label={t('company:users.joined')}>
+                  <Paragraph text={formatDate(u.createdAt)} size="sm" color="black" />
+                </TableCell>
               </div>
             ))}
             {!users.length && <Paragraph text={t('company:users.empty')} size="sm" className="mt-3" />}
@@ -156,7 +168,7 @@ const Company = () => {
           <TableSkeleton columns={[1, 1, 1, 1, 0.4]} rows={3} />
         ) : (
           <>
-            <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
+            <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
               <div className="grid grid-cols-5">
                 <Heading text={t('company:invitations.email')} variant="2" size="sm" color="grey" weight="medium" />
                 <Heading text={t('company:invitations.status')} variant="2" size="sm" color="grey" weight="medium" />
@@ -167,17 +179,20 @@ const Company = () => {
             </div>
             {invitationsPage.pageItems.map((i) => (
               <DefaultTableRowContainer key={i.invitationId} cols={5} dropdownOptions={invitationOptions(i)}>
-                <div className="py-3">
+                <TableCell isTitle label={t('company:invitations.email')} className="col-span-2 md:col-span-1 md:pr-4">
                   <Paragraph text={i.email} size="sm" color="black" />
-                </div>
-                <div className="py-3">
-                  <Paragraph text={t(`company:invitations.${i.status}`)} size="sm" color={STATUS_COLOR[i.status]} />
-                </div>
-                <div className="py-3">
-                  <Paragraph text={formatDate(i.sentAt)} size="sm" color="black" />
-                </div>
-                <div className="py-3">
-                  <Paragraph text={formatDate(i.expiresAt)} size="sm" color="black" />
+                </TableCell>
+                {/* status and dates in one row on a phone, on a tablet and up they are columns of the table */}
+                <div className="col-span-2 grid grid-cols-3 gap-x-3 md:contents">
+                  <TableCell label={t('company:invitations.status')}>
+                    <Paragraph text={t(`company:invitations.${i.status}`)} size="sm" color={STATUS_COLOR[i.status]} />
+                  </TableCell>
+                  <TableCell label={t('company:invitations.sentAt')}>
+                    <Paragraph text={formatDate(i.sentAt)} size="sm" color="black" />
+                  </TableCell>
+                  <TableCell label={t('company:invitations.expiresAt')}>
+                    <Paragraph text={formatDate(i.expiresAt)} size="sm" color="black" />
+                  </TableCell>
                 </div>
               </DefaultTableRowContainer>
             ))}

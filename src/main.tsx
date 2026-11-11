@@ -14,7 +14,6 @@ import '@/src/styles/index.scss'
 import { ToastContainer } from 'react-toastify'
 import '@/src/translations/config.ts'
 import MainModal from '@/src/components/modal/index.js'
-import ScreenSizeWarning from './components/section/ScreenSizeWarnings'
 import GlobalLoader from '@/src/components/section/GlobalLoader'
 
 createRoot(document.getElementById('root')!).render(
@@ -22,12 +21,10 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <ScreenSizeWarning>
-            <App />
-            <ToastContainer autoClose={3000} position="top-center" hideProgressBar />
-            <MainModal />
-            <GlobalLoader />
-          </ScreenSizeWarning>
+          <App />
+          <ToastContainer autoClose={3000} position="top-center" hideProgressBar />
+          <MainModal />
+          <GlobalLoader />
         </Router>
       </QueryClientProvider>
     </Provider>

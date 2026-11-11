@@ -26,9 +26,9 @@ const DataSection = ({ subtitle, title, children, element, tooltip, dropdownOpti
   const handleOnClick = () => setOpen(!open)
 
   return (
-    <div className={`relative bg-white rounded-sm border-1 border-light-grey-alt border-solid mt-4 mb-4 px-6 py-4`}>
-      <div className="flex items-center justify-between">
-        <div className="mb-6">
+    <div className={`relative bg-white rounded-sm border-1 border-light-grey-alt border-solid mt-4 mb-4 px-4 sm:px-6 py-4`}>
+      <div className="flex flex-wrap items-start sm:items-center justify-between gap-x-4">
+        <div className="mb-4 sm:mb-6">
           <div className="flex gap-4 items-center">
             <Heading variant="3" text={title} size="base" color="black" />
             <TooltipIcon text={tooltip} />

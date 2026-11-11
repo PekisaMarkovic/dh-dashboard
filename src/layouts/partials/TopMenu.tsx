@@ -21,9 +21,11 @@ type Props = {
   backButton?: {
     onClick: () => void
   }
+  // opens the menu on a tablet or a phone (the button is shown there)
+  onMenuClick?: () => void
 }
 
-const TopMenu = ({ backButton }: Props) => {
+const TopMenu = ({ backButton, onMenuClick }: Props) => {
   const { t } = useTranslation(['g', 'info', 'static'])
   const showError = useErrorToast()
   const { logOut } = useAuthService()
@@ -77,8 +79,17 @@ const TopMenu = ({ backButton }: Props) => {
   }
 
   return (
-    <div className="pl-8 pr-14 flex items-center justify-between py-3 border-b-1 border-b-lighy-grey border-solid absolute top-0 left-0 right-0 bg-white">
-      <div>
+    <div className="pl-4 pr-4 md:pl-8 md:pr-14 gap-x-3 flex items-center justify-between py-3 border-b-1 border-b-lighy-grey border-solid absolute top-0 left-0 right-0 bg-white">
+      <div className="flex items-center gap-x-3 min-w-0">
+        <button
+          type="button"
+          aria-label={t('static:navigation.leftSide.title')}
+          onClick={onMenuClick}
+          className="lg:hidden shrink-0 flex items-center justify-center h-10 w-10 rounded-full border-1 border-solid border-light-grey-alt hover:bg-light-grey-transparent"
+        >
+          <GeneralIcons type="Menu" />
+        </button>
+
         {page && (
           <Heading
             leftIcon={
@@ -95,7 +106,7 @@ const TopMenu = ({ backButton }: Props) => {
       </div>
 
       {user && (
-        <div className="flex gap-x-6 items-center relative">
+        <div className="flex gap-x-3 md:gap-x-6 items-center relative shrink-0">
           <LanguageSelect />
           <div className="flex items-center cursor-pointer" onClick={handleToggle} ref={clickAwayRef}>
             <div className="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">

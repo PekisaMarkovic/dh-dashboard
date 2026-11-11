@@ -22,7 +22,6 @@
     "maxCharError": "Prekoračen je maksimalan broj karaktera"
   },
   "errorMessage": "Nešto je pošlo naopako. Pokušajte ponovo kasnije.",
-  "screenWraning": "Ova veb aplikacija nije prilagođena ekranima užim od 768px. Koristite uređaj sa većom rezolucijom.",
   "profile": "Profil",
   "profileSaved": "Profil je sačuvan.",
   "logout": "Odjavi se",

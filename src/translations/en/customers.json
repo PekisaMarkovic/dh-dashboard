@@ -10,6 +10,8 @@
   "modal": {
     "addTitle": "Add customer",
     "editTitle": "Edit customer",
+    "code": "Code",
+    "codePlh": "Enter the code of the customer..",
     "name": "Name",
     "namePlh": "Enter the name of the customer.."
   },

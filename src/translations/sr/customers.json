@@ -10,6 +10,8 @@
   "modal": {
     "addTitle": "Dodaj kupca",
     "editTitle": "Izmeni kupca",
+    "code": "Šifra",
+    "codePlh": "Unesite šifru kupca..",
     "name": "Naziv",
     "namePlh": "Unesite naziv kupca.."
   },

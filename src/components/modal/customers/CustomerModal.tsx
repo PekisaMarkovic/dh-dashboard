@@ -21,14 +21,14 @@ const CustomerModal = () => {
   const { createCustomer, updateCustomer } = useCustomerService()
   const dispatch = useAppDispatch()
   const { afterCustomerChange } = useRefreshData()
-  const methods = useForm({ resolver: CUSTOMER_VALIDATION, defaultValues: { name: customer?.name || '' } })
+  const methods = useForm({ resolver: CUSTOMER_VALIDATION, defaultValues: { code: customer?.code || '', name: customer?.name || '' } })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       if (customer) {
-        await updateCustomer(customer.customerId, { name: values.name })
+        await updateCustomer(customer.customerId, { code: values.code, name: values.name })
       } else {
-        await createCustomer({ name: values.name })
+        await createCustomer({ code: values.code, name: values.name })
       }
 
       afterCustomerChange()
@@ -42,6 +42,7 @@ const CustomerModal = () => {
     <FormProvider {...methods}>
       <Heading text={customer ? t('customer:modal.editTitle') : t('customer:modal.addTitle')} variant="2" size="base" color="grey" />
       <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
+        <InputText isRequired name="code" initValue={customer?.code || ''} label={t('customer:modal.code')} placeholder={t('customer:modal.codePlh')} />
         <InputText isRequired name="name" initValue={customer?.name} label={t('customer:modal.name')} placeholder={t('customer:modal.namePlh')} />
 
         <div className="flex justify-center">

@@ -4,6 +4,7 @@ import { useApi } from '@/src/hooks/use-api'
 import { ICustomer, ICustomerOption, PageParams, Paginated } from '@/src/interfaces'
 
 type CustomerBody = {
+  code: string
   name: string
 }
 

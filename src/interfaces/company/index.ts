@@ -9,6 +9,8 @@ export interface ICompany {
   pib: string
   registrationNumber: string
   phone: string | null
+  // printed on the proforma PDF as the issuer, the employee name is used when empty
+  invoiceName: string | null
   bankAccount: string
   createdAt: string
 }

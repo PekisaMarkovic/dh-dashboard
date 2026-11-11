@@ -24,6 +24,7 @@ export const COMPANY_VALIDATION = yupResolver(
       .typeError('phone')
       .trim()
       .test('phone-format', 'phone', (value) => !value || PHONE_PATTERN.test(value)),
+    invoiceName: Yup.string().typeError('invoiceName').trim().max(150, 'invoiceName'),
     bankAccount: Yup.string().typeError('bankAccount').trim().required('bankAccount').matches(BANK_ACCOUNT_PATTERN, 'bankAccount'),
   }),
 )

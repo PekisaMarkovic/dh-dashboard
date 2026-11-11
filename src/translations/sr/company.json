@@ -10,6 +10,8 @@
     "registrationNumber": "Matični broj",
     "phone": "Telefon",
     "bankAccount": "Tekući račun",
+    "invoiceName": "Ime na fakturi",
+    "noInvoiceName": "-",
     "edit": "Izmeni firmu",
     "noPhone": "-"
   },
@@ -62,6 +64,8 @@
     "phonePlh": "npr. +381 11 123 456 (nije obavezno)",
     "bankAccount": "Tekući račun",
     "bankAccountPlh": "npr. 160600000012345678",
+    "invoiceName": "Ime na fakturi",
+    "invoiceNamePlh": "Milutin Milutinović",
     "saved": "Podaci o firmi su sačuvani."
   }
 }

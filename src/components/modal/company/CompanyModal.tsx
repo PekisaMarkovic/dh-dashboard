@@ -32,6 +32,7 @@ const CompanyModal = () => {
       pib: company?.pib || '',
       registrationNumber: company?.registrationNumber || '',
       phone: company?.phone || '',
+      invoiceName: company?.invoiceName || '',
       bankAccount: company?.bankAccount || '',
     },
   })
@@ -48,6 +49,8 @@ const CompanyModal = () => {
         registrationNumber: values.registrationNumber.trim(),
         // an empty phone is saved as nothing
         phone: values.phone?.trim() || null,
+        // an empty name is saved as nothing, the PDF then uses the name of the employee
+        invoiceName: values.invoiceName?.trim() || null,
         bankAccount: values.bankAccount.trim(),
       })
 
@@ -88,6 +91,12 @@ const CompanyModal = () => {
               placeholder={t('company:modal.registrationNumberPlh')}
             />
             <InputText name="phone" initValue={company?.phone || ''} label={t('company:modal.phone')} placeholder={t('company:modal.phonePlh')} />
+            <InputText
+              name="invoiceName"
+              initValue={company?.invoiceName || ''}
+              label={t('company:modal.invoiceName')}
+              placeholder={t('company:modal.invoiceNamePlh')}
+            />
             <InputText
               isRequired
               name="bankAccount"

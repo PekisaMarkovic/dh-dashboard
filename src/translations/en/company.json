@@ -10,6 +10,8 @@
     "registrationNumber": "Registration number",
     "phone": "Phone",
     "bankAccount": "Bank account",
+    "invoiceName": "Name on the invoice",
+    "noInvoiceName": "-",
     "edit": "Edit company",
     "noPhone": "-"
   },
@@ -62,6 +64,8 @@
     "phonePlh": "e.g. +381 11 123 456 (optional)",
     "bankAccount": "Bank account",
     "bankAccountPlh": "e.g. 160600000012345678",
+    "invoiceName": "Name on the invoice",
+    "invoiceNamePlh": "Milutin Milutinovic",
     "saved": "Company data saved."
   }
 }

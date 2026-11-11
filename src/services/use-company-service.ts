@@ -11,6 +11,8 @@ type UpdateCompanyBody = {
   registrationNumber: string
   // empty when the company has no phone
   phone: string | null
+  // the name printed on the proforma PDF, empty means the name of the employee
+  invoiceName: string | null
   bankAccount: string
 }
 

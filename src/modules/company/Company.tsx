@@ -106,6 +106,7 @@ const Company = () => {
               { label: t('company:info.pib'), value: company?.pib },
               { label: t('company:info.registrationNumber'), value: company?.registrationNumber },
               { label: t('company:info.phone'), value: company?.phone || t('company:info.noPhone') },
+              { label: t('company:info.invoiceName'), value: company?.invoiceName || t('company:info.noInvoiceName') },
               { label: t('company:info.bankAccount'), value: company?.bankAccount },
               { label: t('company:info.created'), value: company ? formatDate(company.createdAt) : '' },
             ].map(({ label, value }) => (

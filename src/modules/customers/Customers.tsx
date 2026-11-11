@@ -40,7 +40,11 @@ const Customers = () => {
   const visible = useMemo(() => customers.filter((c) => c.name.toLowerCase().includes(search.trim().toLowerCase())), [customers, search])
   const { pageItems, page, setPage, totalPages } = usePagedList(visible, [search])
 
-  const handleDelete = (customer: ICustomer) => {
+  const handleAdd = () => dispatch(openModal({ modal: ModalEnums.CUSTOMER }))
+
+  const handleEdit = (customer: ICustomer) => () => dispatch(openModal({ modal: ModalEnums.CUSTOMER, data: { customer } }))
+
+  const handleDelete = (customer: ICustomer) => () => {
     dispatch(
       openModal({
         modal: ModalEnums.CONFIRM,
@@ -62,8 +66,8 @@ const Customers = () => {
   }
 
   const options = (customer: ICustomer): CustomDropdown[] => [
-    { content: { type: 'button', text: t('g:button.edit'), onClick: () => dispatch(openModal({ modal: ModalEnums.CUSTOMER, data: { customer } })) } },
-    { content: { type: 'button', text: t('g:button.delete'), onClick: () => handleDelete(customer) }, textColor: 'red' },
+    { content: { type: 'button', text: t('g:button.edit'), onClick: handleEdit(customer) } },
+    { content: { type: 'button', text: t('g:button.delete'), onClick: handleDelete(customer) }, textColor: 'red' },
   ]
 
   return (
@@ -77,12 +81,7 @@ const Customers = () => {
 
         {isAdmin && (
           <div className="ml-auto">
-            <MainButton
-              text={t('customer:add')}
-              variant="contained"
-              size="medium"
-              onClick={() => dispatch(openModal({ modal: ModalEnums.CUSTOMER }))}
-            />
+            <MainButton text={t('customer:add')} variant="contained" size="medium" onClick={handleAdd} />
           </div>
         )}
       </div>

@@ -16,9 +16,12 @@ const buttonClass =
 const QuantityInput = ({ value, max, min = 0, onChange, disabled, ariaLabel }: Props) => {
   const clamp = (next: number) => onChange(Math.min(Math.max(Number.isFinite(next) ? Math.trunc(next) : min, min), max))
 
+  const handleDecrease = () => clamp(value - 1)
+  const handleIncrease = () => clamp(value + 1)
+
   return (
     <div className="inline-flex items-center rounded-xs-plus border-1 border-solid border-grey overflow-hidden bg-white">
-      <button type="button" className={buttonClass} disabled={disabled || value <= min} onClick={() => clamp(value - 1)} aria-label="-">
+      <button type="button" className={buttonClass} disabled={disabled || value <= min} onClick={handleDecrease} aria-label="-">
         −
       </button>
       <input
@@ -29,7 +32,7 @@ const QuantityInput = ({ value, max, min = 0, onChange, disabled, ariaLabel }: P
         onChange={(e) => clamp(Number(e.target.value.replace(/\D/g, '')))}
         className="h-9 w-14 text-center font-poppins text-sm text-black bg-white focus:outline-none disabled:cursor-not-allowed disabled:bg-white"
       />
-      <button type="button" className={buttonClass} disabled={disabled || value >= max} onClick={() => clamp(value + 1)} aria-label="+">
+      <button type="button" className={buttonClass} disabled={disabled || value >= max} onClick={handleIncrease} aria-label="+">
         +
       </button>
     </div>

@@ -5,11 +5,13 @@ type Props = {
   isActive: boolean
 }
 const SinglePage = ({ isActive, page, setPage }: Props) => {
+  const handleClick = () => setPage(page)
+
   return (
     <li
       key={page}
       className={`cursor-pointer fonts-poppins py-1 px-2 ${isActive ? 'bg-green text-white' : 'bg-lighy-grey text-dark-grey'} rounded-sm`}
-      onClick={() => setPage(page)}
+      onClick={handleClick}
     >
       {page}
     </li>

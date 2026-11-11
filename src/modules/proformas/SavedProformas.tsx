@@ -43,7 +43,7 @@ const SavedProformas = () => {
   const isLoad = !isPending
   const { pageItems, page, setPage, totalPages } = usePagedList(proformas)
 
-  const handleDownload = async (proforma: IProforma) => {
+  const handleDownload = (proforma: IProforma) => async () => {
     try {
       await downloadProforma(proforma)
     } catch (error) {
@@ -51,7 +51,7 @@ const SavedProformas = () => {
     }
   }
 
-  const handlePrint = async (proforma: IProforma) => {
+  const handlePrint = (proforma: IProforma) => async () => {
     try {
       await printProforma(proforma.proformaId)
     } catch (error) {
@@ -71,7 +71,7 @@ const SavedProformas = () => {
     }
   }
 
-  const handleReturn = (proforma: IProforma) =>
+  const handleReturn = (proforma: IProforma) => () =>
     dispatch(
       openModal({
         modal: ModalEnums.CONFIRM,
@@ -85,12 +85,14 @@ const SavedProformas = () => {
       }),
     )
 
+  const handleCreate = () => navigate(ROUTE_NAMES.createProforma)
+
   const options = (proforma: IProforma): CustomDropdown[] => [
-    { content: { type: 'button', text: t('proforma:print'), onClick: () => handlePrint(proforma) } },
-    { content: { type: 'button', text: t('proforma:download'), onClick: () => handleDownload(proforma) } },
+    { content: { type: 'button', text: t('proforma:print'), onClick: handlePrint(proforma) } },
+    { content: { type: 'button', text: t('proforma:download'), onClick: handleDownload(proforma) } },
     // only admins, and only while the drinks are still taken off the stock
     ...(isAdmin && proforma.status === 'active'
-      ? [{ content: { type: 'button', text: t('proforma:return.option'), onClick: () => handleReturn(proforma) } } satisfies CustomDropdown]
+      ? [{ content: { type: 'button', text: t('proforma:return.option'), onClick: handleReturn(proforma) } } satisfies CustomDropdown]
       : []),
   ]
 
@@ -100,7 +102,7 @@ const SavedProformas = () => {
       subtitle={t('proforma:saved.subtitle')}
       element={
         <div className="mb-6">
-          <MainButton text={t('proforma:create')} variant="contained" size="medium" onClick={() => navigate(ROUTE_NAMES.createProforma)} />
+          <MainButton text={t('proforma:create')} variant="contained" size="medium" onClick={handleCreate} />
         </div>
       }
     >

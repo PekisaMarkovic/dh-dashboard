@@ -11,11 +11,13 @@ type Props = {
 }
 
 const EmptyComponent = ({ text, button }: Props) => {
+  const handleClick = () => button?.handleOnClick()
+
   return (
     <div className="flex flex-col items-center justify-center gap-2 p-6">
       <EmptyIcon />
       <Paragraph text={text} weight="light" color="grey" size="3xl" />
-      {button && <MainButton text={button.text} variant="alternative" size="medium" onClick={() => button.handleOnClick()} />}
+      {button && <MainButton text={button.text} variant="alternative" size="medium" onClick={handleClick} />}
     </div>
   )
 }

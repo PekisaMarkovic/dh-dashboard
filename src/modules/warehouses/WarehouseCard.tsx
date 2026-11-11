@@ -72,10 +72,12 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
     )
   }
 
+  const handleEdit = () => dispatch(openModal({ modal: ModalEnums.WAREHOUSE, data: { warehouse } }))
+
+  const handleAddDrink = () => dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId: warehouse.warehouseId } }))
+
   const options: CustomDropdown[] = [
-    {
-      content: { type: 'button', text: t('g:button.edit'), onClick: () => dispatch(openModal({ modal: ModalEnums.WAREHOUSE, data: { warehouse } })) },
-    },
+    { content: { type: 'button', text: t('g:button.edit'), onClick: handleEdit } },
     { content: { type: 'button', text: t('g:button.delete'), onClick: handleDelete }, textColor: 'red' },
   ]
 
@@ -87,12 +89,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
       element={
         isAdmin ? (
           <div className="mb-6 mr-8">
-            <MainButton
-              text={t('warehouse:addDrink')}
-              variant="outlined"
-              size="small"
-              onClick={() => dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId: warehouse.warehouseId } }))}
-            />
+            <MainButton text={t('warehouse:addDrink')} variant="outlined" size="small" onClick={handleAddDrink} />
           </div>
         ) : undefined
       }

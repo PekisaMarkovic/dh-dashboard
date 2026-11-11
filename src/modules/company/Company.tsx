@@ -49,7 +49,7 @@ const Company = () => {
   const invitationsPage = usePagedList(invitations)
 
   // sends the email again and starts the 7 days again, the link stays the same
-  const resendInvitation = async (invitation: IInvitation) => {
+  const handleResend = (invitation: IInvitation) => async () => {
     try {
       await resend(invitation.invitationId)
       customToast.success(t('company:invitations.resent', { email: invitation.email }))
@@ -61,11 +61,17 @@ const Company = () => {
     await afterInvitationChange()
   }
 
+  const handleEdit = () => {
+    if (company) dispatch(openModal({ modal: ModalEnums.COMPANY, data: { company } }))
+  }
+
+  const handleInvite = () => dispatch(openModal({ modal: ModalEnums.INVITE }))
+
   // only an invitation that was not used can be sent again (also an expired one)
   const invitationOptions = (invitation: IInvitation): CustomDropdown[] =>
     invitation.status === 'accepted'
       ? []
-      : [{ content: { type: 'button', text: t('company:invitations.resend'), onClick: () => resendInvitation(invitation) } }]
+      : [{ content: { type: 'button', text: t('company:invitations.resend'), onClick: handleResend(invitation) } }]
 
   return (
     <div className="pb-8">
@@ -79,7 +85,7 @@ const Company = () => {
               title={t('company:info.edit')}
               aria-label={t('company:info.edit')}
               disabled={!company}
-              onClick={() => company && dispatch(openModal({ modal: ModalEnums.COMPANY, data: { company } }))}
+              onClick={handleEdit}
               className="flex items-center justify-center h-10 w-10 rounded-full border-1 border-solid border-light-grey-alt hover:bg-light-grey-transparent disabled:cursor-not-allowed disabled:opacity-50"
             >
               <GeneralIcons type="Edit" />
@@ -115,12 +121,7 @@ const Company = () => {
         subtitle={t('company:users.subtitle')}
         element={
           <div className="mb-6">
-            <MainButton
-              text={t('company:users.addEmployee')}
-              variant="contained"
-              size="medium"
-              onClick={() => dispatch(openModal({ modal: ModalEnums.INVITE }))}
-            />
+            <MainButton text={t('company:users.addEmployee')} variant="contained" size="medium" onClick={handleInvite} />
           </div>
         }
       >

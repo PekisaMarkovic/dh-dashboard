@@ -59,6 +59,8 @@ const CompanyModal = () => {
     }
   }
 
+  const handleClose = () => dispatch(removeModal())
+
   return (
     <FormProvider {...methods}>
       <div className="w-[640px] max-w-full">
@@ -96,7 +98,7 @@ const CompanyModal = () => {
           </div>
 
           <div className="flex justify-end gap-x-4 pt-2">
-            <MainButton text={t('g:button.cancel')} variant="alternative" size="medium" onClick={() => dispatch(removeModal())} />
+            <MainButton text={t('g:button.cancel')} variant="alternative" size="medium" onClick={handleClose} />
             <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
           </div>
         </form>

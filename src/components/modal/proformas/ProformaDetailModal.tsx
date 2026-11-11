@@ -25,6 +25,8 @@ const ProformaDetailModal = () => {
     if (isError) dispatch(removeModal())
   }, [isError])
 
+  const handleClose = () => dispatch(removeModal())
+
   if (!proforma) {
     return (
       <div className="w-[720px] max-w-full">
@@ -82,7 +84,7 @@ const ProformaDetailModal = () => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <MainButton text={t('g:button.okey')} variant="contained" size="medium" onClick={() => dispatch(removeModal())} />
+        <MainButton text={t('g:button.okey')} variant="contained" size="medium" onClick={handleClose} />
       </div>
     </div>
   )

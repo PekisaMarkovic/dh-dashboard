@@ -45,6 +45,11 @@ const LanguageSelect = () => {
     }
   }
 
+  const handleToggle = () => setOpen((prev) => !prev)
+
+  // one handler for every flag in the list
+  const handleSelect = (language: Language) => () => changeLanguage(language)
+
   return (
     <div className="relative" ref={clickAwayRef}>
       <button
@@ -53,7 +58,7 @@ const LanguageSelect = () => {
         aria-haspopup="listbox"
         aria-expanded={open}
         title={currentLabel}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={handleToggle}
         className={`flex items-center justify-between gap-x-2 h-9 px-2.5 bg-white rounded-xs-plus border-1 border-solid ${open ? 'border-green' : 'border-grey'}`}
       >
         <FlagIcon language={current} className="h-4 w-6 block rounded-[2px]" />
@@ -71,7 +76,7 @@ const LanguageSelect = () => {
                 type="button"
                 title={label}
                 aria-label={label}
-                onClick={() => changeLanguage(value)}
+                onClick={handleSelect(value)}
                 className={`flex w-full items-center justify-center py-2 hover:bg-light-grey-transparent ${value === current ? 'bg-light-grey-transparent' : ''}`}
               >
                 <FlagIcon language={value} className="h-4 w-6 block rounded-[2px]" />

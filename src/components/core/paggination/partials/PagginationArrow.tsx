@@ -8,12 +8,14 @@ type Props = {
 }
 
 const PagginationArrow = ({ disabled, setPage, reverse }: Props) => {
+  const handleClick = () => setPage()
+
   return (
     <li
       className={`flex justify-center items-center fonts-poppins py-1 px-5 bg-lighy-grey text-dark-grey ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'opacity-1 cursor-pointer'
       } rounded-sm`}
-      onClick={() => setPage()}
+      onClick={handleClick}
     >
       <GeneralIcons type="ArrowRight" className={`${reverse ? 'rotate-180' : ''}`} />
     </li>

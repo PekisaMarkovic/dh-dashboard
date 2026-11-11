@@ -29,7 +29,9 @@ const DrinksTable = ({ drinks }: Props) => {
   const { isAdmin } = useRoles()
   const { pageItems, page, setPage, totalPages } = usePagedList(drinks)
 
-  const handleDelete = (drink: IDrink) => {
+  const handleEdit = (drink: IDrink) => () => dispatch(openModal({ modal: ModalEnums.DRINK, data: { drink, warehouseId: drink.warehouseId } }))
+
+  const handleDelete = (drink: IDrink) => () => {
     dispatch(
       openModal({
         modal: ModalEnums.CONFIRM,
@@ -51,14 +53,8 @@ const DrinksTable = ({ drinks }: Props) => {
   }
 
   const options = (drink: IDrink): CustomDropdown[] => [
-    {
-      content: {
-        type: 'button',
-        text: t('g:button.edit'),
-        onClick: () => dispatch(openModal({ modal: ModalEnums.DRINK, data: { drink, warehouseId: drink.warehouseId } })),
-      },
-    },
-    { content: { type: 'button', text: t('g:button.delete'), onClick: () => handleDelete(drink) }, textColor: 'red' },
+    { content: { type: 'button', text: t('g:button.edit'), onClick: handleEdit(drink) } },
+    { content: { type: 'button', text: t('g:button.delete'), onClick: handleDelete(drink) }, textColor: 'red' },
   ]
 
   return (

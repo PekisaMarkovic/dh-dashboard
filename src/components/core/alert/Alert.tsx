@@ -37,19 +37,17 @@ type Props = {
 
 const Alert = ({ className = '', variant, text, onClose }: Props) => {
   const { svg: Icon, iconColor, color, bgColor } = VARIANT_MAP[variant]
+
+  const handleClose = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    onClose?.()
+  }
+
   return (
     <p className={`flex items-center gap-2 p-2.5 font-inter text-xs rounded-lg bg-${bgColor} text-${color} ${className}`}>
       <Icon className={`self-start shrink-0 text-${iconColor}`} transform="scale(0.75)" />
       {text}
-      {onClose && (
-        <CloseLineIcon
-          className={`ml-auto mr-0 cursor-pointer text-${color}`}
-          onClick={(event: MouseEvent<HTMLElement>) => {
-            event.stopPropagation()
-            onClose()
-          }}
-        />
-      )}
+      {onClose && <CloseLineIcon className={`ml-auto mr-0 cursor-pointer text-${color}`} onClick={handleClose} />}
     </p>
   )
 }

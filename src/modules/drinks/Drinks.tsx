@@ -50,6 +50,17 @@ const Drinks = () => {
 
   const { pageItems, page, setPage, totalPages } = usePagedList(visible, [search, warehouseId])
 
+  // adding a drink needs a warehouse; the one picked in the filter is already chosen in the form
+  const handleAddDrink = () => {
+    if (!warehouses.length) {
+      customToast.error(t('drink:noWarehouses'))
+
+      return
+    }
+
+    dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId: warehouseId ? Number(warehouseId) : undefined } }))
+  }
+
   return (
     <div className="pb-8">
       <div className="flex flex-wrap items-center gap-4 mb-4">
@@ -70,17 +81,7 @@ const Drinks = () => {
 
         {isAdmin && (
           <div className="ml-auto">
-            <MainButton
-              text={t('drink:addDrink')}
-              variant="contained"
-              size="medium"
-              disabled={false}
-              onClick={() =>
-                warehouses.length
-                  ? dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId: warehouseId ? Number(warehouseId) : undefined } }))
-                  : customToast.error(t('drink:noWarehouses'))
-              }
-            />
+            <MainButton text={t('drink:addDrink')} variant="contained" size="medium" disabled={false} onClick={handleAddDrink} />
           </div>
         )}
       </div>

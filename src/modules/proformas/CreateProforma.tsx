@@ -182,6 +182,19 @@ const CreateProforma = () => {
 
   const close = () => navigate(ROUTE_NAMES.proformas)
 
+  const handleAddWarehouse = () => dispatch(openModal({ modal: ModalEnums.WAREHOUSE }))
+
+  const handleAddDrink = () => dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId } }))
+
+  const handleBackToLines = () => setView('lines')
+
+  // one handler for every "remove" in the list: it takes the drink off the proforma
+  const handleRemoveLine = (drinkId: number) => () => {
+    setLines((prev) => withoutKey(prev, drinkId))
+    setPrices((prev) => withoutKey(prev, drinkId))
+    setDiscounts((prev) => withoutKey(prev, drinkId))
+  }
+
   if (!isLoad) {
     return (
       <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
@@ -207,14 +220,7 @@ const CreateProforma = () => {
         <Paragraph text={isAdmin ? t('proforma:noWarehouse') : t('proforma:noWarehouseUser')} size="sm" color="grey" className="mt-3" />
         <div className="flex justify-end gap-x-4 mt-8">
           <MainButton text={t('g:button.cancel')} variant="alternative" size="medium" onClick={close} />
-          {isAdmin && (
-            <MainButton
-              text={t('proforma:createWarehouse')}
-              variant="contained"
-              size="medium"
-              onClick={() => dispatch(openModal({ modal: ModalEnums.WAREHOUSE }))}
-            />
-          )}
+          {isAdmin && <MainButton text={t('proforma:createWarehouse')} variant="contained" size="medium" onClick={handleAddWarehouse} />}
         </div>
       </div>
     )
@@ -325,15 +331,7 @@ const CreateProforma = () => {
         <Paragraph text={formatCents(lineTotalCents(drink, lines[drink.drinkId]))} size="sm" color="black" />
       </div>
       <div className="flex justify-end">
-        <button
-          type="button"
-          className="font-poppins text-sm text-red hover:underline"
-          onClick={() => {
-            setLines((prev) => withoutKey(prev, drink.drinkId))
-            setPrices((prev) => withoutKey(prev, drink.drinkId))
-            setDiscounts((prev) => withoutKey(prev, drink.drinkId))
-          }}
-        >
+        <button type="button" className="font-poppins text-sm text-red hover:underline" onClick={handleRemoveLine(drink.drinkId)}>
           {t('proforma:remove')}
         </button>
       </div>
@@ -393,12 +391,7 @@ const CreateProforma = () => {
                 <Paragraph text={isAdmin ? t('proforma:noDrinks') : t('proforma:noDrinksUser')} size="sm" color="grey" />
                 {isAdmin && (
                   <div className="mt-4">
-                    <MainButton
-                      text={t('proforma:addDrinks')}
-                      variant="contained"
-                      size="medium"
-                      onClick={() => dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId } }))}
-                    />
+                    <MainButton text={t('proforma:addDrinks')} variant="contained" size="medium" onClick={handleAddDrink} />
                   </div>
                 )}
               </div>
@@ -438,7 +431,7 @@ const CreateProforma = () => {
           <div className="flex justify-end gap-x-4 pt-4">
             {isPick ? (
               <>
-                <MainButton text={t('g:button.back')} variant="alternative" size="medium" onClick={() => setView('lines')} />
+                <MainButton text={t('g:button.back')} variant="alternative" size="medium" onClick={handleBackToLines} />
                 <MainButton text={t('proforma:pick.done')} variant="contained" size="medium" onClick={applyDraft} />
               </>
             ) : (

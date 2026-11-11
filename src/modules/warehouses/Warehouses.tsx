@@ -25,16 +25,13 @@ const Warehouses = () => {
   const drinks = drinksQuery.data ?? NO_DRINKS
   const isLoad = !warehousesQuery.isPending && !drinksQuery.isPending
 
+  const handleAddWarehouse = () => dispatch(openModal({ modal: ModalEnums.WAREHOUSE }))
+
   return (
     <div className="pb-8">
       {isAdmin && (
         <div className="flex justify-end">
-          <MainButton
-            text={t('warehouse:addWarehouse')}
-            variant="contained"
-            size="medium"
-            onClick={() => dispatch(openModal({ modal: ModalEnums.WAREHOUSE }))}
-          />
+          <MainButton text={t('warehouse:addWarehouse')} variant="contained" size="medium" onClick={handleAddWarehouse} />
         </div>
       )}
 

@@ -10,6 +10,7 @@ import { useRoles } from '@/src/hooks/use-roles'
 import { IDrink, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal, selectModal } from '@/src/state/shared/modal'
+import CardSkeleton from '@/src/components/skeleton/CardSkeleton'
 import WarehouseCard from '@/src/modules/warehouses/WarehouseCard'
 
 const Warehouses = () => {
@@ -52,6 +53,13 @@ const Warehouses = () => {
             onClick={() => dispatch(openModal({ modal: ModalEnums.WAREHOUSE }))}
           />
         </div>
+      )}
+
+      {!isLoad && (
+        <>
+          <CardSkeleton />
+          <CardSkeleton />
+        </>
       )}
 
       {isLoad && !warehouses.length && <Paragraph text={t('warehouse:empty')} size="sm" className="mt-6" />}

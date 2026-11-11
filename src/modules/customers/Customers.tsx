@@ -6,6 +6,7 @@ import InputText from '@/src/components/core/input/InputText'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
+import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import { ModalEnums } from '@/src/enum'
@@ -26,6 +27,7 @@ const Customers = () => {
   const { isAdmin } = useRoles()
   const { refreshKey } = useAppSelector(selectModal)
   const [customers, setCustomers] = useState<ICustomer[]>([])
+  const [isLoad, setIsLoad] = useState(false)
   const filterForm = useForm()
   const search: string = useWatch({ control: filterForm.control, name: 'search' }) || ''
 
@@ -34,6 +36,8 @@ const Customers = () => {
       setCustomers(await getCustomers())
     } catch (error) {
       showError(error)
+    } finally {
+      setIsLoad(true)
     }
   }, [])
 
@@ -92,7 +96,9 @@ const Customers = () => {
       </div>
 
       <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
-        {visible.length ? (
+        {!isLoad ? (
+          <TableSkeleton columns={[2, 1]} rows={8} />
+        ) : visible.length ? (
           <div>
             <div className="border-b-1 border-b-light-grey-alt border-solid px-4 pb-3 pt-2">
               <div className="grid grid-cols-3">
@@ -117,7 +123,7 @@ const Customers = () => {
         ) : (
           <Paragraph text={t('customer:empty')} size="sm" />
         )}
-        <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        {isLoad && <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />}
       </div>
     </div>
   )

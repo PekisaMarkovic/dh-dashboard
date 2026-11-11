@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import Skeleton from '@/src/components/skeleton/Skeleton'
+import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
@@ -36,7 +38,17 @@ const ProformaDetailModal = () => {
     fetchProforma()
   }, [proformaId])
 
-  if (!proforma) return null
+  if (!proforma) {
+    return (
+      <div className="w-[720px] max-w-full">
+        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-4 w-96 max-w-full mt-3" />
+        <div className="mt-6">
+          <TableSkeleton columns={[2, 1, 1, 1, 1]} rows={5} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-[720px] max-w-full">

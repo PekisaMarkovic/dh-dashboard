@@ -2,6 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import AuthApis from '@/src/api/auth'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { store } from '@/src/state/store'
+import { endRequest, startRequest } from '@/src/state/api-loading'
 import { removeUserData } from '@/src/state/user/authSlice'
 import { signIn } from '@/src/utils/auth'
 import { ACCESS_TOKEN, REFRESH_TOKEN, clearLocalStorageTokens, isTokenExpired } from '@/src/utils/token'
@@ -59,6 +60,9 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(async (config: RetriableConfig) => {
+  // the loader is shown from now on, the response handlers below end it (also when this one rejects)
+  startRequest()
+
   let token = localStorage.getItem(ACCESS_TOKEN) || ''
 
   if (token && !isAuthUrl(config.url) && isTokenExpired(token)) {
@@ -80,8 +84,15 @@ api.interceptors.request.use(async (config: RetriableConfig) => {
 })
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    endRequest()
+
+    return response
+  },
   async (error: AxiosError) => {
+    // this request is over, a retry below starts (and counts) a new one
+    endRequest()
+
     const config = error.config as RetriableConfig | undefined
 
     // the server did not accept the token (for example it was revoked): try once with a fresh one

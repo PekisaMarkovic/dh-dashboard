@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import Skeleton from '@/src/components/skeleton/Skeleton'
+import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import DecimalInput from '@/src/components/core/input/DecimalInput'
 import QuantityInput from '@/src/components/core/input/QuantityInput'
@@ -221,7 +223,22 @@ const CreateProforma = () => {
 
   const close = () => navigate(ROUTE_NAMES.proformas)
 
-  if (!isLoad) return null
+  if (!isLoad) {
+    return (
+      <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
+        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-4 w-96 max-w-full mt-3" />
+        <div className="flex flex-wrap gap-4 mt-6">
+          <Skeleton className="h-12 w-60" />
+          <Skeleton className="h-12 w-60" />
+          <Skeleton className="h-12 w-60" />
+        </div>
+        <div className="mt-6">
+          <TableSkeleton columns={[2, 1, 1, 1.4, 1]} rows={6} />
+        </div>
+      </div>
+    )
+  }
 
   // a proforma is made of the drinks of a warehouse, so a warehouse comes first
   if (!warehouses.length) {
@@ -409,7 +426,9 @@ const CreateProforma = () => {
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto mt-4">
-          {isPick ? (
+          {isPick && !drinksLoad ? (
+            <TableSkeleton columns={[2, 1, 1, 1.4, 1]} rows={6} />
+          ) : isPick ? (
             drinksLoad && !drinks.length ? (
               <div className="pt-2">
                 <Paragraph text={isAdmin ? t('proforma:noDrinks') : t('proforma:noDrinksUser')} size="sm" color="grey" />

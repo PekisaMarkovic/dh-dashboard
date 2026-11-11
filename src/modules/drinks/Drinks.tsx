@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHoo
 import { openModal, selectModal } from '@/src/state/shared/modal'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePagedList } from '@/src/hooks/use-paged-list'
+import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DrinksList from '@/src/modules/drinks/DrinksList'
 
 const matchesSearch = (drink: IDrink, search: string) => {
@@ -34,6 +35,7 @@ const Drinks = () => {
   const { refreshKey } = useAppSelector(selectModal)
   const [warehouses, setWarehouses] = useState<IWarehouse[]>([])
   const [drinks, setDrinks] = useState<IDrink[]>([])
+  const [isLoad, setIsLoad] = useState(false)
   const filterForm = useForm()
   const selectedWarehouse = useWatch({ control: filterForm.control, name: 'warehouse' })
   const search: string = useWatch({ control: filterForm.control, name: 'search' }) || ''
@@ -48,6 +50,8 @@ const Drinks = () => {
       setDrinks(drinksList)
     } catch (error) {
       showError(error)
+    } finally {
+      setIsLoad(true)
     }
   }, [])
 
@@ -98,8 +102,14 @@ const Drinks = () => {
       </div>
 
       <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
-        {visible.length ? <DrinksList drinks={pageItems} warehouses={warehouses} /> : <Paragraph text={t('drink:empty')} size="sm" />}
-        <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        {!isLoad ? (
+          <TableSkeleton columns={[1, 2, 1, 1, 1]} rows={8} />
+        ) : (
+          <>
+            {visible.length ? <DrinksList drinks={pageItems} warehouses={warehouses} /> : <Paragraph text={t('drink:empty')} size="sm" />}
+            <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          </>
+        )}
       </div>
     </div>
   )

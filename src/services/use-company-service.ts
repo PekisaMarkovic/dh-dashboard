@@ -3,6 +3,17 @@ import CompanyApis from '@/src/api/companies'
 import { useApi } from '@/src/hooks/use-api'
 import { ICompany, ICompanyUser } from '@/src/interfaces'
 
+type UpdateCompanyBody = {
+  name: string
+  street: string
+  city: string
+  pib: string
+  registrationNumber: string
+  // empty when the company has no phone
+  phone: string | null
+  bankAccount: string
+}
+
 export const useCompanyService = () => {
   const api = useApi()
 
@@ -19,6 +30,12 @@ export const useCompanyService = () => {
       return data
     }
 
-    return { getCompany, getCompanyUsers }
+    const updateCompany = async (companyId: number, body: UpdateCompanyBody) => {
+      const { data } = await api.patch<ICompany>(CompanyApis.patchCompany(companyId), body)
+
+      return data
+    }
+
+    return { getCompany, getCompanyUsers, updateCompany }
   }, [api])
 }

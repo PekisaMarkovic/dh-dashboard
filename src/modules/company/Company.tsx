@@ -9,6 +9,7 @@ import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePagedList } from '@/src/hooks/use-paged-list'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import DataSection from '@/src/components/section/DataSection'
+import GeneralIcons from '@/src/icons/general'
 import { useCompanyService } from '@/src/services/use-company-service'
 import { useInvitationService } from '@/src/services/use-invitation-service'
 import { CustomDropdown, ICompany, ICompanyUser, IInvitation } from '@/src/interfaces'
@@ -81,16 +82,40 @@ const Company = () => {
 
   return (
     <div className="pb-8">
-      <DataSection title={t('company:info.title')} subtitle={t('company:info.subtitle')}>
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Paragraph text={t('company:info.name')} size="sm" />
-            <Heading text={company?.name || ''} variant="3" size="base" color="black" />
+      <DataSection
+        title={t('company:info.title')}
+        subtitle={t('company:info.subtitle')}
+        element={
+          <div className="mb-6">
+            <button
+              type="button"
+              title={t('company:info.edit')}
+              aria-label={t('company:info.edit')}
+              disabled={!company}
+              onClick={() => company && dispatch(openModal({ modal: ModalEnums.COMPANY, data: { company } }))}
+              className="flex items-center justify-center h-10 w-10 rounded-full border-1 border-solid border-light-grey-alt hover:bg-light-grey-transparent disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <GeneralIcons type="Edit" />
+            </button>
           </div>
-          <div>
-            <Paragraph text={t('company:info.created')} size="sm" />
-            <Heading text={company ? formatDate(company.createdAt) : ''} variant="3" size="base" color="black" />
-          </div>
+        }
+      >
+        <div className="grid grid-cols-3 gap-4 gap-y-6">
+          {[
+            { label: t('company:info.name'), value: company?.name },
+            { label: t('company:info.street'), value: company?.street },
+            { label: t('company:info.city'), value: company?.city },
+            { label: t('company:info.pib'), value: company?.pib },
+            { label: t('company:info.registrationNumber'), value: company?.registrationNumber },
+            { label: t('company:info.phone'), value: company?.phone || t('company:info.noPhone') },
+            { label: t('company:info.bankAccount'), value: company?.bankAccount },
+            { label: t('company:info.created'), value: company ? formatDate(company.createdAt) : '' },
+          ].map(({ label, value }) => (
+            <div key={label}>
+              <Paragraph text={label} size="sm" />
+              <Heading text={value || '-'} variant="3" size="base" color="black" />
+            </div>
+          ))}
         </div>
       </DataSection>
 

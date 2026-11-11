@@ -12,11 +12,11 @@
     "yearFounded": "year founded",
     "yearFoundedAsNumber": "year founded as number",
     "timezone": "timezone",
-    "city": "city",
+    "city": "a city",
     "country": "country",
     "languages": "languages",
     "phoneNumber": "phone number",
-    "street": "street",
+    "street": "a street and number",
     "password": "password",
     "about": "message",
     "email": "email",
@@ -71,6 +71,10 @@
     "warehouseId": "warehouse",
     "language": "language",
     "warningQuantity": "a warning quantity (whole number, not less than 0)",
-    "criticalQuantity": "a \"has to be bought again\" quantity (whole number, lower than the warning quantity)"
+    "criticalQuantity": "a \"has to be bought again\" quantity (whole number, lower than the warning quantity)",
+    "pib": "a tax number (PIB) with exactly 9 digits",
+    "registrationNumber": "a registration number with exactly 8 digits",
+    "phone": "a valid phone number (digits, +, -, spaces, brackets)",
+    "bankAccount": "a bank account (18 digits, or in the form 160-0000002761287-85)"
   }
 }

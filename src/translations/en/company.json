@@ -1,9 +1,17 @@
 {
   "info": {
     "title": "Company",
-    "subtitle": "Basic company information.",
+    "subtitle": "Company information, it is printed on the proforma.",
     "name": "Name",
-    "created": "Created"
+    "created": "Created",
+    "street": "Street",
+    "city": "City",
+    "pib": "Tax number (PIB)",
+    "registrationNumber": "Registration number",
+    "phone": "Phone",
+    "bankAccount": "Bank account",
+    "edit": "Edit company",
+    "noPhone": "-"
   },
   "users": {
     "title": "Users",
@@ -36,5 +44,24 @@
     "expired": "Expired",
     "resend": "Resend invitation",
     "resent": "Invitation sent again to {{email}}."
+  },
+  "modal": {
+    "title": "Edit company",
+    "subtitle": "This data is printed on the proforma (PDF).",
+    "name": "Name",
+    "namePlh": "e.g. KNEZ BAR",
+    "street": "Street and number",
+    "streetPlh": "e.g. KNEZ MIHAILOVA 22",
+    "city": "City",
+    "cityPlh": "e.g. BEOGRAD",
+    "pib": "Tax number (PIB)",
+    "pibPlh": "9 digits",
+    "registrationNumber": "Registration number",
+    "registrationNumberPlh": "8 digits",
+    "phone": "Phone",
+    "phonePlh": "e.g. +381 11 123 456 (optional)",
+    "bankAccount": "Bank account",
+    "bankAccountPlh": "e.g. 160600000012345678",
+    "saved": "Company data saved."
   }
 }

@@ -3,6 +3,7 @@ import ArrowDownIcon from '@/src/icons/general/ArrowDownIcon'
 import ArrowRightIcon from '@/src/icons/general/ArrowRightIcon'
 import ArrowSelectIcon from '@/src/icons/general/ArrowSelectIcon'
 import CheckIcon from '@/src/icons/general/CheckIcon'
+import EditIcon from '@/src/icons/general/EditIcon'
 import MoreIcon from '@/src/icons/general/MoreIcon'
 import SelectDropdownIcon from '@/src/icons/general/SelectDropdownIcon'
 import TooltipIcon from '@/src/icons/general/TooltipIcon'
@@ -17,6 +18,7 @@ interface Props extends React.SVGProps<SVGSVGElement> {
     | 'ArrowDown'
     | 'ArrowRight'
     | 'MoreIcon'
+    | 'Edit'
     | 'ArrowSelect'
     | 'Check'
     | 'UnCheck'
@@ -38,6 +40,8 @@ const GeneralIcons = ({ onClick, type, ...rest }: Props) => {
       return <InfiniteLoader {...rest} onClick={onClick} />
     case 'ArrowRight':
       return <ArrowRightIcon {...rest} onClick={onClick} />
+    case 'Edit':
+      return <EditIcon {...rest} onClick={onClick} />
     case 'MoreIcon':
       return <MoreIcon {...rest} onClick={onClick} />
     case 'ArrowSelect':

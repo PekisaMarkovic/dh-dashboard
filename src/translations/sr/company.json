@@ -1,9 +1,17 @@
 {
   "info": {
     "title": "Kompanija",
-    "subtitle": "Osnovni podaci o kompaniji.",
+    "subtitle": "Podaci o firmi, štampaju se na predračunu.",
     "name": "Naziv",
-    "created": "Kreirana"
+    "created": "Kreirana",
+    "street": "Ulica",
+    "city": "Grad",
+    "pib": "PIB",
+    "registrationNumber": "Matični broj",
+    "phone": "Telefon",
+    "bankAccount": "Tekući račun",
+    "edit": "Izmeni firmu",
+    "noPhone": "-"
   },
   "users": {
     "title": "Korisnici",
@@ -36,5 +44,24 @@
     "expired": "Istekla",
     "resend": "Pošalji ponovo",
     "resent": "Pozivnica je ponovo poslata na {{email}}."
+  },
+  "modal": {
+    "title": "Izmena firme",
+    "subtitle": "Ovi podaci se štampaju na predračunu (PDF).",
+    "name": "Naziv",
+    "namePlh": "npr. KNEZ BAR",
+    "street": "Ulica i broj",
+    "streetPlh": "npr. KNEZ MIHAILOVA 22",
+    "city": "Grad",
+    "cityPlh": "npr. BEOGRAD",
+    "pib": "PIB",
+    "pibPlh": "9 cifara",
+    "registrationNumber": "Matični broj",
+    "registrationNumberPlh": "8 cifara",
+    "phone": "Telefon",
+    "phonePlh": "npr. +381 11 123 456 (nije obavezno)",
+    "bankAccount": "Tekući račun",
+    "bankAccountPlh": "npr. 160600000012345678",
+    "saved": "Podaci o firmi su sačuvani."
   }
 }

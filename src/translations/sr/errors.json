@@ -17,6 +17,12 @@
     "warehouseId": "magacin",
     "language": "jezik",
     "warningQuantity": "količinu za upozorenje (ceo broj, ne manje od 0)",
-    "criticalQuantity": "količinu za dokupljivanje (ceo broj, manji od količine za upozorenje)"
+    "criticalQuantity": "količinu za dokupljivanje (ceo broj, manji od količine za upozorenje)",
+    "street": "ulicu i broj",
+    "city": "grad",
+    "pib": "PIB sa tačno 9 cifara",
+    "registrationNumber": "matični broj sa tačno 8 cifara",
+    "phone": "ispravan broj telefona (cifre, +, -, razmaci, zagrade)",
+    "bankAccount": "tekući račun (18 cifara, ili u obliku 160-0000002761287-85)"
   }
 }

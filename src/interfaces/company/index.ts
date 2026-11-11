@@ -2,7 +2,14 @@ import { IRole } from '@/src/interfaces/user'
 
 export interface ICompany {
   companyId: number
+  // the name is printed on the documents too (the proforma)
   name: string
+  street: string
+  city: string
+  pib: string
+  registrationNumber: string
+  phone: string | null
+  bankAccount: string
   createdAt: string
 }
 

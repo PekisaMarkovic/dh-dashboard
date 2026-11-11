@@ -1,46 +1,29 @@
-import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
-import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ModalEnums } from '@/src/enum'
-import { useDrinkService } from '@/src/services/use-drink-service'
-import { useWarehouseService } from '@/src/services/use-warehouse-service'
+import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
+import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
 import { useRoles } from '@/src/hooks/use-roles'
 import { IDrink, IWarehouse } from '@/src/interfaces'
-import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, selectModal } from '@/src/state/shared/modal'
+import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
+import { openModal } from '@/src/state/shared/modal'
 import CardSkeleton from '@/src/components/skeleton/CardSkeleton'
 import WarehouseCard from '@/src/modules/warehouses/WarehouseCard'
 
+const NO_WAREHOUSES: IWarehouse[] = []
+const NO_DRINKS: IDrink[] = []
+
 const Warehouses = () => {
   const { t } = useTranslation(['warehouse', 'g'])
-  const showError = useErrorToast()
-  const { getWarehouses } = useWarehouseService()
-  const { getDrinks } = useDrinkService()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  const { refreshKey } = useAppSelector(selectModal)
-  const [warehouses, setWarehouses] = useState<IWarehouse[]>([])
-  const [drinks, setDrinks] = useState<IDrink[]>([])
-  const [isLoad, setIsLoad] = useState(false)
-
-  const fetchData = useCallback(async () => {
-    try {
-      const [warehousesList, drinksList] = await Promise.all([getWarehouses(), getDrinks()])
-
-      setWarehouses(warehousesList)
-      setDrinks(drinksList)
-    } catch (error) {
-      showError(error)
-    } finally {
-      setIsLoad(true)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchData()
-  }, [refreshKey])
+  // both lists are cached: a visit after the first one shows them right away
+  const warehousesQuery = useWarehousesQuery()
+  const drinksQuery = useDrinksQuery()
+  const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
+  const drinks = drinksQuery.data ?? NO_DRINKS
+  const isLoad = !warehousesQuery.isPending && !drinksQuery.isPending
 
   return (
     <div className="pb-8">

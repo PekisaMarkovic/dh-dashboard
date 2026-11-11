@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
@@ -12,59 +11,42 @@ import InfoGridSkeleton from '@/src/components/skeleton/InfoGridSkeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DataSection from '@/src/components/section/DataSection'
 import GeneralIcons from '@/src/icons/general'
-import { useCompanyService } from '@/src/services/use-company-service'
+import { useCompanyQuery, useCompanyUsersQuery, useInvitationsQuery } from '@/src/hooks/queries/use-company-queries'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useInvitationService } from '@/src/services/use-invitation-service'
-import { CustomDropdown, ICompany, ICompanyUser, IInvitation } from '@/src/interfaces'
+import { CustomDropdown, ICompanyUser, IInvitation } from '@/src/interfaces'
 import { ModalEnums } from '@/src/enum'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, selectModal } from '@/src/state/shared/modal'
+import { openModal } from '@/src/state/shared/modal'
 import { selectAuthUser } from '@/src/state/user/authSlice'
 import { getRoleTranslationKey } from '@/src/utils/roles'
 import { formatDate } from '@/src/utils/date'
 import { Color } from '@/src/interfaces'
+
+const NO_USERS: ICompanyUser[] = []
+const NO_INVITATIONS: IInvitation[] = []
 
 const STATUS_COLOR: Record<IInvitation['status'], Color> = { pending: 'orange', accepted: 'green', expired: 'red' }
 
 const Company = () => {
   const { t } = useTranslation(['company', 'g'])
   const showError = useErrorToast()
-  const { getCompany, getCompanyUsers } = useCompanyService()
-  const { getInvitations, resendInvitation: resend } = useInvitationService()
+  const { resendInvitation: resend } = useInvitationService()
+  const { afterInvitationChange } = useRefreshData()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(selectAuthUser)
-  // bumped when the invite modal sent an invitation, so the tables reload
-  const { refreshKey } = useAppSelector(selectModal)
   const companyId = user?.companyId
-  const [company, setCompany] = useState<ICompany | null>(null)
-  const [users, setUsers] = useState<ICompanyUser[]>([])
-  const [invitations, setInvitations] = useState<IInvitation[]>([])
-  const [isLoad, setIsLoad] = useState(false)
+  // everything is cached: a visit after the first one shows it right away
+  const companyQuery = useCompanyQuery(companyId)
+  const usersQuery = useCompanyUsersQuery(companyId)
+  const invitationsQuery = useInvitationsQuery()
+  const company = companyQuery.data ?? null
+  const users = usersQuery.data ?? NO_USERS
+  const invitations = invitationsQuery.data ?? NO_INVITATIONS
+  // a user without a company has nothing to wait for
+  const isLoad = !companyId || (!companyQuery.isPending && !usersQuery.isPending && !invitationsQuery.isPending)
   const usersPage = usePagedList(users)
   const invitationsPage = usePagedList(invitations)
-
-  const fetchInvitations = useCallback(async () => {
-    setInvitations(await getInvitations())
-  }, [])
-
-  const fetchData = useCallback(async () => {
-    if (!companyId) {
-      setIsLoad(true)
-
-      return
-    }
-
-    try {
-      const [companyData, usersList] = await Promise.all([getCompany(companyId), getCompanyUsers(companyId)])
-
-      setCompany(companyData)
-      setUsers(usersList)
-      await fetchInvitations()
-    } catch (error) {
-      showError(error)
-    } finally {
-      setIsLoad(true)
-    }
-  }, [companyId])
 
   // sends the email again and starts the 7 days again, the link stays the same
   const resendInvitation = async (invitation: IInvitation) => {
@@ -76,7 +58,7 @@ const Company = () => {
     }
 
     // the list is loaded again either way, e.g. the person may have registered in the meantime
-    await fetchInvitations()
+    await afterInvitationChange()
   }
 
   // only an invitation that was not used can be sent again (also an expired one)
@@ -84,10 +66,6 @@ const Company = () => {
     invitation.status === 'accepted'
       ? []
       : [{ content: { type: 'button', text: t('company:invitations.resend'), onClick: () => resendInvitation(invitation) } }]
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData, refreshKey])
 
   return (
     <div className="pb-8">

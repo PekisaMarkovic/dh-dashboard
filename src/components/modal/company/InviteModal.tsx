@@ -6,9 +6,10 @@ import customToast from '@/src/components/core/toast/CustomToast'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useInvitationService } from '@/src/services/use-invitation-service'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
-import { refresh, removeModal } from '@/src/state/shared/modal'
+import { removeModal } from '@/src/state/shared/modal'
 import { INVITE_VALIDATION } from '@/src/validations/inventory/invite'
 
 const InviteModal = () => {
@@ -16,13 +17,14 @@ const InviteModal = () => {
   const showError = useErrorToast()
   const { invite } = useInvitationService()
   const dispatch = useAppDispatch()
+  const { afterInvitationChange } = useRefreshData()
   const methods = useForm({ resolver: INVITE_VALIDATION, defaultValues: { email: '' } })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       await invite(values.email)
       customToast.success(t('company:invite.sent'))
-      dispatch(refresh())
+      afterInvitationChange()
       dispatch(removeModal())
     } catch (error) {
       showError(error)

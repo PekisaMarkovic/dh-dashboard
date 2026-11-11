@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
@@ -13,44 +12,36 @@ import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DataSection from '@/src/components/section/DataSection'
 import { ModalEnums } from '@/src/enum'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
+import { useProformasQuery } from '@/src/hooks/queries/use-proforma-queries'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useProformaService } from '@/src/services/use-proforma-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import { CustomDropdown, IProforma } from '@/src/interfaces'
 import { useProformaDownload } from '@/src/hooks/use-proforma-download'
 import { useProformaPrint } from '@/src/hooks/use-proforma-print'
-import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, refresh, selectModal } from '@/src/state/shared/modal'
+import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
+import { openModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
 import { formatMoney } from '@/src/utils/money'
+
+const NO_PROFORMAS: IProforma[] = []
 
 const SavedProformas = () => {
   const { t } = useTranslation(['proforma', 'g'])
   const showError = useErrorToast()
-  const { getProformas, returnProforma } = useProformaService()
+  const { returnProforma } = useProformaService()
   const downloadProforma = useProformaDownload()
   const printProforma = useProformaPrint()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { isAdmin } = useRoles()
-  const { refreshKey } = useAppSelector(selectModal)
-  const [proformas, setProformas] = useState<IProforma[]>([])
-  const [isLoad, setIsLoad] = useState(false)
+  const { afterProformaChange } = useRefreshData()
+  // the list is cached: a visit after the first one shows it right away
+  const { data, isPending } = useProformasQuery()
+  const proformas = data ?? NO_PROFORMAS
+  const isLoad = !isPending
   const { pageItems, page, setPage, totalPages } = usePagedList(proformas)
-
-  useEffect(() => {
-    const fetchProformas = async () => {
-      try {
-        setProformas(await getProformas())
-      } catch (error) {
-        showError(error)
-      } finally {
-        setIsLoad(true)
-      }
-    }
-
-    fetchProformas()
-  }, [refreshKey])
 
   const handleDownload = async (proforma: IProforma) => {
     try {
@@ -73,10 +64,10 @@ const SavedProformas = () => {
       await returnProforma(proforma.proformaId)
       customToast.success(t('proforma:returnedToast', { number: proforma.number }))
       // the stock changed, so everything that shows drinks reloads
-      dispatch(refresh())
+      await afterProformaChange()
     } catch (error) {
       showError(error)
-      dispatch(refresh())
+      await afterProformaChange()
     }
   }
 

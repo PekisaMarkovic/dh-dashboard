@@ -6,6 +6,7 @@ import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { TOP_MENU_LINKS_FOR_TRANSLATIONS } from '@/src/constatns/navigation'
+import { queryClient } from '@/src/state/query-client'
 import { useAuthService } from '@/src/services/use-auth-service'
 import GeneralIcons from '@/src/icons/general'
 import { CustomDropdown } from '@/src/interfaces'
@@ -46,6 +47,7 @@ const TopMenu = ({ backButton }: Props) => {
     } catch (error) {
       showError(error)
     } finally {
+      queryClient.clear()
       dispatch(removeUserData())
       clearLocalStorageTokens()
       navigate(ROUTE_NAMES.index)

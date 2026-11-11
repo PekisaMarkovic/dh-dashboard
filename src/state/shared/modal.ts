@@ -7,14 +7,11 @@ type State = {
   modal: Nullable<ModalEnums>
   // data handed to the opened modal, e.g. the item that is being edited
   data: unknown
-  // bumped after a modal changed something, lists reload when it changes
-  refreshKey: number
 }
 
 const initialState: State = {
   modal: null,
   data: null,
-  refreshKey: 0,
 }
 
 const modalSlice = createSlice({
@@ -34,13 +31,10 @@ const modalSlice = createSlice({
       state.modal = null
       state.data = null
     },
-    refresh: (state) => {
-      state.refreshKey += 1
-    },
   },
 })
 
-export const { initializeModal, setModal, openModal, removeModal, refresh } = modalSlice.actions
+export const { initializeModal, setModal, openModal, removeModal } = modalSlice.actions
 
 export default modalSlice.reducer
 

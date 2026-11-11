@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Skeleton from '@/src/components/skeleton/Skeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import MainButton from '@/src/components/core/buttons/MainButton'
-import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
-import { useProformaService } from '@/src/services/use-proforma-service'
-import { IProforma } from '@/src/interfaces'
+import { useProformaQuery } from '@/src/hooks/queries/use-proforma-queries'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
@@ -16,27 +14,16 @@ import { formatMoney, formatPrice } from '@/src/utils/money'
 
 const ProformaDetailModal = () => {
   const { t } = useTranslation(['proforma', 'g'])
-  const showError = useErrorToast()
-  const { getProforma } = useProformaService()
   const dispatch = useAppDispatch()
   const { data } = useAppSelector(selectModal)
   const proformaId = (data as { proformaId: number } | null)?.proformaId
-  const [proforma, setProforma] = useState<IProforma | null>(null)
+  // a proforma that was opened before is shown from the cache
+  const { data: proforma, isError } = useProformaQuery(proformaId)
 
+  // the message about the error comes from the cache, the window is of no use then
   useEffect(() => {
-    if (!proformaId) return
-
-    const fetchProforma = async () => {
-      try {
-        setProforma(await getProforma(proformaId))
-      } catch (error) {
-        showError(error)
-        dispatch(removeModal())
-      }
-    }
-
-    fetchProforma()
-  }, [proformaId])
+    if (isError) dispatch(removeModal())
+  }, [isError])
 
   if (!proforma) {
     return (

@@ -7,9 +7,10 @@ import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { ICompany } from '@/src/interfaces'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useCompanyService } from '@/src/services/use-company-service'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { refresh, removeModal, selectModal } from '@/src/state/shared/modal'
+import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { COMPANY_VALIDATION } from '@/src/validations/company/company'
 
 type CompanyModalData = { company: ICompany } | null
@@ -21,6 +22,7 @@ const CompanyModal = () => {
   const company = (data as CompanyModalData)?.company
   const { updateCompany } = useCompanyService()
   const dispatch = useAppDispatch()
+  const { afterCompanyChange } = useRefreshData()
   const methods = useForm({
     resolver: COMPANY_VALIDATION,
     defaultValues: {
@@ -50,7 +52,7 @@ const CompanyModal = () => {
       })
 
       customToast.success(t('company:modal.saved'))
-      dispatch(refresh())
+      afterCompanyChange()
       dispatch(removeModal())
     } catch (error) {
       showError(error)

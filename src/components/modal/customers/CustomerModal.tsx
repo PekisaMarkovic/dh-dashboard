@@ -5,9 +5,10 @@ import InputText from '@/src/components/core/input/InputText'
 import Heading from '@/src/components/core/typography/Heading'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { ICustomer } from '@/src/interfaces'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useCustomerService } from '@/src/services/use-customer-service'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { refresh, removeModal, selectModal } from '@/src/state/shared/modal'
+import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { CUSTOMER_VALIDATION } from '@/src/validations/inventory/customer'
 
 type CustomerModalData = { customer?: ICustomer } | null
@@ -19,6 +20,7 @@ const CustomerModal = () => {
   const customer = (data as CustomerModalData)?.customer
   const { createCustomer, updateCustomer } = useCustomerService()
   const dispatch = useAppDispatch()
+  const { afterCustomerChange } = useRefreshData()
   const methods = useForm({ resolver: CUSTOMER_VALIDATION, defaultValues: { name: customer?.name || '' } })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
@@ -29,7 +31,7 @@ const CustomerModal = () => {
         await createCustomer({ name: values.name })
       }
 
-      dispatch(refresh())
+      afterCustomerChange()
       dispatch(removeModal())
     } catch (error) {
       showError(error)

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
@@ -14,36 +14,28 @@ import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { usePagedList } from '@/src/hooks/use-paged-list'
 import { useRoles } from '@/src/hooks/use-roles'
 import { CustomDropdown, ICustomer } from '@/src/interfaces'
+import { useCustomersQuery } from '@/src/hooks/queries/use-customer-queries'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useCustomerService } from '@/src/services/use-customer-service'
-import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, refresh, selectModal } from '@/src/state/shared/modal'
+import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
+import { openModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
+
+const NO_CUSTOMERS: ICustomer[] = []
 
 const Customers = () => {
   const { t } = useTranslation(['customer', 'g'])
   const showError = useErrorToast()
-  const { getCustomers, deleteCustomer } = useCustomerService()
+  const { deleteCustomer } = useCustomerService()
+  const { afterCustomerChange } = useRefreshData()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  const { refreshKey } = useAppSelector(selectModal)
-  const [customers, setCustomers] = useState<ICustomer[]>([])
-  const [isLoad, setIsLoad] = useState(false)
+  // the list is cached: a visit after the first one shows it right away
+  const { data, isPending } = useCustomersQuery()
+  const customers = data ?? NO_CUSTOMERS
+  const isLoad = !isPending
   const filterForm = useForm()
   const search: string = useWatch({ control: filterForm.control, name: 'search' }) || ''
-
-  const fetchCustomers = useCallback(async () => {
-    try {
-      setCustomers(await getCustomers())
-    } catch (error) {
-      showError(error)
-    } finally {
-      setIsLoad(true)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchCustomers()
-  }, [refreshKey])
 
   const visible = useMemo(() => customers.filter((c) => c.name.toLowerCase().includes(search.trim().toLowerCase())), [customers, search])
   const { pageItems, page, setPage, totalPages } = usePagedList(visible, [search])
@@ -59,7 +51,7 @@ const Customers = () => {
           onConfirm: async () => {
             try {
               await deleteCustomer(customer.customerId)
-              dispatch(refresh())
+              await afterCustomerChange()
             } catch (error) {
               showError(error)
             }

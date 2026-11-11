@@ -8,11 +8,12 @@ import { ModalEnums } from '@/src/enum'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import { formatCents, lineCents } from '@/src/utils/money'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import { CustomDropdown, IDrink, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, refresh } from '@/src/state/shared/modal'
+import { openModal } from '@/src/state/shared/modal'
 import DrinksTable from '@/src/modules/warehouses/DrinksTable'
 
 type Props = {
@@ -25,6 +26,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
   const { deleteWarehouse: removeWarehouse } = useWarehouseService()
   const showError = useErrorToast()
   const dispatch = useAppDispatch()
+  const { afterWarehouseChange } = useRefreshData()
   const { isAdmin } = useRoles()
 
   const totalValueCents = drinks.reduce((sum, drink) => sum + lineCents(drink.price, drink.quantity), 0)
@@ -32,7 +34,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
   const deleteWarehouse = async () => {
     try {
       await removeWarehouse(warehouse.warehouseId)
-      dispatch(refresh())
+      await afterWarehouseChange()
     } catch (error) {
       // 409: somebody added a drink in the meantime
       if (axios.isAxiosError(error) && error.response?.status === 409) {
@@ -41,7 +43,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
         showError(error)
       }
 
-      dispatch(refresh())
+      await afterWarehouseChange()
     }
   }
 

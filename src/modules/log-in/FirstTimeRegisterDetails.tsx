@@ -7,7 +7,7 @@ import customToast from '@/src/components/core/toast/CustomToast'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { useAuthService } from '@/src/services/use-auth-service'
-import { signIn } from '@/src/utils/auth'
+import { startSession } from '@/src/utils/auth'
 import { decodeToken } from '@/src/utils/token'
 
 const FirstTimeRegisterDetails = () => {
@@ -23,7 +23,7 @@ const FirstTimeRegisterDetails = () => {
       const data = await firstTimeRegister({ invitationId, ...values })
       const tokenPayload = decodeToken(data.access_token)
 
-      signIn(data)
+      startSession(data)
       customToast.success(t('static:welcome', { name: `${tokenPayload.firstName} ${tokenPayload.lastName}` }))
       navigate(ROUTE_NAMES.proformas)
     } catch (error) {

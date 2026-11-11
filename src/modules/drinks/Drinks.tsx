@@ -1,23 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
 import InputText from '@/src/components/core/input/InputText'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
-import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ModalEnums } from '@/src/enum'
-import { useDrinkService } from '@/src/services/use-drink-service'
-import { useWarehouseService } from '@/src/services/use-warehouse-service'
+import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
+import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
 import { useRoles } from '@/src/hooks/use-roles'
 import { IDrink, IWarehouse } from '@/src/interfaces'
-import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, selectModal } from '@/src/state/shared/modal'
+import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
+import { openModal } from '@/src/state/shared/modal'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePagedList } from '@/src/hooks/use-paged-list'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DrinksList from '@/src/modules/drinks/DrinksList'
+
+const NO_WAREHOUSES: IWarehouse[] = []
+const NO_DRINKS: IDrink[] = []
 
 const matchesSearch = (drink: IDrink, search: string) => {
   const text = search.trim().toLowerCase()
@@ -27,37 +29,19 @@ const matchesSearch = (drink: IDrink, search: string) => {
 
 const Drinks = () => {
   const { t } = useTranslation(['drink', 'g'])
-  const showError = useErrorToast()
-  const { getWarehouses } = useWarehouseService()
-  const { getDrinks } = useDrinkService()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  const { refreshKey } = useAppSelector(selectModal)
-  const [warehouses, setWarehouses] = useState<IWarehouse[]>([])
-  const [drinks, setDrinks] = useState<IDrink[]>([])
-  const [isLoad, setIsLoad] = useState(false)
+  // both lists are cached: a visit after the first one shows them right away
+  const warehousesQuery = useWarehousesQuery()
+  const drinksQuery = useDrinksQuery()
+  const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
+  const drinks = drinksQuery.data ?? NO_DRINKS
+  const isLoad = !warehousesQuery.isPending && !drinksQuery.isPending
   const filterForm = useForm()
   const selectedWarehouse = useWatch({ control: filterForm.control, name: 'warehouse' })
   const search: string = useWatch({ control: filterForm.control, name: 'search' }) || ''
   // the select is cleared by picking the selected option again, which means: all warehouses
   const warehouseId: string = selectedWarehouse?.value || ''
-
-  const fetchData = useCallback(async () => {
-    try {
-      const [warehousesList, drinksList] = await Promise.all([getWarehouses(), getDrinks()])
-
-      setWarehouses(warehousesList)
-      setDrinks(drinksList)
-    } catch (error) {
-      showError(error)
-    } finally {
-      setIsLoad(true)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchData()
-  }, [refreshKey])
 
   const visible = useMemo(
     () => drinks.filter((d) => (!warehouseId || d.warehouseId === Number(warehouseId)) && matchesSearch(d, search)),

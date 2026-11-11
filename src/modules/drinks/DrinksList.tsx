@@ -7,11 +7,12 @@ import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import { ModalEnums } from '@/src/enum'
 import { formatPrice } from '@/src/utils/money'
 import { getStockLevel, STOCK_ROW_CLASS, STOCK_TEXT_CLASS } from '@/src/utils/stock'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useDrinkService } from '@/src/services/use-drink-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import { CustomDropdown, IDrink, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, refresh } from '@/src/state/shared/modal'
+import { openModal } from '@/src/state/shared/modal'
 
 type Props = {
   drinks: IDrink[]
@@ -22,6 +23,7 @@ const DrinksList = ({ drinks, warehouses }: Props) => {
   const { t } = useTranslation(['drink', 'warehouse', 'g'])
   const showError = useErrorToast()
   const { deleteDrink } = useDrinkService()
+  const { afterDrinkChange } = useRefreshData()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
 
@@ -38,7 +40,7 @@ const DrinksList = ({ drinks, warehouses }: Props) => {
           onConfirm: async () => {
             try {
               await deleteDrink(drink.drinkId)
-              dispatch(refresh())
+              await afterDrinkChange()
             } catch (error) {
               showError(error)
             }

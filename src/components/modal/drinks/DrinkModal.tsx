@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
@@ -6,13 +6,16 @@ import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
+import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useDrinkService } from '@/src/services/use-drink-service'
-import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { refresh, removeModal, selectModal } from '@/src/state/shared/modal'
+import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { formatPrice, parsePriceInput } from '@/src/utils/money'
 import { DRINK_VALIDATION } from '@/src/validations/inventory/drink'
+
+const NO_WAREHOUSES: IWarehouse[] = []
 
 const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) })
 
@@ -23,12 +26,11 @@ const DrinkModal = () => {
   const showError = useErrorToast()
   const { data } = useAppSelector(selectModal)
   const { warehouseId: presetWarehouseId, drink } = (data as DrinkModalData) || {}
-  const [warehouses, setWarehouses] = useState<IWarehouse[]>([])
   // the warehouse can be picked only when adding a drink and none was preselected
   const needsWarehouse = !drink && !presetWarehouseId
-  const { getWarehouses } = useWarehouseService()
   const { createDrink, updateDrink } = useDrinkService()
   const dispatch = useAppDispatch()
+  const { afterDrinkChange } = useRefreshData()
   const methods = useForm<FieldValues>({
     resolver: DRINK_VALIDATION as unknown as Resolver<FieldValues>,
     defaultValues: {
@@ -42,22 +44,14 @@ const DrinkModal = () => {
     },
   })
 
+  // the warehouses come from the cache, the first one is picked at the start
+  const warehouses = useWarehousesQuery().data ?? NO_WAREHOUSES
+
   useEffect(() => {
-    if (!needsWarehouse) return
-
-    const fetchWarehouses = async () => {
-      try {
-        const list = await getWarehouses()
-
-        setWarehouses(list)
-        if (list.length) methods.setValue('warehouse', toOption(list[0]))
-      } catch (error) {
-        showError(error)
-      }
+    if (needsWarehouse && warehouses.length && !methods.getValues('warehouse')?.value) {
+      methods.setValue('warehouse', toOption(warehouses[0]))
     }
-
-    fetchWarehouses()
-  }, [])
+  }, [warehouses, needsWarehouse])
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     const body = {
@@ -76,7 +70,7 @@ const DrinkModal = () => {
         await createDrink({ ...body, warehouseId: Number(values.warehouse?.value || presetWarehouseId) })
       }
 
-      dispatch(refresh())
+      afterDrinkChange()
       dispatch(removeModal())
     } catch (error) {
       showError(error)

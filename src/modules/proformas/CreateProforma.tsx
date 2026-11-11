@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -17,18 +17,23 @@ import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { ModalEnums } from '@/src/enum'
-import { useCustomerService } from '@/src/services/use-customer-service'
-import { useDrinkService } from '@/src/services/use-drink-service'
+import { useCustomersQuery } from '@/src/hooks/queries/use-customer-queries'
+import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
+import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useProformaService } from '@/src/services/use-proforma-service'
-import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { useRoles } from '@/src/hooks/use-roles'
 import { ICustomer, IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
-import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { openModal, refresh, selectModal } from '@/src/state/shared/modal'
+import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
+import { openModal } from '@/src/state/shared/modal'
 import { openPdfTab } from '@/src/utils/files'
 import ProformaTotals from '@/src/components/proformas/ProformaTotals'
 import { formatCents, formatPrice, lineCents, vatCents } from '@/src/utils/money'
 import { getStockLevel, STOCK_ROW_CLASS, STOCK_TEXT_CLASS } from '@/src/utils/stock'
+
+const NO_WAREHOUSES: IWarehouse[] = []
+const NO_CUSTOMERS: ICustomer[] = []
+const NO_DRINKS: IDrink[] = []
 
 type Quantities = Record<number, number>
 
@@ -47,26 +52,23 @@ const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), 
 const CreateProforma = () => {
   const { t } = useTranslation(['proforma', 'g'])
   const showError = useErrorToast()
-  const { getWarehouses } = useWarehouseService()
-  const { getDrinks } = useDrinkService()
-  const { getCustomers } = useCustomerService()
   const { createProforma, getProformaPdf } = useProformaService()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { isAdmin } = useRoles()
-  // changes when something is added from this page (a warehouse or a drink)
-  const { refreshKey } = useAppSelector(selectModal)
+  const { afterProformaChange } = useRefreshData()
   const methods = useForm<{ warehouse?: SelectOption; customer?: SelectOption; search?: string }>({
     defaultValues: { warehouse: undefined, customer: undefined, search: '' },
   })
   const selected = useWatch({ control: methods.control, name: 'warehouse' })
   const search = (useWatch({ control: methods.control, name: 'search' }) || '').trim().toLowerCase()
   const customer = useWatch({ control: methods.control, name: 'customer' })
-  const [warehouses, setWarehouses] = useState<IWarehouse[]>([])
-  const [customers, setCustomers] = useState<ICustomer[]>([])
-  const [isLoad, setIsLoad] = useState(false)
-  const [drinks, setDrinks] = useState<IDrink[]>([])
-  const [drinksLoad, setDrinksLoad] = useState(false)
+  // the lists come from the cache: a visit after the first one shows them right away
+  const warehousesQuery = useWarehousesQuery()
+  const customersQuery = useCustomersQuery()
+  const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
+  const customers = customersQuery.data ?? NO_CUSTOMERS
+  const isLoad = !warehousesQuery.isPending
   // what is on the proforma, and what is being edited in the "add drinks" view
   const [lines, setLines] = useState<Quantities>({})
   const [draft, setDraft] = useState<Quantities>({})
@@ -79,58 +81,15 @@ const CreateProforma = () => {
   // there is always a warehouse in use: the picked one, or the first available one
   const warehouseId = warehouses.find((w) => String(w.warehouseId) === selected?.value)?.warehouseId ?? warehouses[0]?.warehouseId
 
-  const fetchWarehouses = useCallback(async () => {
-    try {
-      const list = await getWarehouses()
-
-      setWarehouses(list)
-      // the first warehouse is picked at the start, a picked one stays
-      if (list.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(list[0]))
-    } catch (error) {
-      showError(error)
-    } finally {
-      setIsLoad(true)
-    }
-  }, [])
-
+  // the first warehouse is picked at the start, a picked one stays
   useEffect(() => {
-    fetchWarehouses()
-  }, [])
+    if (warehouses.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(warehouses[0]))
+  }, [warehouses])
 
-  // the customer is optional, so nothing is selected at the start
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        setCustomers(await getCustomers())
-      } catch (error) {
-        showError(error)
-      }
-    }
-
-    fetchCustomers()
-  }, [])
-
-  const fetchDrinks = useCallback(async () => {
-    if (!warehouseId) return
-
-    setDrinksLoad(false)
-
-    try {
-      setDrinks(await getDrinks(warehouseId))
-    } catch (error) {
-      showError(error)
-    } finally {
-      setDrinksLoad(true)
-    }
-  }, [warehouseId])
-
-  // a warehouse or a drink was added from this page, so the lists are loaded again
-  useEffect(() => {
-    if (refreshKey === 0) return
-
-    fetchWarehouses()
-    fetchDrinks()
-  }, [refreshKey])
+  // the drinks of the warehouse in use (cached per warehouse; they are 30 seconds fresh because the stock changes often)
+  const drinksQuery = useDrinksQuery(warehouseId, !!warehouseId)
+  const drinks = drinksQuery.data ?? NO_DRINKS
+  const drinksLoad = drinksQuery.isSuccess || drinksQuery.isError
 
   // another warehouse means other drinks, so the proforma starts again
   useEffect(() => {
@@ -141,8 +100,7 @@ const CreateProforma = () => {
     // the proforma always starts at choosing the drinks
     setView('pick')
     methods.setValue('search', '')
-    fetchDrinks()
-  }, [fetchDrinks])
+  }, [warehouseId])
 
   // the changed price of this proforma, or the price of the drink
   const priceOf = (drink: IDrink) => prices[drink.drinkId] ?? drink.price
@@ -198,7 +156,8 @@ const CreateProforma = () => {
       })
 
       customToast.success(t('proforma:created', { number: proforma.number }))
-      dispatch(refresh())
+      // the proformas and the stock of the drinks changed (not awaited: the page is left right away)
+      void afterProformaChange()
       navigate(ROUTE_NAMES.proformas)
 
       // the proforma is made, so it opens in a new tab together with the print dialog.

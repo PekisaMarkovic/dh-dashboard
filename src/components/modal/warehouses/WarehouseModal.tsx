@@ -4,10 +4,11 @@ import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
+import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { IWarehouse } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
-import { refresh, removeModal, selectModal } from '@/src/state/shared/modal'
+import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { WAREHOUSE_VALIDATION } from '@/src/validations/inventory/warehouse'
 import { selectAuthUser } from '@/src/state/user/authSlice'
 
@@ -21,6 +22,7 @@ const WarehouseModal = () => {
   const warehouse = (data as WarehouseModalData)?.warehouse
   const { createWarehouse, updateWarehouse } = useWarehouseService()
   const dispatch = useAppDispatch()
+  const { afterWarehouseChange } = useRefreshData()
   const methods = useForm({ resolver: WAREHOUSE_VALIDATION, defaultValues: { name: warehouse?.name || '' } })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
@@ -31,7 +33,7 @@ const WarehouseModal = () => {
         await createWarehouse({ name: values.name, companyId: user?.companyId })
       }
 
-      dispatch(refresh())
+      afterWarehouseChange()
       dispatch(removeModal())
     } catch (error) {
       showError(error)

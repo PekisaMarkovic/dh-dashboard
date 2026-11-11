@@ -1,15 +1,17 @@
-import { useEffect } from 'react'
-import { FormProvider, useForm, useWatch } from 'react-hook-form'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import SingleSelect from '@/src/components/core/select/SingleSelect'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
+import { useClickAway } from '@/src/hooks/use-click-outside'
+import GeneralIcons from '@/src/icons/general'
+import FlagIcon from '@/src/icons/flags/FlagIcon'
 import { useUserService } from '@/src/services/use-user-service'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { selectAuthUser, setUserProfileData } from '@/src/state/user/authSlice'
-import { applyLanguage, isLanguage, LANGUAGE_OPTIONS, languageToOption } from '@/src/utils/language'
+import { applyLanguage, isLanguage, Language, LANGUAGES } from '@/src/utils/language'
 
 /**
- * Switches the language immediately and saves it as the preference of the logged in user
+ * A small dropdown of flags (English, Serbian) instead of the names of the languages.
+ * A pick switches the language immediately and saves it as the preference of the logged in user.
  */
 const LanguageSelect = () => {
   const { t, i18n } = useTranslation(['g'])
@@ -17,14 +19,18 @@ const LanguageSelect = () => {
   const { updateProfile } = useUserService()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(selectAuthUser)
-  const methods = useForm({ defaultValues: { language: languageToOption(i18n.resolvedLanguage) } })
-  const selected = useWatch({ control: methods.control, name: 'language' })
+  const [open, setOpen] = useState(false)
 
-  // the user picked another language in the dropdown
-  useEffect(() => {
-    const next = selected?.value
+  const handleClose = useCallback(() => setOpen(false), [])
+  const clickAwayRef = useClickAway<HTMLDivElement>({ clickAwayCallback: handleClose })
 
-    if (!next || !isLanguage(next) || next === i18n.resolvedLanguage) return
+  const current: Language = isLanguage(i18n.resolvedLanguage) ? i18n.resolvedLanguage : 'en'
+  const currentLabel = LANGUAGES.find((l) => l.value === current)?.label
+
+  const changeLanguage = async (next: Language) => {
+    setOpen(false)
+
+    if (next === current) return
 
     applyLanguage(next)
 
@@ -32,28 +38,49 @@ const LanguageSelect = () => {
 
     dispatch(setUserProfileData({ user: { ...user, language: next } }))
 
-    const saveLanguage = async () => {
-      try {
-        await updateProfile({ language: next })
-      } catch (error) {
-        showError(error)
-      }
+    try {
+      await updateProfile({ language: next })
+    } catch (error) {
+      showError(error)
     }
-
-    saveLanguage()
-  }, [selected?.value])
-
-  // the language changed somewhere else (login, profile page), keep the dropdown in sync
-  useEffect(() => {
-    methods.setValue('language', languageToOption(i18n.resolvedLanguage))
-  }, [i18n.resolvedLanguage])
+  }
 
   return (
-    <FormProvider {...methods}>
-      <div className="w-36">
-        <SingleSelect compact isLabelHidden name="language" label={t('g:language')} options={LANGUAGE_OPTIONS} />
-      </div>
-    </FormProvider>
+    <div className="relative" ref={clickAwayRef}>
+      <button
+        type="button"
+        aria-label={`${t('g:language')}: ${currentLabel}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        title={currentLabel}
+        onClick={() => setOpen((prev) => !prev)}
+        className={`flex items-center justify-between gap-x-2 h-9 px-2.5 bg-white rounded-xs-plus border-1 border-solid ${open ? 'border-green' : 'border-grey'}`}
+      >
+        <FlagIcon language={current} className="h-4 w-6 block rounded-[2px]" />
+        <GeneralIcons type="ArrowSelect" className={open ? 'rotate-180' : ''} />
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          className="absolute left-0 top-full mt-1.5 z-10 w-full bg-white rounded-xs-plus border-1 border-light-grey-alt border-solid shadow-drop-down overflow-hidden"
+        >
+          {LANGUAGES.map(({ value, label }) => (
+            <li key={value} role="option" aria-selected={value === current}>
+              <button
+                type="button"
+                title={label}
+                aria-label={label}
+                onClick={() => changeLanguage(value)}
+                className={`flex w-full items-center justify-center py-2 hover:bg-light-grey-transparent ${value === current ? 'bg-light-grey-transparent' : ''}`}
+              >
+                <FlagIcon language={value} className="h-4 w-6 block rounded-[2px]" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 

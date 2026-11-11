@@ -47,7 +47,6 @@
   "createModal": {
     "title": "Create proforma",
     "subtitle": "Pick a warehouse, add the drinks and create the proforma. The drinks are taken off the stock.",
-    "items": "Drinks on the proforma",
     "noItems": "No drinks added yet. Click \"Add drinks\" to choose them."
   },
   "pick": {

@@ -47,7 +47,6 @@
   "createModal": {
     "title": "Napravi predračun",
     "subtitle": "Izaberite magacin, dodajte pića i napravite predračun. Pića se skidaju sa stanja.",
-    "items": "Pića na predračunu",
     "noItems": "Još nema dodatih pića. Kliknite \"Dodaj pića\" da ih izaberete."
   },
   "pick": {

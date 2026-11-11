@@ -398,6 +398,13 @@ const CreateProforma = () => {
                 <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
               </div>
             )}
+
+            {/* the drinks are added from here, at the far right, level with the fields */}
+            {!isPick && (
+              <div className="ml-auto self-end">
+                <MainButton text={t('proforma:addDrinks')} variant="outlined" size="medium" onClick={openPicker} />
+              </div>
+            )}
           </div>
         </div>
 
@@ -426,11 +433,6 @@ const CreateProforma = () => {
             )
           ) : (
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <Heading text={t('proforma:createModal.items')} variant="3" size="base" color="black" />
-                <MainButton text={t('proforma:addDrinks')} variant="outlined" size="small" onClick={openPicker} />
-              </div>
-
               {added.length ? (
                 <div>
                   {linesHeader}

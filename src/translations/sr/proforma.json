@@ -46,13 +46,16 @@
   "remove": "Ukloni",
   "createModal": {
     "title": "Napravi predračun",
-    "subtitle": "Izaberite magacin, dodajte pića i napravite predračun. Pića se skidaju sa stanja.",
-    "noItems": "Još nema dodatih pića. Kliknite \"Dodaj pića\" da ih izaberete."
+    "subtitle": "Proverite stavke, po potrebi promenite količinu, cenu ili rabat, izaberite kupca i napravite predračun. Pića se skidaju sa stanja.",
+    "noItems": "Još nema pića na predračunu. Kliknite \"Nazad\" da ih izaberete."
+  },
+  "steps": {
+    "pick": "Pića",
+    "review": "Pregled"
   },
   "pick": {
     "title": "Dodaj pića",
-    "subtitle": "Unesite količinu za svako piće koje želite na predračunu. Možete dodati jedno ili više odjednom.",
-    "done": "Dodaj na predračun"
+    "subtitle": "Izaberite magacin i unesite količinu za svako piće koje želite na predračunu. Zatim kliknite Dalje."
   },
   "download": "Preuzmi",
   "status": {

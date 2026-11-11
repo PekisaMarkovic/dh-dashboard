@@ -16,7 +16,10 @@ type Props = {
   htmlType?: 'button' | 'submit' | 'reset'
   leftIcon?: ReactNode
   rightIcon?: ReactNode
+  // shows the spinner instead of the text, used while something is saving
   disabled?: boolean
+  // the button can not be clicked: the text stays, only a bit faded
+  isInactive?: boolean
   onClick?: () => void
 }
 
@@ -31,9 +34,15 @@ const MainButton = ({
   leftIcon,
   rightIcon,
   disabled = false,
+  isInactive = false,
 }: Props) => {
   return (
-    <button onClick={onClick} type={htmlType} className={`${style({ fontFamily, size, variant, disabled })} ${className}`} disabled={disabled}>
+    <button
+      onClick={onClick}
+      type={htmlType}
+      className={`${style({ fontFamily, size, variant, disabled })} ${isInactive ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+      disabled={disabled || isInactive}
+    >
       {disabled ? (
         <GeneralIcons type="InfiniteLoader" />
       ) : (

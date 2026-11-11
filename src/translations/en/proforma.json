@@ -46,13 +46,16 @@
   "remove": "Remove",
   "createModal": {
     "title": "Create proforma",
-    "subtitle": "Pick a warehouse, add the drinks and create the proforma. The drinks are taken off the stock.",
-    "noItems": "No drinks added yet. Click \"Add drinks\" to choose them."
+    "subtitle": "Check the items, change the quantity, price or discount if needed, pick a customer and create the proforma. The drinks are taken off the stock.",
+    "noItems": "No drinks on the proforma yet. Click \"Back\" to choose them."
+  },
+  "steps": {
+    "pick": "Drinks",
+    "review": "Review"
   },
   "pick": {
     "title": "Add drinks",
-    "subtitle": "Set the quantity for every drink you want on the proforma. You can add one or more at once.",
-    "done": "Add to proforma"
+    "subtitle": "Pick a warehouse and set the quantity for every drink you want on the proforma. Then click Next."
   },
   "download": "Download",
   "status": {

@@ -28,6 +28,7 @@ import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import { openPdfTab } from '@/src/utils/files'
 import ProformaTotals from '@/src/components/proformas/ProformaTotals'
+import ProformaSteps from '@/src/components/proformas/ProformaSteps'
 import ProformaPickList from '@/src/components/proformas/ProformaPickList'
 import ProformaLinesList from '@/src/components/proformas/ProformaLinesList'
 import { lineCents, vatCents } from '@/src/utils/money'
@@ -77,7 +78,7 @@ const CreateProforma = () => {
   // the price (for this proforma only) and the discount in percent of the added drinks
   const [prices, setPrices] = useState<Quantities>({})
   const [discounts, setDiscounts] = useState<Quantities>({})
-  const [view, setView] = useState<'lines' | 'pick'>('pick')
+  const [view, setView] = useState<'pick' | 'review'>('pick')
   const [isSaving, setIsSaving] = useState(false)
 
   // there is always a warehouse in use: the picked one, or the first available one
@@ -137,15 +138,17 @@ const CreateProforma = () => {
   const draftCents = drafted.reduce((sum, d) => sum + lineTotalCents(d, draft[d.drinkId] || 0), 0)
   const draftVatCents = drafted.reduce((sum, d) => sum + vatCents(lineTotalCents(d, draft[d.drinkId] || 0)), 0)
 
-  const openPicker = () => {
+  // step 1 -> step 2: the chosen drinks go on the proforma
+  const handleNext = () => {
+    setLines(Object.fromEntries(Object.entries(draft).filter(([, quantity]) => quantity > 0)))
+    setView('review')
+  }
+
+  // step 2 -> step 1: the drinks of the proforma are chosen again, with their quantities
+  const handleBack = () => {
     methods.setValue('search', '')
     setDraft({ ...lines })
     setView('pick')
-  }
-
-  const applyDraft = () => {
-    setLines(Object.fromEntries(Object.entries(draft).filter(([, quantity]) => quantity > 0)))
-    setView('lines')
   }
 
   const handleCreate = async () => {
@@ -204,10 +207,15 @@ const CreateProforma = () => {
 
   const handleAddDrink = () => dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId } }))
 
-  const handleBackToLines = () => setView('lines')
-
   // one handler for every "remove" in the list: it takes the drink off the proforma
   const handleRemoveLine = (drinkId: number) => {
+    // the last drink was removed: back to choosing the drinks
+    if (added.length === 1 && added[0].drinkId === drinkId) {
+      setDraft({})
+      methods.setValue('search', '')
+      setView('pick')
+    }
+
     setLines((prev) => withoutKey(prev, drinkId))
     setPrices((prev) => withoutKey(prev, drinkId))
     setDiscounts((prev) => withoutKey(prev, drinkId))
@@ -245,14 +253,15 @@ const CreateProforma = () => {
   }
 
   const isPick = view === 'pick'
-  // the warehouse can be changed until drinks are on the proforma, a new warehouse starts the proforma again
-  const isWarehouseLocked = isPick && added.length > 0
+  // the warehouse is chosen in the first step, a new warehouse starts the proforma again
+  const isWarehouseLocked = !isPick
 
   return (
     <FormProvider {...methods}>
       {/* three parts: the top and the bottom are always there, only the middle scrolls */}
       <div className="flex flex-col md:h-full mb-6 md:mb-0 bg-white rounded-sm border-1 border-light-grey-alt border-solid p-4 md:p-6">
         <div className="shrink-0">
+          <ProformaSteps step={isPick ? 1 : 2} />
           <Heading text={isPick ? t('proforma:pick.title') : t('proforma:createModal.title')} variant="2" size="base" color="black" />
           <Paragraph text={isPick ? t('proforma:pick.subtitle') : t('proforma:createModal.subtitle')} size="sm" color="grey" className="mt-1" />
 
@@ -268,25 +277,20 @@ const CreateProforma = () => {
               />
             </div>
 
-            <div className="w-full sm:w-60">
-              <SingleSelect
-                name="customer"
-                label={t('proforma:builder.customer')}
-                placeholder={t('proforma:builder.customerPlh')}
-                options={customers.map(toCustomerOption)}
-              />
-            </div>
+            {!isPick && (
+              <div className="w-full sm:w-60">
+                <SingleSelect
+                  name="customer"
+                  label={t('proforma:builder.customer')}
+                  placeholder={t('proforma:builder.customerPlh')}
+                  options={customers.map(toCustomerOption)}
+                />
+              </div>
+            )}
 
             {isPick && (drinks.length > 0 || search !== '') && (
               <div className="w-full sm:w-60">
                 <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
-              </div>
-            )}
-
-            {/* the drinks are added from here, at the far right, level with the fields */}
-            {!isPick && (
-              <div className="ml-auto self-end">
-                <MainButton text={t('proforma:addDrinks')} variant="outlined" size="medium" onClick={openPicker} />
               </div>
             )}
           </div>
@@ -350,12 +354,12 @@ const CreateProforma = () => {
           <div className="flex justify-end gap-x-4 pt-4">
             {isPick ? (
               <>
-                <MainButton text={t('g:button.back')} variant="alternative" size="medium" onClick={handleBackToLines} />
-                <MainButton text={t('proforma:pick.done')} variant="contained" size="medium" onClick={applyDraft} />
+                <MainButton text={t('g:button.cancel')} variant="alternative" size="medium" onClick={close} />
+                <MainButton text={t('g:button.next')} variant="contained" size="medium" isInactive={!drafted.length} onClick={handleNext} />
               </>
             ) : (
               <>
-                <MainButton text={t('g:button.cancel')} variant="alternative" size="medium" onClick={close} />
+                <MainButton text={t('g:button.back')} variant="alternative" size="medium" onClick={handleBack} />
                 <MainButton text={t('proforma:create')} variant="contained" size="medium" disabled={isSaving} onClick={handleCreate} />
               </>
             )}

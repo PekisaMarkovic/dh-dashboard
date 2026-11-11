@@ -5,7 +5,7 @@ import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
-import { usePagedList } from '@/src/hooks/use-paged-list'
+import { usePageState } from '@/src/hooks/use-page-state'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import InfoGridSkeleton from '@/src/components/skeleton/InfoGridSkeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
@@ -39,15 +39,16 @@ const Company = () => {
   const companyId = user?.companyId
   // everything is cached: a visit after the first one shows it right away
   const companyQuery = useCompanyQuery(companyId)
-  const usersQuery = useCompanyUsersQuery(companyId)
-  const invitationsQuery = useInvitationsQuery()
+  // the users and the invitations are loaded a page at a time by the api
+  const [usersPage, setUsersPage] = usePageState()
+  const [invitationsPage, setInvitationsPage] = usePageState()
+  const usersQuery = useCompanyUsersQuery(companyId, { page: usersPage })
+  const invitationsQuery = useInvitationsQuery({ page: invitationsPage })
   const company = companyQuery.data ?? null
-  const users = usersQuery.data ?? NO_USERS
-  const invitations = invitationsQuery.data ?? NO_INVITATIONS
+  const users = usersQuery.data?.items ?? NO_USERS
+  const invitations = invitationsQuery.data?.items ?? NO_INVITATIONS
   // a user without a company has nothing to wait for
   const isLoad = !companyId || (!companyQuery.isPending && !usersQuery.isPending && !invitationsQuery.isPending)
-  const usersPage = usePagedList(users)
-  const invitationsPage = usePagedList(invitations)
 
   // sends the email again and starts the 7 days again, the link stays the same
   const handleResend = (invitation: IInvitation) => async () => {
@@ -138,7 +139,7 @@ const Company = () => {
                 <Heading text={t('company:users.joined')} variant="2" size="sm" color="grey" weight="medium" />
               </div>
             </div>
-            {usersPage.pageItems.map((u) => (
+            {users.map((u) => (
               <div
                 key={u.userId}
                 className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-0 pl-1 pr-1 md:px-4 py-3 md:py-0 border-b-1 border-b-light-grey-alt border-solid"
@@ -158,7 +159,7 @@ const Company = () => {
               </div>
             ))}
             {!users.length && <Paragraph text={t('company:users.empty')} size="sm" className="mt-3" />}
-            <ListPagination page={usersPage.page} totalPages={usersPage.totalPages} onPageChange={usersPage.setPage} />
+            <ListPagination page={usersPage} totalPages={usersQuery.data?.meta.totalPages ?? 1} onPageChange={setUsersPage} />
           </>
         )}
       </DataSection>
@@ -177,7 +178,7 @@ const Company = () => {
                 <span />
               </div>
             </div>
-            {invitationsPage.pageItems.map((i) => (
+            {invitations.map((i) => (
               <DefaultTableRowContainer key={i.invitationId} cols={5} dropdownOptions={invitationOptions(i)}>
                 <TableCell isTitle label={t('company:invitations.email')} className="col-span-2 md:col-span-1 md:pr-4">
                   <Paragraph text={i.email} size="sm" color="black" />
@@ -197,7 +198,7 @@ const Company = () => {
               </DefaultTableRowContainer>
             ))}
             {!invitations.length && <Paragraph text={t('company:invitations.empty')} size="sm" className="mt-3" />}
-            <ListPagination page={invitationsPage.page} totalPages={invitationsPage.totalPages} onPageChange={invitationsPage.setPage} />
+            <ListPagination page={invitationsPage} totalPages={invitationsQuery.data?.meta.totalPages ?? 1} onPageChange={setInvitationsPage} />
           </>
         )}
       </DataSection>

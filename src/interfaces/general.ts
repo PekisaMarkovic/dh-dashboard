@@ -56,6 +56,13 @@ export interface Paginated<T> {
   }
 }
 
+// what every paginated list of the api is asked with
+export interface PageParams {
+  page: number
+  limit?: number
+  search?: string
+}
+
 export interface LocationPoint {
   x: number
   y: number

@@ -16,4 +16,7 @@ export interface IWarehouse {
   warehouseId: number
   name: string
   companyId: number
+  // how many drinks it has and what they are worth in cents, calculated by the api
+  drinksCount: number
+  totalValueCents: number
 }

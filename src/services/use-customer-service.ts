@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import CustomerApis from '@/src/api/customers'
 import { useApi } from '@/src/hooks/use-api'
-import { ICustomer } from '@/src/interfaces'
+import { ICustomer, ICustomerOption, PageParams, Paginated } from '@/src/interfaces'
 
 type CustomerBody = {
   name: string
@@ -11,8 +11,15 @@ export const useCustomerService = () => {
   const api = useApi()
 
   return useMemo(() => {
-    const getCustomers = async () => {
-      const { data } = await api.get<ICustomer[]>(CustomerApis.getCustomers())
+    const getCustomers = async ({ search, ...paging }: PageParams) => {
+      const { data } = await api.get<Paginated<ICustomer>>(CustomerApis.getCustomers(), { params: { ...paging, search: search || undefined } })
+
+      return data
+    }
+
+    // every customer with only the id and the name, for a select
+    const getCustomerOptions = async () => {
+      const { data } = await api.get<ICustomerOption[]>(CustomerApis.getCustomerOptions())
 
       return data
     }
@@ -33,6 +40,6 @@ export const useCustomerService = () => {
       await api.delete(CustomerApis.deleteCustomer(customerId))
     }
 
-    return { getCustomers, createCustomer, updateCustomer, deleteCustomer }
+    return { getCustomers, getCustomerOptions, createCustomer, updateCustomer, deleteCustomer }
   }, [api])
 }

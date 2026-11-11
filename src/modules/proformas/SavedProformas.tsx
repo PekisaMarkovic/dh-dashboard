@@ -7,7 +7,7 @@ import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
-import { usePagedList } from '@/src/hooks/use-paged-list'
+import { usePageState } from '@/src/hooks/use-page-state'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DataSection from '@/src/components/section/DataSection'
 import { ModalEnums } from '@/src/enum'
@@ -38,11 +38,11 @@ const SavedProformas = () => {
   const navigate = useNavigate()
   const { isAdmin } = useRoles()
   const { afterProformaChange } = useRefreshData()
-  // the list is cached: a visit after the first one shows it right away
-  const { data, isPending } = useProformasQuery()
-  const proformas = data ?? NO_PROFORMAS
+  const [page, setPage] = usePageState()
+  // every page is cached: the page before stays visible while the next one loads
+  const { data, isPending } = useProformasQuery({ page })
+  const proformas = data?.items ?? NO_PROFORMAS
   const isLoad = !isPending
-  const { pageItems, page, setPage, totalPages } = usePagedList(proformas)
 
   const handleDownload = (proforma: IProforma) => async () => {
     try {
@@ -123,7 +123,7 @@ const SavedProformas = () => {
             </div>
           </div>
 
-          {pageItems.map((p) => (
+          {proformas.map((p) => (
             <DefaultTableRowContainer
               key={p.proformaId}
               cols={7}
@@ -152,7 +152,7 @@ const SavedProformas = () => {
           ))}
 
           {!proformas.length && <Paragraph text={t('proforma:saved.empty')} size="sm" className="mt-3" />}
-          <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          <ListPagination page={page} totalPages={data?.meta.totalPages ?? 1} onPageChange={setPage} />
         </>
       )}
     </DataSection>

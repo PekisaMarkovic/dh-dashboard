@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
@@ -14,41 +13,31 @@ import { IDrink, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
-import { usePagedList } from '@/src/hooks/use-paged-list'
+import { useDebouncedValue } from '@/src/hooks/use-debounced-value'
+import { usePageState } from '@/src/hooks/use-page-state'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DrinksList from '@/src/modules/drinks/DrinksList'
 
 const NO_WAREHOUSES: IWarehouse[] = []
 const NO_DRINKS: IDrink[] = []
 
-const matchesSearch = (drink: IDrink, search: string) => {
-  const text = search.trim().toLowerCase()
-
-  return drink.name.toLowerCase().includes(text) || (drink.code || '').toLowerCase().includes(text)
-}
-
 const Drinks = () => {
   const { t } = useTranslation(['drink', 'g'])
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  // both lists are cached: a visit after the first one shows them right away
-  const warehousesQuery = useWarehousesQuery()
-  const drinksQuery = useDrinksQuery()
-  const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
-  const drinks = drinksQuery.data ?? NO_DRINKS
-  const isLoad = !warehousesQuery.isPending && !drinksQuery.isPending
   const filterForm = useForm()
   const selectedWarehouse = useWatch({ control: filterForm.control, name: 'warehouse' })
-  const search: string = useWatch({ control: filterForm.control, name: 'search' }) || ''
+  // the search waits for a pause in typing, then the api returns the matching page
+  const search = useDebouncedValue((useWatch({ control: filterForm.control, name: 'search' }) || '').trim())
   // the select is cleared by picking the selected option again, which means: all warehouses
   const warehouseId: string = selectedWarehouse?.value || ''
-
-  const visible = useMemo(
-    () => drinks.filter((d) => (!warehouseId || d.warehouseId === Number(warehouseId)) && matchesSearch(d, search)),
-    [drinks, warehouseId, search],
-  )
-
-  const { pageItems, page, setPage, totalPages } = usePagedList(visible, [search, warehouseId])
+  const [page, setPage] = usePageState([search, warehouseId])
+  // the warehouses are cached; the drinks come a page at a time, every page and search is cached too
+  const warehousesQuery = useWarehousesQuery()
+  const drinksQuery = useDrinksQuery({ page, search, warehouseId: warehouseId ? Number(warehouseId) : undefined })
+  const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
+  const drinks = drinksQuery.data?.items ?? NO_DRINKS
+  const isLoad = !warehousesQuery.isPending && !drinksQuery.isPending
 
   // adding a drink needs a warehouse; the one picked in the filter is already chosen in the form
   const handleAddDrink = () => {
@@ -91,8 +80,8 @@ const Drinks = () => {
           <TableSkeleton columns={[1, 2, 1, 1, 1]} rows={8} />
         ) : (
           <>
-            {visible.length ? <DrinksList drinks={pageItems} warehouses={warehouses} /> : <Paragraph text={t('drink:empty')} size="sm" />}
-            <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+            {drinks.length ? <DrinksList drinks={drinks} warehouses={warehouses} /> : <Paragraph text={t('drink:empty')} size="sm" />}
+            <ListPagination page={page} totalPages={drinksQuery.data?.meta.totalPages ?? 1} onPageChange={setPage} />
           </>
         )}
       </div>

@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
@@ -12,7 +11,8 @@ import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowCont
 import TableCell from '@/src/components/table/TableCell'
 import { ModalEnums } from '@/src/enum'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
-import { usePagedList } from '@/src/hooks/use-paged-list'
+import { useDebouncedValue } from '@/src/hooks/use-debounced-value'
+import { usePageState } from '@/src/hooks/use-page-state'
 import { useRoles } from '@/src/hooks/use-roles'
 import { CustomDropdown, ICustomer } from '@/src/interfaces'
 import { useCustomersQuery } from '@/src/hooks/queries/use-customer-queries'
@@ -31,15 +31,14 @@ const Customers = () => {
   const { afterCustomerChange } = useRefreshData()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  // the list is cached: a visit after the first one shows it right away
-  const { data, isPending } = useCustomersQuery()
-  const customers = data ?? NO_CUSTOMERS
-  const isLoad = !isPending
   const filterForm = useForm()
-  const search: string = useWatch({ control: filterForm.control, name: 'search' }) || ''
-
-  const visible = useMemo(() => customers.filter((c) => c.name.toLowerCase().includes(search.trim().toLowerCase())), [customers, search])
-  const { pageItems, page, setPage, totalPages } = usePagedList(visible, [search])
+  // the search waits for a pause in typing, then the api returns the matching page
+  const search = useDebouncedValue((useWatch({ control: filterForm.control, name: 'search' }) || '').trim())
+  const [page, setPage] = usePageState([search])
+  // every page and search is cached: the page before stays visible while the next one loads
+  const { data, isPending } = useCustomersQuery({ page, search })
+  const customers = data?.items ?? NO_CUSTOMERS
+  const isLoad = !isPending
 
   const handleAdd = () => dispatch(openModal({ modal: ModalEnums.CUSTOMER }))
 
@@ -90,7 +89,7 @@ const Customers = () => {
       <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-6">
         {!isLoad ? (
           <TableSkeleton columns={[2, 1]} rows={8} />
-        ) : visible.length ? (
+        ) : customers.length ? (
           <div>
             <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
               <div className="grid grid-cols-3">
@@ -101,7 +100,7 @@ const Customers = () => {
               </div>
             </div>
 
-            {pageItems.map((customer) => (
+            {customers.map((customer) => (
               <DefaultTableRowContainer key={customer.customerId} cols={3} dropdownOptions={isAdmin ? options(customer) : []}>
                 <TableCell isTitle label={t('customer:table.name')} className="col-span-2">
                   <Paragraph text={customer.name} size="sm" color="black" />
@@ -115,7 +114,7 @@ const Customers = () => {
         ) : (
           <Paragraph text={t('customer:empty')} size="sm" />
         )}
-        {isLoad && <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />}
+        {isLoad && <ListPagination page={page} totalPages={data?.meta.totalPages ?? 1} onPageChange={setPage} />}
       </div>
     </div>
   )

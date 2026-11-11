@@ -6,22 +6,21 @@ import Paragraph from '@/src/components/core/typography/Paragraph'
 import DataSection from '@/src/components/section/DataSection'
 import { ModalEnums } from '@/src/enum'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
-import { formatCents, lineCents } from '@/src/utils/money'
+import { formatCents } from '@/src/utils/money'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useWarehouseService } from '@/src/services/use-warehouse-service'
 import { useRoles } from '@/src/hooks/use-roles'
-import { CustomDropdown, IDrink, IWarehouse } from '@/src/interfaces'
+import { CustomDropdown, IWarehouse } from '@/src/interfaces'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import DrinksTable from '@/src/modules/warehouses/DrinksTable'
 
 type Props = {
   warehouse: IWarehouse
-  drinks: IDrink[]
 }
 
-const WarehouseCard = ({ warehouse, drinks }: Props) => {
+const WarehouseCard = ({ warehouse }: Props) => {
   const { t } = useTranslation(['warehouse', 'g'])
   const { deleteWarehouse: removeWarehouse } = useWarehouseService()
   const showError = useErrorToast()
@@ -29,7 +28,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
   const { afterWarehouseChange } = useRefreshData()
   const { isAdmin } = useRoles()
 
-  const totalValueCents = drinks.reduce((sum, drink) => sum + lineCents(drink.price, drink.quantity), 0)
+  const { drinksCount, totalValueCents } = warehouse
 
   const deleteWarehouse = async () => {
     try {
@@ -49,11 +48,11 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
 
   const handleDelete = () => {
     // a warehouse must be emptied first, so only explain why it can not be deleted yet
-    if (drinks.length) {
+    if (drinksCount) {
       dispatch(
         openModal({
           modal: ModalEnums.CONFIRM,
-          data: { title: t('warehouse:notEmptyTitle'), message: t('warehouse:notEmptyMessage', { count: drinks.length }) } satisfies ConfirmModalData,
+          data: { title: t('warehouse:notEmptyTitle'), message: t('warehouse:notEmptyMessage', { count: drinksCount }) } satisfies ConfirmModalData,
         }),
       )
       return
@@ -94,7 +93,7 @@ const WarehouseCard = ({ warehouse, drinks }: Props) => {
         ) : undefined
       }
     >
-      {drinks.length ? <DrinksTable drinks={drinks} /> : <Paragraph text={t('warehouse:noDrinks')} size="sm" />}
+      {drinksCount ? <DrinksTable warehouseId={warehouse.warehouseId} /> : <Paragraph text={t('warehouse:noDrinks')} size="sm" />}
     </DataSection>
   )
 }

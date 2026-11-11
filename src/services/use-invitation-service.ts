@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import InvitationApis from '@/src/api/invitations'
 import { useApi } from '@/src/hooks/use-api'
-import { IInvitation } from '@/src/interfaces'
+import { IInvitation, PageParams, Paginated } from '@/src/interfaces'
 
 export const useInvitationService = () => {
   const api = useApi()
@@ -11,8 +11,8 @@ export const useInvitationService = () => {
       await api.post(InvitationApis.invite(), { email })
     }
 
-    const getInvitations = async () => {
-      const { data } = await api.get<IInvitation[]>(InvitationApis.getInvitations())
+    const getInvitations = async ({ search, ...paging }: PageParams) => {
+      const { data } = await api.get<Paginated<IInvitation>>(InvitationApis.getInvitations(), { params: { ...paging, search: search || undefined } })
 
       return data
     }

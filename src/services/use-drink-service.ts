@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import DrinkApis from '@/src/api/drinks'
 import { useApi } from '@/src/hooks/use-api'
-import { IDrink } from '@/src/interfaces'
+import { IDrink, PageParams, Paginated } from '@/src/interfaces'
 
 type UpdateDrinkBody = {
   code: string
@@ -16,13 +16,15 @@ type CreateDrinkBody = UpdateDrinkBody & {
   warehouseId: number
 }
 
+export type DrinkListParams = PageParams & { warehouseId?: number }
+
 export const useDrinkService = () => {
   const api = useApi()
 
   return useMemo(() => {
-    // without a warehouse it returns the drinks of all warehouses
-    const getDrinks = async (warehouseId?: number) => {
-      const { data } = await api.get<IDrink[]>(DrinkApis.getDrinks(), { params: { warehouseId } })
+    // one page of drinks; without a warehouse it is the drinks of all warehouses
+    const getDrinks = async ({ warehouseId, search, ...paging }: DrinkListParams) => {
+      const { data } = await api.get<Paginated<IDrink>>(DrinkApis.getDrinks(), { params: { ...paging, warehouseId, search: search || undefined } })
 
       return data
     }

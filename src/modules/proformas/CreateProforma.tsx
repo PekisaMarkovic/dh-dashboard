@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -13,18 +13,20 @@ import customToast from '@/src/components/core/toast/CustomToast'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
 import { usePagedList } from '@/src/hooks/use-paged-list'
+import { useDebouncedValue } from '@/src/hooks/use-debounced-value'
+import { usePageState } from '@/src/hooks/use-page-state'
 import InputText from '@/src/components/core/input/InputText'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { ModalEnums } from '@/src/enum'
-import { useCustomersQuery } from '@/src/hooks/queries/use-customer-queries'
+import { useCustomerOptionsQuery } from '@/src/hooks/queries/use-customer-queries'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useProformaService } from '@/src/services/use-proforma-service'
 import { useRoles } from '@/src/hooks/use-roles'
-import { ICustomer, IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
+import { ICustomerOption, IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import { openPdfTab } from '@/src/utils/files'
@@ -33,7 +35,7 @@ import { formatCents, formatPrice, lineCents, vatCents } from '@/src/utils/money
 import { getStockLevel, STOCK_ROW_CLASS, STOCK_TEXT_CLASS } from '@/src/utils/stock'
 
 const NO_WAREHOUSES: IWarehouse[] = []
-const NO_CUSTOMERS: ICustomer[] = []
+const NO_CUSTOMERS: ICustomerOption[] = []
 const NO_DRINKS: IDrink[] = []
 
 type Quantities = Record<number, number>
@@ -46,7 +48,7 @@ const withoutKey = (values: Quantities, key: number) => {
   return next
 }
 
-const toCustomerOption = (c: ICustomer): SelectOption => ({ id: String(c.customerId), name: c.name, value: String(c.customerId) })
+const toCustomerOption = (c: ICustomerOption): SelectOption => ({ id: String(c.customerId), name: c.name, value: String(c.customerId) })
 
 const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) })
 
@@ -62,11 +64,12 @@ const CreateProforma = () => {
     defaultValues: { warehouse: undefined, customer: undefined, search: '' },
   })
   const selected = useWatch({ control: methods.control, name: 'warehouse' })
-  const search = (useWatch({ control: methods.control, name: 'search' }) || '').trim().toLowerCase()
+  // the search waits for a pause in typing, then the api returns the matching page of drinks
+  const search = useDebouncedValue((useWatch({ control: methods.control, name: 'search' }) || '').trim())
   const customer = useWatch({ control: methods.control, name: 'customer' })
   // the lists come from the cache: a visit after the first one shows them right away
   const warehousesQuery = useWarehousesQuery()
-  const customersQuery = useCustomersQuery()
+  const customersQuery = useCustomerOptionsQuery()
   const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
   const customers = customersQuery.data ?? NO_CUSTOMERS
   const isLoad = !warehousesQuery.isPending
@@ -87,13 +90,20 @@ const CreateProforma = () => {
     if (warehouses.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(warehouses[0]))
   }, [warehouses])
 
-  // the drinks of the warehouse in use (cached per warehouse; they are 30 seconds fresh because the stock changes often)
-  const drinksQuery = useDrinksQuery(warehouseId, !!warehouseId)
-  const drinks = drinksQuery.data ?? NO_DRINKS
-  const drinksLoad = drinksQuery.isSuccess || drinksQuery.isError
+  // one page of the drinks of the warehouse in use (every page and search is cached; 30 seconds fresh because the stock changes often)
+  const [pickPageNo, setPickPageNo] = usePageState([search, warehouseId])
+  const drinksQuery = useDrinksQuery({ page: pickPageNo, search, warehouseId }, !!warehouseId)
+  // while another warehouse loads, the previous page stays in the query, but its drinks must not be shown
+  const isOtherWarehouse = !!drinksQuery.data?.items.some((d) => d.warehouseId !== warehouseId)
+  const drinks = (!isOtherWarehouse && drinksQuery.data?.items) || NO_DRINKS
+  const drinksLoad = !isOtherWarehouse && (drinksQuery.isSuccess || drinksQuery.isError)
+  const pickTotalPages = drinksQuery.data?.meta.totalPages ?? 1
+  // the drinks that were on a page, so the amounts of the chosen ones stay known on other pages
+  const [known, setKnown] = useState<Record<number, IDrink>>({})
 
   // another warehouse means other drinks, so the proforma starts again
   useEffect(() => {
+    setKnown({})
     setLines({})
     setDraft({})
     setPrices({})
@@ -103,22 +113,31 @@ const CreateProforma = () => {
     methods.setValue('search', '')
   }, [warehouseId])
 
+  // runs after the reset above, so a page that is already cached is not wiped when the warehouse changes
+  useEffect(() => {
+    if (isOtherWarehouse || !drinksQuery.data) return
+
+    setKnown((prev) => ({ ...prev, ...Object.fromEntries(drinksQuery.data.items.map((d) => [d.drinkId, d])) }))
+  }, [drinksQuery.data, isOtherWarehouse])
+
   // the changed price of this proforma, or the price of the drink
   const priceOf = (drink: IDrink) => prices[drink.drinkId] ?? drink.price
   const discountOf = (drink: IDrink) => discounts[drink.drinkId] ?? 0
   const lineTotalCents = (drink: IDrink, quantity: number) => lineCents(priceOf(drink), quantity, discountOf(drink))
 
-  const added = useMemo(() => drinks.filter((d) => (lines[d.drinkId] || 0) > 0), [drinks, lines])
+  const byIds = (quantities: Quantities) =>
+    Object.keys(quantities)
+      .map((id) => known[Number(id)])
+      .filter((d): d is IDrink => !!d && (quantities[d.drinkId] || 0) > 0)
+      .sort((a, b) => a.name.localeCompare(b.name))
+
+  const added = byIds(lines)
   const totalCents = added.reduce((sum, d) => sum + lineTotalCents(d, lines[d.drinkId]), 0)
   const totalVatCents = added.reduce((sum, d) => sum + vatCents(lineTotalCents(d, lines[d.drinkId])), 0)
-  const filtered = useMemo(
-    () => drinks.filter((d) => d.name.toLowerCase().includes(search) || (d.code || '').toLowerCase().includes(search)),
-    [drinks, search],
-  )
-  const pickPage = usePagedList(filtered, [search, warehouseId])
   const linesPage = usePagedList(added)
-  const draftCents = drinks.reduce((sum, d) => sum + lineTotalCents(d, draft[d.drinkId] || 0), 0)
-  const draftVatCents = drinks.reduce((sum, d) => sum + vatCents(lineTotalCents(d, draft[d.drinkId] || 0)), 0)
+  const drafted = byIds(draft)
+  const draftCents = drafted.reduce((sum, d) => sum + lineTotalCents(d, draft[d.drinkId] || 0), 0)
+  const draftVatCents = drafted.reduce((sum, d) => sum + vatCents(lineTotalCents(d, draft[d.drinkId] || 0)), 0)
 
   const openPicker = () => {
     methods.setValue('search', '')
@@ -247,7 +266,7 @@ const CreateProforma = () => {
     </div>
   )
 
-  const pickRows = pickPage.pageItems.map((drink) => {
+  const pickRows = drinks.map((drink) => {
     const quantity = draft[drink.drinkId] || 0
     const level = getStockLevel(drink)
 
@@ -375,7 +394,7 @@ const CreateProforma = () => {
               />
             </div>
 
-            {isPick && drinks.length > 0 && (
+            {isPick && (drinks.length > 0 || search !== '') && (
               <div className="w-full sm:w-60">
                 <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
               </div>
@@ -394,7 +413,7 @@ const CreateProforma = () => {
           {isPick && !drinksLoad ? (
             <TableSkeleton columns={[2, 1, 1, 1.4, 1]} rows={6} />
           ) : isPick ? (
-            drinksLoad && !drinks.length ? (
+            drinksLoad && !drinks.length && !search ? (
               <div className="pt-2">
                 <Paragraph text={isAdmin ? t('proforma:noDrinks') : t('proforma:noDrinksUser')} size="sm" color="grey" />
                 {isAdmin && (
@@ -407,7 +426,7 @@ const CreateProforma = () => {
               <div>
                 {pickHeader}
                 {pickRows}
-                {!filtered.length && <Paragraph text={t('drink:empty')} size="sm" color="grey" className="py-4" />}
+                {!drinks.length && <Paragraph text={t('drink:empty')} size="sm" color="grey" className="py-4" />}
               </div>
             )
           ) : (
@@ -426,7 +445,7 @@ const CreateProforma = () => {
 
         <div className="shrink-0 border-t-1 border-t-light-grey-alt border-solid">
           {isPick ? (
-            <ListPagination page={pickPage.page} totalPages={pickPage.totalPages} onPageChange={pickPage.setPage} />
+            <ListPagination page={pickPageNo} totalPages={pickTotalPages} onPageChange={setPickPageNo} />
           ) : (
             <ListPagination page={linesPage.page} totalPages={linesPage.totalPages} onPageChange={linesPage.setPage} />
           )}

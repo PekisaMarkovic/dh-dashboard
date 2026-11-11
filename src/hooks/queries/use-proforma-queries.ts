@@ -1,15 +1,17 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { PageParams } from '@/src/interfaces'
 import { QUERY_KEYS } from '@/src/constatns/query-keys'
 import { STALE_TIMES } from '@/src/constatns/stale-times'
 import { useProformaService } from '@/src/services/use-proforma-service'
 
-export const useProformasQuery = () => {
+export const useProformasQuery = (params: PageParams) => {
   const { getProformas } = useProformaService()
 
   return useQuery({
-    queryKey: QUERY_KEYS.proformas,
-    queryFn: getProformas,
+    queryKey: [...QUERY_KEYS.proformas, params],
+    queryFn: () => getProformas(params),
     staleTime: STALE_TIMES.proformas,
+    placeholderData: keepPreviousData,
   })
 }
 

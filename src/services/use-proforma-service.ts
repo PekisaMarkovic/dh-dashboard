@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import ProformaApis from '@/src/api/proformas'
 import { useApi } from '@/src/hooks/use-api'
-import { IProforma } from '@/src/interfaces'
+import { IProforma, PageParams, Paginated } from '@/src/interfaces'
 
 type ProformaItemBody = {
   drinkId: number
@@ -23,8 +23,8 @@ export const useProformaService = () => {
   const api = useApi()
 
   return useMemo(() => {
-    const getProformas = async () => {
-      const { data } = await api.get<IProforma[]>(ProformaApis.getProformas())
+    const getProformas = async ({ search, ...paging }: PageParams) => {
+      const { data } = await api.get<Paginated<IProforma>>(ProformaApis.getProformas(), { params: { ...paging, search: search || undefined } })
 
       return data
     }

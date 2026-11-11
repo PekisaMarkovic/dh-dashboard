@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import ListPagination from '@/src/components/core/paggination/ListPagination'
-import { usePagedList } from '@/src/hooks/use-paged-list'
+import { usePageState } from '@/src/hooks/use-page-state'
+import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
@@ -18,17 +19,22 @@ import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 
 type Props = {
-  drinks: IDrink[]
+  warehouseId: number
 }
 
-const DrinksTable = ({ drinks }: Props) => {
+const NO_DRINKS: IDrink[] = []
+
+const DrinksTable = ({ warehouseId }: Props) => {
   const { t } = useTranslation(['warehouse', 'g'])
   const showError = useErrorToast()
   const { deleteDrink } = useDrinkService()
   const { afterDrinkChange } = useRefreshData()
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  const { pageItems, page, setPage, totalPages } = usePagedList(drinks)
+  const [page, setPage] = usePageState([warehouseId])
+  // one page of the drinks of this warehouse, every page is cached
+  const { data } = useDrinksQuery({ page, warehouseId })
+  const drinks = data?.items ?? NO_DRINKS
 
   const handleEdit = (drink: IDrink) => () => dispatch(openModal({ modal: ModalEnums.DRINK, data: { drink, warehouseId: drink.warehouseId } }))
 
@@ -71,7 +77,7 @@ const DrinksTable = ({ drinks }: Props) => {
         </div>
       </div>
 
-      {pageItems.map((drink) => {
+      {drinks.map((drink) => {
         const level = getStockLevel(drink)
 
         return (
@@ -96,7 +102,7 @@ const DrinksTable = ({ drinks }: Props) => {
         )
       })}
 
-      <ListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
+      <ListPagination page={page} totalPages={data?.meta.totalPages ?? 1} onPageChange={setPage} />
     </div>
   )
 }

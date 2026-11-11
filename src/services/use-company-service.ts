@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import CompanyApis from '@/src/api/companies'
 import { useApi } from '@/src/hooks/use-api'
-import { ICompany, ICompanyUser } from '@/src/interfaces'
+import { ICompany, ICompanyUser, PageParams, Paginated } from '@/src/interfaces'
 
 type UpdateCompanyBody = {
   name: string
@@ -24,8 +24,10 @@ export const useCompanyService = () => {
       return data
     }
 
-    const getCompanyUsers = async (companyId: number) => {
-      const { data } = await api.get<ICompanyUser[]>(CompanyApis.getCompanyUsers(companyId))
+    const getCompanyUsers = async (companyId: number, { search, ...paging }: PageParams) => {
+      const { data } = await api.get<Paginated<ICompanyUser>>(CompanyApis.getCompanyUsers(companyId), {
+        params: { ...paging, search: search || undefined },
+      })
 
       return data
     }

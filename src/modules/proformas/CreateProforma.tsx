@@ -348,7 +348,7 @@ const CreateProforma = () => {
 
           {/* the amounts on the far right; buttons in their own row */}
           <div className="px-2 pt-4">
-            <ProformaTotals netCents={isPick ? draftCents : totalCents} vatCents={isPick ? draftVatCents : totalVatCents} />
+            <ProformaTotals grossCents={isPick ? draftCents : totalCents} vatCents={isPick ? draftVatCents : totalVatCents} />
           </div>
 
           <div className="flex justify-end gap-x-4 pt-4">

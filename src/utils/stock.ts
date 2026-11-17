@@ -10,6 +10,8 @@ type StockInfo = Pick<IDrink, 'quantity' | 'warningQuantity' | 'criticalQuantity
  * - warning: fell below the warning quantity (orange)
  */
 export const getStockLevel = ({ quantity, warningQuantity, criticalQuantity }: StockInfo): StockLevel => {
+  // below zero (a proforma was made without enough stock) is always red
+  if (quantity < 0) return 'critical'
   if (criticalQuantity > 0 && quantity < criticalQuantity) return 'critical'
   if (warningQuantity > 0 && quantity < warningQuantity) return 'warning'
 

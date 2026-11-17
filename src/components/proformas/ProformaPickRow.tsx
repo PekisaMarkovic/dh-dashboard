@@ -35,7 +35,7 @@ const ProformaPickRow = ({ drink, price, quantity, lineCents, onQuantityChange }
         <Paragraph text={formatPrice(price)} size="sm" color="black" />
       </TableCell>
       <TableCell isDense label={t('proforma:table.quantity')}>
-        <QuantityInput ariaLabel={drink.name} value={quantity} max={drink.quantity} disabled={drink.quantity === 0} onChange={onQuantityChange} />
+        <QuantityInput ariaLabel={drink.name} value={quantity} onChange={onQuantityChange} />
       </TableCell>
       <TableCell isDense label={t('proforma:table.lineTotal')} className="md:flex md:justify-end">
         <Paragraph text={quantity ? formatCents(lineCents) : '-'} size="sm" color="black" />

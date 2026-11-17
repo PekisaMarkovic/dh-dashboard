@@ -42,7 +42,7 @@ export const lineCents = (price: number, quantity: number, discountPercent = 0) 
   return Math.round(afterDiscount / 10)
 }
 
-// The VAT of a line without VAT (in cents), rounded per line, so the lines add up to the totals (same as in the api)
-export const vatCents = (netCents: number) => Math.round((netCents * VAT_RATE_PERCENT) / 100)
+// The VAT inside a line with VAT (in cents), rounded per line, so the lines add up to the totals (same as in the api)
+export const vatCents = (grossCents: number) => Math.round((grossCents * VAT_RATE_PERCENT) / (100 + VAT_RATE_PERCENT))
 
 export const formatCents = (cents: number) => formatMoney(cents / 100)

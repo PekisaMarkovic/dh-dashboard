@@ -11,7 +11,7 @@
     "code": "šifru artikla",
     "name": "naziv",
     "price": "cenu (broj sa najviše 3 decimale, npr. 2,304.500)",
-    "quantity": "količinu (ceo broj, ne manje od 0)",
+    "quantity": "količinu (ceo broj)",
     "phoneNumber": "broj telefona",
     "dateOfBirth": "datum rođenja",
     "warehouseId": "magacin",

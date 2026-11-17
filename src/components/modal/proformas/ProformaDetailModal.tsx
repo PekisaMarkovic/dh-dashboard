@@ -67,7 +67,7 @@ const ProformaDetailModal = () => {
         {proforma.items?.map((item) => <ProformaItemRow key={item.proformaItemId} item={item} />)}
 
         <div className="pt-4">
-          <ProformaTotals netCents={Math.round(proforma.total * 100)} vatCents={Math.round(proforma.vatAmount * 100)} />
+          <ProformaTotals grossCents={Math.round(proforma.total * 100)} vatCents={Math.round(proforma.vatAmount * 100)} />
         </div>
       </div>
 

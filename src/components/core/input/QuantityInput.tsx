@@ -1,6 +1,6 @@
 type Props = {
   value: number
-  max: number
+  max?: number
   min?: number
   onChange: (value: number) => void
   disabled?: boolean
@@ -11,9 +11,9 @@ const buttonClass =
   'h-9 w-9 flex items-center justify-center font-poppins text-lg text-dark-grey bg-white hover:bg-light-grey-transparent disabled:cursor-not-allowed disabled:text-grey'
 
 /**
- * Whole number stepper that stays between min (default 0) and max
+ * Whole number stepper that stays between min (default 0) and max (default: no limit)
  */
-const QuantityInput = ({ value, max, min = 0, onChange, disabled, ariaLabel }: Props) => {
+const QuantityInput = ({ value, max = Infinity, min = 0, onChange, disabled, ariaLabel }: Props) => {
   const clamp = (next: number) => onChange(Math.min(Math.max(Number.isFinite(next) ? Math.trunc(next) : min, min), max))
 
   const handleDecrease = () => clamp(value - 1)

@@ -11,7 +11,7 @@ export const DRINK_VALIDATION = yupResolver(
       .required('price')
       .test('price-format', 'price', (value) => isValidPriceInput(value ?? '')),
     warehouse: Yup.mixed(),
-    quantity: Yup.number().typeError('quantity').required('quantity').integer('quantity').min(0, 'quantity'),
+    quantity: Yup.number().typeError('quantity').required('quantity').integer('quantity'),
     warningQuantity: Yup.number().typeError('warningQuantity').required('warningQuantity').integer('warningQuantity').min(0, 'warningQuantity'),
     // the red level has to be lower than the orange one (0 means it is off)
     criticalQuantity: Yup.number()

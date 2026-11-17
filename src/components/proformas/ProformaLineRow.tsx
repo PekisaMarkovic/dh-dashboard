@@ -31,7 +31,7 @@ const ProformaLineRow = ({ drink, quantity, price, discount, lineCents, onQuanti
         <Paragraph text={drink.name} size="sm" color="black" />
       </TableCell>
       <TableCell isDense label={t('proforma:table.quantity')}>
-        <QuantityInput ariaLabel={drink.name} value={quantity} min={1} max={drink.quantity} onChange={onQuantityChange} />
+        <QuantityInput ariaLabel={drink.name} value={quantity} min={1} onChange={onQuantityChange} />
       </TableCell>
       <TableCell isDense label={t('proforma:table.unitPrice')}>
         <DecimalInput ariaLabel={`${t('proforma:table.unitPrice')} ${drink.name}`} value={price} decimals={3} isPrice onChange={onPriceChange} />

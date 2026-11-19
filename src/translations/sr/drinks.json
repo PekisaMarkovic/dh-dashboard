@@ -3,6 +3,12 @@
   "empty": "Nema pronađenih pića.",
   "noWarehouses": "Prvo napravite magacin.",
   "allWarehouses": "Svi magacini",
+  "filterStock": "Stanje",
+  "allStock": "Sve zalihe",
+  "stock": {
+    "warning": "Upozorenje",
+    "critical": "Kritično"
+  },
   "filterWarehouse": "Magacin",
   "search": "Pretraži pića po nazivu ili šifri..",
   "table": {

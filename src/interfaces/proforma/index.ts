@@ -1,5 +1,7 @@
 export interface IProformaItem {
   proformaItemId: number
+  // empty when the drink was deleted after the proforma was made
+  drinkId?: number | null
   code?: string | null
   name: string
   unitPrice: number
@@ -15,6 +17,7 @@ export interface IProforma {
   number: string
   warehouseId: number
   warehouseName: string
+  customerId?: number | null
   customerName?: string | null
   // the amount without VAT, the VAT and what is to be paid
   total: number

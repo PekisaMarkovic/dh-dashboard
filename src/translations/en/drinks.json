@@ -3,6 +3,12 @@
   "empty": "No drinks found.",
   "noWarehouses": "Create a warehouse first.",
   "allWarehouses": "All warehouses",
+  "filterStock": "Stock",
+  "allStock": "All stock",
+  "stock": {
+    "warning": "Warning",
+    "critical": "Critical"
+  },
   "filterWarehouse": "Warehouse",
   "search": "Search drinks by name or code..",
   "table": {

@@ -19,6 +19,13 @@ type CreateProformaBody = {
   items: ProformaItemBody[]
 }
 
+type UpdateProformaBody = {
+  // left out = unchanged, null = no buyer
+  customerId?: number | null
+  // all the items, they replace the old ones
+  items: ProformaItemBody[]
+}
+
 export const useProformaService = () => {
   const api = useApi()
 
@@ -41,6 +48,12 @@ export const useProformaService = () => {
       return data
     }
 
+    const updateProforma = async (proformaId: number, body: UpdateProformaBody) => {
+      const { data } = await api.patch<IProforma>(ProformaApis.patchProforma(proformaId), body)
+
+      return data
+    }
+
     // puts the drinks of the proforma back on the stock
     const returnProforma = async (proformaId: number) => {
       await api.post(ProformaApis.returnProforma(proformaId))
@@ -52,6 +65,6 @@ export const useProformaService = () => {
       return data
     }
 
-    return { getProformas, getProforma, createProforma, returnProforma, getProformaPdf }
+    return { getProformas, getProforma, createProforma, updateProforma, returnProforma, getProformaPdf }
   }, [api])
 }

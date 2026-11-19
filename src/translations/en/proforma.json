@@ -44,6 +44,13 @@
     "customer": "Customer"
   },
   "remove": "Remove",
+  "edit": {
+    "option": "Edit",
+    "title": "Edit proforma",
+    "subtitle": "Change the items, quantity, price or discount and save. The stock is corrected by the difference.",
+    "save": "Save changes",
+    "updated": "Proforma {{number}} was changed."
+  },
   "createModal": {
     "title": "Create proforma",
     "subtitle": "Check the items, change the quantity, price or discount if needed, pick a customer and create the proforma. The drinks are taken off the stock.",

@@ -44,6 +44,13 @@
     "customer": "Kupac"
   },
   "remove": "Ukloni",
+  "edit": {
+    "option": "Izmeni",
+    "title": "Izmeni predračun",
+    "subtitle": "Promenite stavke, količinu, cenu ili popust i sačuvajte. Stanje se koriguje za razliku.",
+    "save": "Sačuvaj izmene",
+    "updated": "Predračun {{number}} je izmenjen."
+  },
   "createModal": {
     "title": "Napravi predračun",
     "subtitle": "Proverite stavke, po potrebi promenite količinu, cenu ili rabat, izaberite kupca i napravite predračun. Pića se skidaju sa stanja.",

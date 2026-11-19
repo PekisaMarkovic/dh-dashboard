@@ -6,6 +6,7 @@ import InputText from '@/src/components/core/input/InputText'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ModalEnums } from '@/src/enum'
+import { DrinkStockFilter } from '@/src/services/use-drink-service'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
 import { useRoles } from '@/src/hooks/use-roles'
@@ -19,6 +20,7 @@ import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
 import DrinksList from '@/src/modules/drinks/DrinksList'
 
 const NO_WAREHOUSES: IWarehouse[] = []
+const STOCK_FILTERS: DrinkStockFilter[] = ['warning', 'critical']
 const NO_DRINKS: IDrink[] = []
 
 const Drinks = () => {
@@ -31,10 +33,12 @@ const Drinks = () => {
   const search = useDebouncedValue((useWatch({ control: filterForm.control, name: 'search' }) || '').trim())
   // the select is cleared by picking the selected option again, which means: all warehouses
   const warehouseId: string = selectedWarehouse?.value || ''
-  const [page, setPage] = usePageState([search, warehouseId])
+  const selectedStock = useWatch({ control: filterForm.control, name: 'stockLevel' })
+  const stockLevel: DrinkStockFilter | undefined = selectedStock?.value || undefined
+  const [page, setPage] = usePageState([search, warehouseId, stockLevel])
   // the warehouses are cached; the drinks come a page at a time, every page and search is cached too
   const warehousesQuery = useWarehousesQuery()
-  const drinksQuery = useDrinksQuery({ page, search, warehouseId: warehouseId ? Number(warehouseId) : undefined })
+  const drinksQuery = useDrinksQuery({ page, search, warehouseId: warehouseId ? Number(warehouseId) : undefined, stockLevel })
   const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
   const drinks = drinksQuery.data?.items ?? NO_DRINKS
   const isLoad = !warehousesQuery.isPending && !drinksQuery.isPending
@@ -64,6 +68,15 @@ const Drinks = () => {
               label={t('drink:filterWarehouse')}
               placeholder={t('drink:allWarehouses')}
               options={warehouses.map((w) => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) }))}
+            />
+          </div>
+
+          <div className="w-full sm:w-56">
+            <SingleSelect
+              name="stockLevel"
+              label={t('drink:filterStock')}
+              placeholder={t('drink:allStock')}
+              options={STOCK_FILTERS.map((s) => ({ id: s, name: t(`drink:stock.${s}`), value: s }))}
             />
           </div>
         </FormProvider>

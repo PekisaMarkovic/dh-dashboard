@@ -5,6 +5,7 @@ export const ROUTE_NAMES = {
   customers: '/customers',
   proformas: '/proformas',
   createProforma: '/proformas/create',
+  editProforma: '/proformas/:proformaId/edit',
   company: '/company',
   firtTimeRegister: '/first-time-register/:invitationId',
   profile: '/profile',

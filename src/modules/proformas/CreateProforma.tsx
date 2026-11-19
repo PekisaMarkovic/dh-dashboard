@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +19,7 @@ import { ROUTE_NAMES } from '@/src/constatns/a-routes'
 import { ModalEnums } from '@/src/enum'
 import { useCustomerOptionsQuery } from '@/src/hooks/queries/use-customer-queries'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
+import { useProformaQuery } from '@/src/hooks/queries/use-proforma-queries'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useProformaService } from '@/src/services/use-proforma-service'
@@ -51,10 +52,16 @@ const toCustomerOption = (c: ICustomerOption): SelectOption => ({ id: String(c.c
 
 const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) })
 
-const CreateProforma = () => {
+type Props = {
+  // set: an existing proforma is changed, else a new one is made
+  proformaId?: number
+}
+
+const CreateProforma = ({ proformaId }: Props) => {
+  const isEdit = !!proformaId
   const { t } = useTranslation(['proforma', 'g'])
   const showError = useErrorToast()
-  const { createProforma, getProformaPdf } = useProformaService()
+  const { createProforma, updateProforma, getProformaPdf } = useProformaService()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { isAdmin } = useRoles()
@@ -84,9 +91,58 @@ const CreateProforma = () => {
   // there is always a warehouse in use: the picked one, or the first available one
   const warehouseId = warehouses.find((w) => String(w.warehouseId) === selected?.value)?.warehouseId ?? warehouses[0]?.warehouseId
 
+  // editing: the proforma is loaded once and fills the form (warehouse, buyer, lines, prices, discounts)
+  const proformaQuery = useProformaQuery(proformaId)
+  const proforma = proformaQuery.data
+  const isFilled = useRef(false)
+
+  useEffect(() => {
+    if (!isEdit || isFilled.current || !proforma || !warehouses.length) return
+
+    const warehouse = warehouses.find((w) => w.warehouseId === proforma.warehouseId)
+    // lines of drinks that were deleted can not be edited
+    const items = (proforma.items ?? []).filter((item) => item.drinkId != null)
+
+    isFilled.current = true
+    if (warehouse) methods.setValue('warehouse', toOption(warehouse))
+    if (proforma.customerId) {
+      const buyer = customers.find((c) => c.customerId === proforma.customerId)
+
+      methods.setValue(
+        'customer',
+        buyer ? toCustomerOption(buyer) : { id: String(proforma.customerId), name: proforma.customerName || '', value: String(proforma.customerId) },
+      )
+    }
+
+    // the drinks are known by what was on the proforma, the real ones replace them when a page of the warehouse loads
+    setKnown((prev) => ({
+      ...Object.fromEntries(
+        items.map((i) => [
+          i.drinkId as number,
+          {
+            drinkId: i.drinkId as number,
+            code: i.code || '',
+            name: i.name,
+            price: i.unitPrice,
+            quantity: 0,
+            warningQuantity: 0,
+            criticalQuantity: 0,
+            warehouseId: proforma.warehouseId,
+            companyId: 0,
+          },
+        ]),
+      ),
+      ...prev,
+    }))
+    setLines(Object.fromEntries(items.map((i) => [i.drinkId as number, i.quantity])))
+    setPrices(Object.fromEntries(items.map((i) => [i.drinkId as number, i.unitPrice])))
+    setDiscounts(Object.fromEntries(items.map((i) => [i.drinkId as number, i.discountPercent])))
+    setView('review')
+  }, [proforma, warehouses, customers])
+
   // the first warehouse is picked at the start, a picked one stays
   useEffect(() => {
-    if (warehouses.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(warehouses[0]))
+    if (!isEdit && warehouses.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(warehouses[0]))
   }, [warehouses])
 
   // one page of the drinks of the warehouse in use (every page and search is cached; 30 seconds fresh because the stock changes often)
@@ -102,6 +158,9 @@ const CreateProforma = () => {
 
   // another warehouse means other drinks, so the proforma starts again
   useEffect(() => {
+    // editing: the warehouse of the proforma never changes
+    if (isEdit) return
+
     setKnown({})
     setLines({})
     setDraft({})
@@ -201,6 +260,52 @@ const CreateProforma = () => {
     }
   }
 
+  const handleSave = async () => {
+    if (!added.length) {
+      customToast.error(t('proforma:addAtLeastOne'))
+      return
+    }
+
+    // the tab for the PDF has to be opened right in the click, before waiting for the api
+    const pdfTab = openPdfTab()
+
+    setIsSaving(true)
+
+    try {
+      const saved = await updateProforma(proformaId as number, {
+        // the buyer can be removed too
+        customerId: customer?.value ? Number(customer.value) : null,
+        items: added.map((d) => ({
+          drinkId: d.drinkId,
+          quantity: lines[d.drinkId],
+          unitPrice: priceOf(d),
+          discountPercent: discountOf(d),
+        })),
+      })
+
+      customToast.success(t('proforma:edit.updated', { number: saved.number }))
+      void afterProformaChange()
+      navigate(ROUTE_NAMES.proformas)
+
+      // the changed proforma opens again in a new tab together with the print dialog
+      if (!pdfTab) {
+        customToast.error(t('proforma:popupBlocked'))
+        return
+      }
+
+      try {
+        pdfTab.show(await getProformaPdf(saved.proformaId), saved.number)
+      } catch (error) {
+        pdfTab.close()
+        showError(error)
+      }
+    } catch (error) {
+      pdfTab?.close()
+      showError(error)
+      setIsSaving(false)
+    }
+  }
+
   const close = () => navigate(ROUTE_NAMES.proformas)
 
   const handleAddWarehouse = () => dispatch(openModal({ modal: ModalEnums.WAREHOUSE }))
@@ -221,7 +326,7 @@ const CreateProforma = () => {
     setDiscounts((prev) => withoutKey(prev, drinkId))
   }
 
-  if (!isLoad) {
+  if (!isLoad || (isEdit && !isFilled.current && !proformaQuery.isError)) {
     return (
       <div className="bg-white rounded-sm border-1 border-light-grey-alt border-solid p-4 md:p-6">
         <Skeleton className="h-6 w-56" />
@@ -254,7 +359,7 @@ const CreateProforma = () => {
 
   const isPick = view === 'pick'
   // the warehouse is chosen in the first step, a new warehouse starts the proforma again
-  const isWarehouseLocked = !isPick
+  const isWarehouseLocked = !isPick || isEdit
 
   return (
     <FormProvider {...methods}>
@@ -262,8 +367,18 @@ const CreateProforma = () => {
       <div className="flex flex-col md:h-full mb-6 md:mb-0 bg-white rounded-sm border-1 border-light-grey-alt border-solid p-4 md:p-6">
         <div className="shrink-0">
           <ProformaSteps step={isPick ? 1 : 2} />
-          <Heading text={isPick ? t('proforma:pick.title') : t('proforma:createModal.title')} variant="2" size="base" color="black" />
-          <Paragraph text={isPick ? t('proforma:pick.subtitle') : t('proforma:createModal.subtitle')} size="sm" color="grey" className="mt-1" />
+          <Heading
+            text={isPick ? t('proforma:pick.title') : isEdit ? t('proforma:edit.title') : t('proforma:createModal.title')}
+            variant="2"
+            size="base"
+            color="black"
+          />
+          <Paragraph
+            text={isPick ? t('proforma:pick.subtitle') : isEdit ? t('proforma:edit.subtitle') : t('proforma:createModal.subtitle')}
+            size="sm"
+            color="grey"
+            className="mt-1"
+          />
 
           {/* warehouse and search side by side */}
           <div className="flex flex-wrap items-start gap-4 mt-6">
@@ -360,7 +475,13 @@ const CreateProforma = () => {
             ) : (
               <>
                 <MainButton text={t('g:button.back')} variant="alternative" size="medium" onClick={handleBack} />
-                <MainButton text={t('proforma:create')} variant="contained" size="medium" disabled={isSaving} onClick={handleCreate} />
+                <MainButton
+                  text={isEdit ? t('proforma:edit.save') : t('proforma:create')}
+                  variant="contained"
+                  size="medium"
+                  disabled={isSaving}
+                  onClick={isEdit ? handleSave : handleCreate}
+                />
               </>
             )}
           </div>

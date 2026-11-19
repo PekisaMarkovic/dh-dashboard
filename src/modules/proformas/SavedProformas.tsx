@@ -85,12 +85,17 @@ const SavedProformas = () => {
 
   const handleCreate = () => navigate(ROUTE_NAMES.createProforma)
 
+  const handleEdit = (proforma: IProforma) => () => navigate(ROUTE_NAMES.editProforma.replace(':proformaId', String(proforma.proformaId)))
+
   const options = (proforma: IProforma): CustomDropdown[] => [
     { content: { type: 'button', text: t('proforma:print'), onClick: handlePrint(proforma) } },
     { content: { type: 'button', text: t('proforma:download'), onClick: handleDownload(proforma) } },
     // only admins, and only while the drinks are still taken off the stock
     ...(isAdmin && proforma.status === 'active'
-      ? [{ content: { type: 'button', text: t('proforma:return.option'), onClick: handleReturn(proforma) } } satisfies CustomDropdown]
+      ? [
+          { content: { type: 'button', text: t('proforma:edit.option'), onClick: handleEdit(proforma) } } satisfies CustomDropdown,
+          { content: { type: 'button', text: t('proforma:return.option'), onClick: handleReturn(proforma) } } satisfies CustomDropdown,
+        ]
       : []),
   ]
 

@@ -51,7 +51,7 @@ export const useDrinkService = () => {
       await api.delete(DrinkApis.deleteDrink(drinkId))
     }
 
-    // TODO: TEMPORARY, remove later together with the button on the drinks page.
+    // not used by any button right now (the button on the drinks page was taken away, it can come back).
     // Sends the overview of the low stock to all employees right now (the same email as the one at 8:00)
     const sendStockDigest = async () => {
       const { data } = await api.post<StockDigestResult>(DrinkApis.sendStockDigest())

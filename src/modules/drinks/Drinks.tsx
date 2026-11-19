@@ -5,10 +5,8 @@ import customToast from '@/src/components/core/toast/CustomToast'
 import InputText from '@/src/components/core/input/InputText'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
 import Paragraph from '@/src/components/core/typography/Paragraph'
-import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
-import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { ModalEnums } from '@/src/enum'
-import { DrinkStockFilter, useDrinkService } from '@/src/services/use-drink-service'
+import { DrinkStockFilter } from '@/src/services/use-drink-service'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
 import { useRoles } from '@/src/hooks/use-roles'
@@ -29,8 +27,6 @@ const Drinks = () => {
   const { t } = useTranslation(['drink', 'g'])
   const dispatch = useAppDispatch()
   const { isAdmin } = useRoles()
-  const showError = useErrorToast()
-  const { sendStockDigest } = useDrinkService()
   const filterForm = useForm()
   const selectedWarehouse = useWatch({ control: filterForm.control, name: 'warehouse' })
   // the search waits for a pause in typing, then the api returns the matching page
@@ -57,33 +53,6 @@ const Drinks = () => {
 
     dispatch(openModal({ modal: ModalEnums.DRINK, data: { warehouseId: warehouseId ? Number(warehouseId) : undefined } }))
   }
-
-  // TODO: TEMPORARY, remove this button and handler (and sendStockDigest in use-drink-service.ts) later.
-  // It is only for sending the overview of the low stock by hand, the same email that goes out every day at 8:00
-  const handleSendDigest = () =>
-    dispatch(
-      openModal({
-        modal: ModalEnums.CONFIRM,
-        data: {
-          title: t('drink:digest.title'),
-          message: t('drink:digest.message'),
-          confirmText: t('drink:digest.confirm'),
-          danger: false,
-          onConfirm: async () => {
-            try {
-              const { critical, warning, recipients } = await sendStockDigest()
-
-              // nothing is sent when nothing is low
-              if (!critical && !warning) customToast.success(t('drink:digest.nothingLow'))
-              else if (!recipients) customToast.error(t('drink:digest.noRecipients'))
-              else customToast.success(t('drink:digest.sent', { recipients, critical, warning }))
-            } catch (error) {
-              showError(error)
-            }
-          },
-        } satisfies ConfirmModalData,
-      }),
-    )
 
   return (
     <div className="pb-8">
@@ -113,9 +82,7 @@ const Drinks = () => {
         </FormProvider>
 
         {isAdmin && (
-          <div className="ml-auto flex flex-wrap gap-3">
-            {/* TODO: TEMPORARY, remove later (manual sending of the stock overview email) */}
-            <MainButton text={t('drink:digest.button')} variant="alternative" size="medium" onClick={handleSendDigest} />
+          <div className="ml-auto">
             <MainButton text={t('drink:addDrink')} variant="contained" size="medium" disabled={false} onClick={handleAddDrink} />
           </div>
         )}

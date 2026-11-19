@@ -18,5 +18,14 @@
     "price": "Cena",
     "quantity": "Količina"
   },
-  "lowStock": "Nema na stanju"
+  "lowStock": "Nema na stanju",
+  "digest": {
+    "button": "Pošalji pregled zalihe",
+    "title": "Pošalji pregled zalihe",
+    "message": "Poslati mejl sa pićima koja su na izmaku (kritična i za upozorenje) svim zaposlenima sada?",
+    "confirm": "Pošalji",
+    "sent": "Poslato na {{recipients}} adrese: {{critical}} kritičnih, {{warning}} za upozorenje.",
+    "nothingLow": "Ništa nije na izmaku, mejl nije poslat.",
+    "noRecipients": "Nema kome da se pošalje mejl."
+  }
 }

@@ -5,6 +5,8 @@ const createDrink = () => base
 const patchDrink = (id: number) => `${base}/${id}`
 const deleteDrink = (id: number) => `${base}/${id}`
 
-const DrinkApis = { getDrinks, createDrink, patchDrink, deleteDrink }
+const sendStockDigest = () => 'stock-alerts/digest'
+
+const DrinkApis = { getDrinks, createDrink, patchDrink, deleteDrink, sendStockDigest }
 
 export default DrinkApis

@@ -18,5 +18,14 @@
     "price": "Price",
     "quantity": "Quantity"
   },
-  "lowStock": "Out of stock"
+  "lowStock": "Out of stock",
+  "digest": {
+    "button": "Send stock overview",
+    "title": "Send stock overview",
+    "message": "Send the email with the drinks that are low (critical and warning) to all employees now?",
+    "confirm": "Send",
+    "sent": "Sent to {{recipients}} people: {{critical}} critical, {{warning}} warning.",
+    "nothingLow": "Nothing is low, no email was sent.",
+    "noRecipients": "There is nobody to send the email to."
+  }
 }

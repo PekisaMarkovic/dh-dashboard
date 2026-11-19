@@ -20,6 +20,8 @@ export type DrinkStockFilter = 'warning' | 'critical'
 
 export type DrinkListParams = PageParams & { warehouseId?: number; stockLevel?: DrinkStockFilter }
 
+export type StockDigestResult = { critical: number; warning: number; recipients: number }
+
 export const useDrinkService = () => {
   const api = useApi()
 
@@ -49,6 +51,14 @@ export const useDrinkService = () => {
       await api.delete(DrinkApis.deleteDrink(drinkId))
     }
 
-    return { getDrinks, createDrink, updateDrink, deleteDrink }
+    // TODO: TEMPORARY, remove later together with the button on the drinks page.
+    // Sends the overview of the low stock to all employees right now (the same email as the one at 8:00)
+    const sendStockDigest = async () => {
+      const { data } = await api.post<StockDigestResult>(DrinkApis.sendStockDigest())
+
+      return data
+    }
+
+    return { getDrinks, createDrink, updateDrink, deleteDrink, sendStockDigest }
   }, [api])
 }

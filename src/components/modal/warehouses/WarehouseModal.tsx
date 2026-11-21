@@ -24,7 +24,10 @@ const WarehouseModal = () => {
   const { createWarehouse, updateWarehouse } = useWarehouseService()
   const dispatch = useAppDispatch()
   const { afterWarehouseChange } = useRefreshData()
-  const methods = useForm<FieldValues>({ resolver: WAREHOUSE_VALIDATION as unknown as Resolver<FieldValues>, defaultValues: { name: warehouse?.name || '', isDefault: { checked: warehouse?.isDefault || false } } })
+  const methods = useForm<FieldValues>({
+    resolver: WAREHOUSE_VALIDATION as unknown as Resolver<FieldValues>,
+    defaultValues: { name: warehouse?.name || '', isDefault: { checked: warehouse?.isDefault || false } },
+  })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
@@ -43,33 +46,35 @@ const WarehouseModal = () => {
 
   return (
     <FormProvider {...methods}>
-      <Heading
-        text={warehouse ? t('warehouse:warehouseModal.editTitle') : t('warehouse:warehouseModal.addTitle')}
-        variant="2"
-        size="base"
-        color="grey"
-      />
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
-        <InputText
-          isRequired
-          name="name"
-          initValue={warehouse?.name}
-          label={t('warehouse:warehouseModal.name')}
-          placeholder={t('warehouse:warehouseModal.namePlh')}
+      <div className="w-[480px] max-w-full">
+        <Heading
+          text={warehouse ? t('warehouse:warehouseModal.editTitle') : t('warehouse:warehouseModal.addTitle')}
+          variant="2"
+          size="base"
+          color="grey"
         />
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
+          <InputText
+            isRequired
+            name="name"
+            initValue={warehouse?.name}
+            label={t('warehouse:warehouseModal.name')}
+            placeholder={t('warehouse:warehouseModal.namePlh')}
+          />
 
-        {/* the default one can not be unchecked, another warehouse has to become the default instead */}
-        <Checkbox
-          name="isDefault"
-          initValue={warehouse?.isDefault}
-          disabled={warehouse?.isDefault}
-          label={t('warehouse:warehouseModal.isDefault')}
-        />
+          {/* the default one can not be unchecked, another warehouse has to become the default instead */}
+          <Checkbox
+            name="isDefault"
+            initValue={warehouse?.isDefault}
+            disabled={warehouse?.isDefault}
+            label={t('warehouse:warehouseModal.isDefault')}
+          />
 
-        <div className="flex justify-center">
-          <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
-        </div>
-      </form>
+          <div className="flex justify-center">
+            <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
+          </div>
+        </form>
+      </div>
     </FormProvider>
   )
 }

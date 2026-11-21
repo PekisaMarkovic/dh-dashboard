@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import Paragraph from '@/src/components/core/typography/Paragraph'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 import MainLink from '@/src/components/core/buttons/MainLink'
 
 const InvalidFistTimeRegisterToken = () => {

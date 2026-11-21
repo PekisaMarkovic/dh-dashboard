@@ -22,6 +22,8 @@ export const useRefreshData = () => {
       afterDrinkChange: () => reload(QUERY_KEYS.drinks),
       afterWarehouseChange: () => reload(QUERY_KEYS.warehouses, QUERY_KEYS.drinks),
       afterProformaChange: () => reload(QUERY_KEYS.proformas, QUERY_KEYS.proforma, QUERY_KEYS.drinks),
+      // a document was read (a new line of the history) or added to the stock (the drinks changed too)
+      afterPurchaseImport: () => reload(QUERY_KEYS.purchaseImports, QUERY_KEYS.drinks),
       afterCustomerChange: () => reload(QUERY_KEYS.customers),
       afterCompanyChange: () => reload(QUERY_KEYS.company),
       afterInvitationChange: () => reload(QUERY_KEYS.invitations, QUERY_KEYS.companyUsers),

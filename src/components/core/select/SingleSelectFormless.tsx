@@ -1,6 +1,5 @@
 import { ChangeEventHandler, useRef, useState } from 'react'
-import DropdownIcon from '@/public/images/general/select-dropdown-arrow.svg'
-import DisabledDropdownIcon from '@/public/images/general/select-dropdown-arrow-disabled.svg'
+import GeneralIcons from '@/src/icons/general'
 import SingleOption from '@/src/components/core/select/partials/SingleOption'
 import ErrorMessage from '@/src/components/core/typography/ErrorMessage'
 import Label from '@/src/components/core/typography/Label'
@@ -20,6 +19,7 @@ type Props = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   setSelected: Function
   disabled?: boolean
+  isLabelHidden?: boolean
 }
 
 const SingleSelectFormless = ({
@@ -33,6 +33,7 @@ const SingleSelectFormless = ({
   selected,
   setSelected,
   disabled = false,
+  isLabelHidden = false,
 }: Props) => {
   const [open, setOpen] = useState<boolean>(false)
   const [inputValue, setInputvalue] = useState(selected ? selected.name : '')
@@ -67,7 +68,7 @@ const SingleSelectFormless = ({
 
   return (
     <div className={`flex flex-col relative ${!disabled && 'cursor-pointer'}`} ref={clickAwayRef}>
-      <Label htmlFor={name} label={label} isRequired={isRequired} />
+      <Label htmlFor={name} label={label} isRequired={isRequired} isLabelHidden={isLabelHidden} />
 
       <div
         className={`flex items-center jusfity-between bg-white py-3 px-4 block w-full rounded-xs-plus border-1 ${outlineStyle()} border-solid`}
@@ -85,7 +86,7 @@ const SingleSelectFormless = ({
           onChange={handleOnChangeInput}
         />
 
-        {disabled ? <DisabledDropdownIcon /> : <DropdownIcon className={`${open ? 'rotate-180' : ''}`} />}
+        <GeneralIcons type="ArrowSelect" className={`${open ? 'rotate-180' : ''}`} />
       </div>
 
       {open && (

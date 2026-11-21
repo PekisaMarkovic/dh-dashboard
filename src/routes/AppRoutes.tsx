@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react'
 import { Route, Routes as Switch } from 'react-router-dom'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 import { RoleEnums } from '@/src/enum'
 import WarehousesPage from '@/src/pages/warehouses/WarehousesPage'
+import PurchaseImportPage from '@/src/pages/purchase-import/PurchaseImportPage'
 import DrinksPage from '@/src/pages/drinks/DrinksPage'
 import EditProformaPage from '@/src/pages/proformas/EditProformaPage'
 import CreateProformaPage from '@/src/pages/proformas/CreateProformaPage'
@@ -59,6 +60,15 @@ const AppRoutes = () => {
       element: (
         <ProtectedRoute allowedRoles={ALL_ROLES}>
           <DrinksPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: ROUTE_NAMES.purchaseImport,
+      element: (
+        <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+          <PurchaseImportPage />
         </ProtectedRoute>
       ),
     },

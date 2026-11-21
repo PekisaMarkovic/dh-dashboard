@@ -3,6 +3,7 @@
     "leftSide": {
       "title": "navigacija",
       "warehouses": "Magacini",
+      "purchaseImport": "Uvoz robe",
       "drinks": "Pića",
       "customers": "Kupci",
       "company": "Kompanija",
@@ -15,7 +16,8 @@
       "customers": "Kupci",
       "company": "Kompanija",
       "profile": "Profil",
-      "proformas": "Predračun"
+      "proformas": "Predračun",
+      "purchase-import": "Uvoz robe"
     }
   },
   "welcome": "Dobrodošli, {{name}}."

@@ -1,6 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import AuthApis from '@/src/api/auth'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 import { store } from '@/src/state/store'
 import { queryClient } from '@/src/state/query-client'
 import { endRequest, startRequest } from '@/src/state/api-loading'

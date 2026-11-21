@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { selectAuthUser } from '@/src/state/user/authSlice'
 import { useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { RoleEnums } from '@/src/enum'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 
 type Props = {
   allowedRoles: RoleEnums[]

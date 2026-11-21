@@ -8,6 +8,7 @@ import enWarehouses from './en/warehouses.json'
 import enCompany from './en/company.json'
 import enDrinks from './en/drinks.json'
 import enCustomers from './en/customers.json'
+import enPurchase from './en/purchase.json'
 import enProforma from './en/proforma.json'
 import profile from './en/user/profile.json'
 
@@ -19,6 +20,7 @@ import srWarehouses from './sr/warehouses.json'
 import srDrinks from './sr/drinks.json'
 import srCustomers from './sr/customers.json'
 import srCompany from './sr/company.json'
+import srPurchase from './sr/purchase.json'
 import srProforma from './sr/proforma.json'
 import srProfile from './sr/user/profile.json'
 import { getStoredLanguage } from '@/src/utils/language'
@@ -36,6 +38,7 @@ export const resources = {
     customer: enCustomers,
     company: enCompany,
     proforma: enProforma,
+    purchase: enPurchase,
   },
   sr: {
     g: srGeneral,
@@ -48,6 +51,7 @@ export const resources = {
     customer: srCustomers,
     company: srCompany,
     proforma: srProforma,
+    purchase: srPurchase,
   },
 } as const
 

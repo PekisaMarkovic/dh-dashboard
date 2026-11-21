@@ -3,6 +3,7 @@
     "leftSide": {
       "title": "navigation",
       "warehouses": "Warehouses",
+      "purchaseImport": "Import goods",
       "drinks": "Drinks",
       "customers": "Customers",
       "company": "Company",
@@ -15,7 +16,8 @@
       "customers": "Customers",
       "company": "Company",
       "profile": "Profile",
-      "proformas": "Proforma"
+      "proformas": "Proforma",
+      "purchase-import": "Import goods"
     }
   },
   "welcome": "Welcome, {{name}}."

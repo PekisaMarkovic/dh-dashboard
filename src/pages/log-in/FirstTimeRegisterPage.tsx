@@ -6,7 +6,7 @@ import { FIRST_TIME_REGISTER_VALIDATION } from '@/src/validations/log-in/first-t
 import { useNavigate, useParams } from 'react-router-dom'
 import { useInvitationService } from '@/src/services/use-invitation-service'
 import { useEffect, useState } from 'react'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 import InvalidFistTimeRegisterToken from '@/src/modules/log-in/partials/InvalidFistTimeRegisterToken'
 
 const FirstTimeRegisterPage = () => {

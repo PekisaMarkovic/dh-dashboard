@@ -1,0 +1,50 @@
+{
+  "title": "Import goods from a document",
+  "description": "Upload an image or a PDF of an invoice with the bought drinks. Only the names and quantities are read, and you check everything before it is added to the stock.",
+  "hint": "PDF, JPG or PNG up to 10 MB. On a phone you can take a photo of the document directly.",
+  "warehouse": "Warehouse",
+  "warehousePlh": "Select a warehouse",
+  "upload": "Upload document",
+  "reading": "Reading the document: {{name}}..",
+  "noWarehouses": "Create a warehouse first.",
+  "modal": {
+    "subtitle": "{{warehouse}} · {{user}} · {{date}}",
+    "onDocument": "On the document",
+    "drink": "Drink in the warehouse",
+    "quantity": "Quantity",
+    "pickDrink": "Select a drink",
+    "skip": "Skip",
+    "include": "Restore",
+    "ready": "Ready to add: {{count}}",
+    "apply": "Add to stock ({{count}})",
+    "close": "Close",
+    "nothingFound": "No drinks were found on the document.",
+    "failed": "The document could not be read.",
+    "allAdded": "All lines were added to the stock.",
+    "added_toast": "Added to stock: {{count}}"
+  },
+  "history": {
+    "title": "Import history",
+    "empty": "No documents were uploaded yet.",
+    "lines": "Added {{applied}} of {{count}} lines",
+    "review": "Review",
+    "addRest": "Add the rest",
+    "status": {
+      "parsing": "Reading",
+      "parsed": "Waiting for a check",
+      "partial": "Partly added",
+      "applied": "Added to stock",
+      "failed": "Failed"
+    },
+    "search": "Search by the name of the document..",
+    "noResults": "No documents match the search.",
+    "table": {
+      "document": "Document",
+      "date": "Date",
+      "lines": "Added",
+      "status": "Status"
+    },
+    "deleteTitle": "Delete the document",
+    "deleteConfirm": "Are you sure you want to remove \"{{name}}\" from the history? The quantities that were already added to the stock stay."
+  }
+}

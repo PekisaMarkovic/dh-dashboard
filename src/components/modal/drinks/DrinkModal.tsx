@@ -79,70 +79,72 @@ const DrinkModal = () => {
 
   return (
     <FormProvider {...methods}>
-      <Heading text={drink ? t('warehouse:drinkModal.editTitle') : t('warehouse:drinkModal.addTitle')} variant="2" size="base" color="grey" />
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
-        {needsWarehouse && (
-          <SingleSelect
+      <div className="w-[480px] max-w-full">
+        <Heading text={drink ? t('warehouse:drinkModal.editTitle') : t('warehouse:drinkModal.addTitle')} variant="2" size="base" color="grey" />
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
+          {needsWarehouse && (
+            <SingleSelect
+              isRequired
+              name="warehouse"
+              label={t('warehouse:drinkModal.warehouse')}
+              placeholder={t('warehouse:drinkModal.warehousePlh')}
+              options={warehouses.map(toOption)}
+            />
+          )}
+
+          <InputText
             isRequired
-            name="warehouse"
-            label={t('warehouse:drinkModal.warehouse')}
-            placeholder={t('warehouse:drinkModal.warehousePlh')}
-            options={warehouses.map(toOption)}
+            name="code"
+            initValue={drink?.code}
+            label={t('warehouse:drinkModal.code')}
+            placeholder={t('warehouse:drinkModal.codePlh')}
           />
-        )}
 
-        <InputText
-          isRequired
-          name="code"
-          initValue={drink?.code}
-          label={t('warehouse:drinkModal.code')}
-          placeholder={t('warehouse:drinkModal.codePlh')}
-        />
+          <InputText
+            isRequired
+            name="name"
+            initValue={drink?.name}
+            label={t('warehouse:drinkModal.name')}
+            placeholder={t('warehouse:drinkModal.namePlh')}
+          />
 
-        <InputText
-          isRequired
-          name="name"
-          initValue={drink?.name}
-          label={t('warehouse:drinkModal.name')}
-          placeholder={t('warehouse:drinkModal.namePlh')}
-        />
+          <InputText
+            isRequired
+            name="price"
+            initValue={drink ? formatPrice(drink.price) : undefined}
+            label={t('warehouse:drinkModal.price')}
+            placeholder={t('warehouse:drinkModal.pricePlh')}
+          />
 
-        <InputText
-          isRequired
-          name="price"
-          initValue={drink ? formatPrice(drink.price) : undefined}
-          label={t('warehouse:drinkModal.price')}
-          placeholder={t('warehouse:drinkModal.pricePlh')}
-        />
+          <InputText
+            isRequired
+            name="quantity"
+            initValue={drink ? String(drink.quantity) : undefined}
+            label={t('warehouse:drinkModal.quantity')}
+            placeholder={t('warehouse:drinkModal.quantityPlh')}
+          />
 
-        <InputText
-          isRequired
-          name="quantity"
-          initValue={drink ? String(drink.quantity) : undefined}
-          label={t('warehouse:drinkModal.quantity')}
-          placeholder={t('warehouse:drinkModal.quantityPlh')}
-        />
+          <InputText
+            isRequired
+            name="warningQuantity"
+            initValue={String(drink?.warningQuantity ?? 0)}
+            label={t('warehouse:drinkModal.warningQuantity')}
+            placeholder={t('warehouse:drinkModal.warningQuantityPlh')}
+          />
 
-        <InputText
-          isRequired
-          name="warningQuantity"
-          initValue={String(drink?.warningQuantity ?? 0)}
-          label={t('warehouse:drinkModal.warningQuantity')}
-          placeholder={t('warehouse:drinkModal.warningQuantityPlh')}
-        />
+          <InputText
+            isRequired
+            name="criticalQuantity"
+            initValue={String(drink?.criticalQuantity ?? 0)}
+            label={t('warehouse:drinkModal.criticalQuantity')}
+            placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
+          />
 
-        <InputText
-          isRequired
-          name="criticalQuantity"
-          initValue={String(drink?.criticalQuantity ?? 0)}
-          label={t('warehouse:drinkModal.criticalQuantity')}
-          placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
-        />
-
-        <div className="flex justify-center">
-          <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
-        </div>
-      </form>
+          <div className="flex justify-center">
+            <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
+          </div>
+        </form>
+      </div>
     </FormProvider>
   )
 }

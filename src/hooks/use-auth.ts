@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { removeUserData, setUserData } from '@/src/state/user/authSlice'
 import { clearLocalStorageTokens, getAccessToken, getTokenPayload } from '@/src/utils/token'

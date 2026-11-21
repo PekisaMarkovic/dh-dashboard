@@ -1,0 +1,50 @@
+{
+  "title": "Uvoz robe iz dokumenta",
+  "description": "Otpremite sliku ili PDF računa sa kupljenim pićima. Čitaju se samo nazivi i količine, a vi sve proveravate pre nego što se doda na stanje.",
+  "hint": "PDF, JPG ili PNG do 10 MB. Na telefonu možete direktno da slikate dokument.",
+  "warehouse": "Magacin",
+  "warehousePlh": "Izaberite magacin",
+  "upload": "Upload dokument",
+  "reading": "Čitam dokument: {{name}}..",
+  "noWarehouses": "Prvo napravite magacin.",
+  "modal": {
+    "subtitle": "{{warehouse}} · {{user}} · {{date}}",
+    "onDocument": "Na dokumentu",
+    "drink": "Piće u magacinu",
+    "quantity": "Količina",
+    "pickDrink": "Izaberite piće",
+    "skip": "Preskoči",
+    "include": "Vrati",
+    "ready": "Spremno za dodavanje: {{count}}",
+    "apply": "Dodaj na stanje ({{count}})",
+    "close": "Zatvori",
+    "nothingFound": "Na dokumentu nisu pronađena pića.",
+    "failed": "Dokument nije mogao da se pročita.",
+    "allAdded": "Sve stavke su dodate na stanje.",
+    "added_toast": "Dodato na stanje: {{count}}"
+  },
+  "history": {
+    "title": "Istorija uvoza",
+    "empty": "Još nema otpremljenih dokumenata.",
+    "lines": "Dodato {{applied}} od {{count}} stavki",
+    "review": "Pregledaj",
+    "addRest": "Dodaj preostalo",
+    "status": {
+      "parsing": "Čita se",
+      "parsed": "Čeka proveru",
+      "partial": "Delimično dodato",
+      "applied": "Dodato na stanje",
+      "failed": "Greška"
+    },
+    "search": "Pretraži po nazivu dokumenta..",
+    "noResults": "Nema dokumenata za ovu pretragu.",
+    "table": {
+      "document": "Dokument",
+      "date": "Datum",
+      "lines": "Dodato",
+      "status": "Status"
+    },
+    "deleteTitle": "Brisanje dokumenta",
+    "deleteConfirm": "Da li ste sigurni da želite da uklonite \"{{name}}\" iz istorije? Količine koje su već dodate na stanje ostaju."
+  }
+}

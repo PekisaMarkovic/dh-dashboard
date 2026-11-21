@@ -36,11 +36,11 @@ const ConfirmModal = () => {
   }
 
   return (
-    <div className="max-w-md">
+    <div className="w-[420px] max-w-full">
       <Heading text={title} variant="2" size="base" color="black" />
       <Paragraph text={message} size="sm" color="grey" className="mt-3" />
 
-      <div className="flex justify-end gap-x-4 mt-8">
+      <div className="flex flex-wrap justify-end gap-4 mt-8">
         <MainButton
           text={onConfirm ? t('g:button.cancel') : t('g:button.okey')}
           variant={onConfirm ? 'alternative' : 'contained'}

@@ -1,5 +1,5 @@
 import { NavigationIconType } from '@/src/icons/navigation'
-import { ROUTE_NAMES } from '@/src/constatns/a-routes'
+import { ROUTE_NAMES } from '@/src/constatns/routes'
 
 interface IMenuLink {
   text: string
@@ -12,6 +12,7 @@ interface IMenuLink {
 export const LEFT_SIDE_MENU_LINKS: IMenuLink[] = [
   { text: 'proformas', icon: 'Proforma', link: ROUTE_NAMES.proformas },
   { text: 'drinks', icon: 'Drink', link: ROUTE_NAMES.drinks },
+  { text: 'purchaseImport', icon: 'Import', link: ROUTE_NAMES.purchaseImport, adminOnly: true },
   { text: 'customers', icon: 'Customer', link: ROUTE_NAMES.customers },
   { text: 'warehouses', icon: 'Warehouse', link: ROUTE_NAMES.warehouses },
   { text: 'company', icon: 'Company', link: ROUTE_NAMES.company, adminOnly: true },

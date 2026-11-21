@@ -40,15 +40,23 @@ const CustomerModal = () => {
 
   return (
     <FormProvider {...methods}>
-      <Heading text={customer ? t('customer:modal.editTitle') : t('customer:modal.addTitle')} variant="2" size="base" color="grey" />
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
-        <InputText isRequired name="code" initValue={customer?.code || ''} label={t('customer:modal.code')} placeholder={t('customer:modal.codePlh')} />
-        <InputText isRequired name="name" initValue={customer?.name} label={t('customer:modal.name')} placeholder={t('customer:modal.namePlh')} />
+      <div className="w-[480px] max-w-full">
+        <Heading text={customer ? t('customer:modal.editTitle') : t('customer:modal.addTitle')} variant="2" size="base" color="grey" />
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 mt-6">
+          <InputText
+            isRequired
+            name="code"
+            initValue={customer?.code || ''}
+            label={t('customer:modal.code')}
+            placeholder={t('customer:modal.codePlh')}
+          />
+          <InputText isRequired name="name" initValue={customer?.name} label={t('customer:modal.name')} placeholder={t('customer:modal.namePlh')} />
 
-        <div className="flex justify-center">
-          <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
-        </div>
-      </form>
+          <div className="flex justify-center">
+            <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />
+          </div>
+        </form>
+      </div>
     </FormProvider>
   )
 }

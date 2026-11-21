@@ -9,4 +9,5 @@ export const QUERY_KEYS = {
   customers: ['customers'] as const,
   proformas: ['proformas'] as const,
   proforma: ['proforma'] as const,
+  purchaseImports: ['purchase-imports'] as const,
 }

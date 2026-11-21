@@ -9,11 +9,13 @@
     "price": "Price",
     "quantity": "Quantity"
   },
+  "defaultBadge": "Default warehouse",
   "totalValue": "Total value: {{value}}",
   "warehouseModal": {
     "addTitle": "Add warehouse",
     "editTitle": "Edit warehouse",
     "name": "Name",
+    "isDefault": "Default warehouse",
     "namePlh": "Enter a warehouse name.."
   },
   "drinkModal": {

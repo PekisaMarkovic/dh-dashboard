@@ -1,6 +1,7 @@
-import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
+import Checkbox from '@/src/components/core/checkbox/Checkbox'
 import InputText from '@/src/components/core/input/InputText'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
@@ -23,14 +24,14 @@ const WarehouseModal = () => {
   const { createWarehouse, updateWarehouse } = useWarehouseService()
   const dispatch = useAppDispatch()
   const { afterWarehouseChange } = useRefreshData()
-  const methods = useForm({ resolver: WAREHOUSE_VALIDATION, defaultValues: { name: warehouse?.name || '' } })
+  const methods = useForm<FieldValues>({ resolver: WAREHOUSE_VALIDATION as unknown as Resolver<FieldValues>, defaultValues: { name: warehouse?.name || '', isDefault: { checked: warehouse?.isDefault || false } } })
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       if (warehouse) {
-        await updateWarehouse(warehouse.warehouseId, { name: values.name })
+        await updateWarehouse(warehouse.warehouseId, { name: values.name, isDefault: !!values.isDefault?.checked })
       } else {
-        await createWarehouse({ name: values.name, companyId: user?.companyId })
+        await createWarehouse({ name: values.name, companyId: user?.companyId, isDefault: !!values.isDefault?.checked })
       }
 
       afterWarehouseChange()
@@ -55,6 +56,14 @@ const WarehouseModal = () => {
           initValue={warehouse?.name}
           label={t('warehouse:warehouseModal.name')}
           placeholder={t('warehouse:warehouseModal.namePlh')}
+        />
+
+        {/* the default one can not be unchecked, another warehouse has to become the default instead */}
+        <Checkbox
+          name="isDefault"
+          initValue={warehouse?.isDefault}
+          disabled={warehouse?.isDefault}
+          label={t('warehouse:warehouseModal.isDefault')}
         />
 
         <div className="flex justify-center">

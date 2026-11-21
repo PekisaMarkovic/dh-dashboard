@@ -9,11 +9,13 @@
     "price": "Cena",
     "quantity": "Količina"
   },
+  "defaultBadge": "Podrazumevani magacin",
   "totalValue": "Ukupna vrednost: {{value}}",
   "warehouseModal": {
     "addTitle": "Dodaj magacin",
     "editTitle": "Izmeni magacin",
     "name": "Naziv",
+    "isDefault": "Podrazumevani magacin",
     "namePlh": "Unesite naziv magacina.."
   },
   "drinkModal": {

@@ -88,8 +88,9 @@ const CreateProforma = ({ proformaId }: Props) => {
   const [view, setView] = useState<'pick' | 'review'>('pick')
   const [isSaving, setIsSaving] = useState(false)
 
-  // there is always a warehouse in use: the picked one, or the first available one
-  const warehouseId = warehouses.find((w) => String(w.warehouseId) === selected?.value)?.warehouseId ?? warehouses[0]?.warehouseId
+  const defaultWarehouse = warehouses.find((w) => w.isDefault) ?? warehouses[0]
+  // there is always a warehouse in use: the picked one, or the default one
+  const warehouseId = warehouses.find((w) => String(w.warehouseId) === selected?.value)?.warehouseId ?? defaultWarehouse?.warehouseId
 
   // editing: the proforma is loaded once and fills the form (warehouse, buyer, lines, prices, discounts)
   const proformaQuery = useProformaQuery(proformaId)
@@ -140,9 +141,9 @@ const CreateProforma = ({ proformaId }: Props) => {
     setView('review')
   }, [proforma, warehouses, customers])
 
-  // the first warehouse is picked at the start, a picked one stays
+  // the default warehouse is picked at the start, a picked one stays
   useEffect(() => {
-    if (!isEdit && warehouses.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(warehouses[0]))
+    if (!isEdit && warehouses.length && !methods.getValues('warehouse')?.value) methods.setValue('warehouse', toOption(defaultWarehouse))
   }, [warehouses])
 
   // one page of the drinks of the warehouse in use (every page and search is cached; 30 seconds fresh because the stock changes often)

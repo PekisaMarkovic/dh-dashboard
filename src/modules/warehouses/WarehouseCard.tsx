@@ -82,7 +82,7 @@ const WarehouseCard = ({ warehouse }: Props) => {
 
   return (
     <DataSection
-      title={warehouse.name}
+      title={warehouse.isDefault ? `${warehouse.name} · ${t('warehouse:defaultBadge')}` : warehouse.name}
       subtitle={t('warehouse:totalValue', { value: formatCents(totalValueCents) })}
       dropdownOptions={isAdmin ? options : []}
       element={

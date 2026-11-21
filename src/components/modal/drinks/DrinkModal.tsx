@@ -44,12 +44,12 @@ const DrinkModal = () => {
     },
   })
 
-  // the warehouses come from the cache, the first one is picked at the start
+  // the warehouses come from the cache, the default one is picked at the start
   const warehouses = useWarehousesQuery().data ?? NO_WAREHOUSES
 
   useEffect(() => {
     if (needsWarehouse && warehouses.length && !methods.getValues('warehouse')?.value) {
-      methods.setValue('warehouse', toOption(warehouses[0]))
+      methods.setValue('warehouse', toOption(warehouses.find((w) => w.isDefault) ?? warehouses[0]))
     }
   }, [warehouses, needsWarehouse])
 

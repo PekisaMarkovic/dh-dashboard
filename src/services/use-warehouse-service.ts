@@ -4,11 +4,13 @@ import { useApi } from '@/src/hooks/use-api'
 import { IWarehouse } from '@/src/interfaces'
 
 type CreateWarehouseBody = {
+  isDefault?: boolean
   name: string
   companyId?: number | null
 }
 
 type UpdateWarehouseBody = {
+  isDefault?: boolean
   name: string
 }
 

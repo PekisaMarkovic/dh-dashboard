@@ -12,12 +12,13 @@ const PagginationArrow = ({ disabled, setPage, reverse }: Props) => {
 
   return (
     <li
-      className={`flex justify-center items-center fonts-poppins py-1 px-5 bg-lighy-grey text-dark-grey ${
+      aria-disabled={disabled}
+      className={`flex justify-center items-center min-w-8 h-8 px-1.5 md:min-w-9 md:h-9 md:px-2 select-none bg-lighy-grey text-dark-grey ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'opacity-1 cursor-pointer'
       } rounded-sm`}
       onClick={handleClick}
     >
-      <GeneralIcons type="ArrowRight" className={`${reverse ? 'rotate-180' : ''}`} />
+      <GeneralIcons type="ArrowRight" className={`h-3 w-[6.5px] md:h-[13px] md:w-[7px] ${reverse ? 'rotate-180' : ''}`} />
     </li>
   )
 }

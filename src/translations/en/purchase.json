@@ -1,7 +1,6 @@
 {
   "title": "Import goods from a document",
   "description": "Upload an image or a PDF of an invoice with the bought drinks. Only the names and quantities are read, and you check everything before it is added to the stock.",
-  "hint": "PDF, JPG or PNG up to 10 MB. On a phone you can take a photo of the document directly.",
   "warehouse": "Warehouse",
   "warehousePlh": "Select a warehouse",
   "upload": "Upload document",
@@ -46,5 +45,10 @@
     },
     "deleteTitle": "Delete the document",
     "deleteConfirm": "Are you sure you want to remove \"{{name}}\" from the history? The quantities that were already added to the stock stay."
-  }
+  },
+  "dropTitle": "Upload a document",
+  "dropPhone": "Choose a file or take a photo of the document",
+  "dropDesktop": "Drop a file here or choose it",
+  "formats": "PDF, JPG or PNG up to 10 MB",
+  "wrongType": "Only PDF, JPG, PNG and WEBP are allowed."
 }

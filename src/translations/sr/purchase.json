@@ -1,7 +1,6 @@
 {
   "title": "Uvoz robe iz dokumenta",
   "description": "Otpremite sliku ili PDF računa sa kupljenim pićima. Čitaju se samo nazivi i količine, a vi sve proveravate pre nego što se doda na stanje.",
-  "hint": "PDF, JPG ili PNG do 10 MB. Na telefonu možete direktno da slikate dokument.",
   "warehouse": "Magacin",
   "warehousePlh": "Izaberite magacin",
   "upload": "Upload dokument",
@@ -46,5 +45,10 @@
     },
     "deleteTitle": "Brisanje dokumenta",
     "deleteConfirm": "Da li ste sigurni da želite da uklonite \"{{name}}\" iz istorije? Količine koje su već dodate na stanje ostaju."
-  }
+  },
+  "dropTitle": "Otpremite dokument",
+  "dropPhone": "Izaberite fajl ili slikajte dokument",
+  "dropDesktop": "Prevucite fajl ovde ili ga izaberite",
+  "formats": "PDF, JPG ili PNG do 10 MB",
+  "wrongType": "Dozvoljeni su samo PDF, JPG, PNG i WEBP."
 }

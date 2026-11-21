@@ -11,7 +11,7 @@ type Props = {
  */
 const ListPagination = ({ page, totalPages, onPageChange }: Props) =>
   totalPages > 1 ? (
-    <div className="flex flex-row-reverse pt-4">
+    <div className="flex justify-center md:justify-end pt-4">
       <PagginationWithoutUrl totalPages={totalPages} page={page} onPageChange={onPageChange} />
     </div>
   ) : null

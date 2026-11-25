@@ -58,7 +58,9 @@ const DrinksList = ({ drinks, warehouses }: Props) => {
     <div>
       <div className="hidden md:block border-b-1 border-b-light-grey-alt border-solid pl-4 pr-10 pb-3 pt-2">
         <div className="grid grid-cols-6">
-          <Heading text={t('drink:table.code')} variant="2" size="sm" color="grey" weight="medium" />
+          <div className="pl-[52px]">
+            <Heading text={t('drink:table.code')} variant="2" size="sm" color="grey" weight="medium" />
+          </div>
           <div className="col-span-2">
             <Heading text={t('drink:table.name')} variant="2" size="sm" color="grey" weight="medium" />
           </div>

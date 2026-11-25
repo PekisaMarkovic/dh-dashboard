@@ -7,6 +7,8 @@ import CustomDropdowns from '@/src/components/core/dropdowns/CustomDropdowns'
 interface DefaultTableRowContainerProps {
   cols?: number
   isOptionsHidden?: boolean
+  // the cells are centered vertically (a row with an image is higher than its text)
+  isCentered?: boolean
   dropdownOptions?: CustomDropdown[]
   onRowClick?: () => void
   // extra classes of the row, e.g. a background color
@@ -29,6 +31,7 @@ const DefaultTableRowContainer = ({
   cols = 9,
   dropdownOptions = [],
   isOptionsHidden = false,
+  isCentered = false,
   onRowClick,
   className = '',
 }: PropsWithChildren<DefaultTableRowContainerProps>) => {
@@ -45,7 +48,7 @@ const DefaultTableRowContainer = ({
 
   return (
     <div
-      className={`relative pl-3 md:pl-4 pr-10 py-2.5 md:py-0 grid grid-cols-2 gap-x-3 md:gap-x-0 ${COLUMNS_FROM_TABLET[cols]} border-b-1 border-b-light-grey-alt border-solid last:border-b-0 ${open ? 'z-4' : 'z-2'} ${onRowClick ? 'cursor-pointer hover:bg-light-grey-transparent' : ''} ${className}`}
+      className={`relative pl-3 md:pl-4 pr-10 py-2.5 md:py-0 grid grid-cols-2 gap-x-3 md:gap-x-0 ${COLUMNS_FROM_TABLET[cols]} border-b-1 border-b-light-grey-alt border-solid last:border-b-0 ${isCentered ? 'md:items-center' : ''} ${open ? 'z-4' : 'z-2'} ${onRowClick ? 'cursor-pointer hover:bg-light-grey-transparent' : ''} ${className}`}
       onClick={onRowClick}
     >
       {children}

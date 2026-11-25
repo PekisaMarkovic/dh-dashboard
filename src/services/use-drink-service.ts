@@ -36,15 +36,29 @@ export const useDrinkService = () => {
     }
 
     const createDrink = async (body: CreateDrinkBody) => {
-      const { data } = await api.post(DrinkApis.createDrink(), body)
+      const { data } = await api.post<IDrink>(DrinkApis.createDrink(), body)
 
       return data
     }
 
     const updateDrink = async (drinkId: number, body: UpdateDrinkBody) => {
-      const { data } = await api.patch(DrinkApis.patchDrink(drinkId), body)
+      const { data } = await api.patch<IDrink>(DrinkApis.patchDrink(drinkId), body)
 
       return data
+    }
+
+    // the api makes a WebP (at most 1200x1200) of any jpg / png / webp and replaces the old image
+    const uploadDrinkImage = async (drinkId: number, file: File) => {
+      const body = new FormData()
+      body.append('file', file)
+      // the api sends json by default, which would turn the form data into json and lose the file
+      const { data } = await api.put<IDrink>(DrinkApis.drinkImage(drinkId), body, { headers: { 'Content-Type': 'multipart/form-data' } })
+
+      return data
+    }
+
+    const deleteDrinkImage = async (drinkId: number) => {
+      await api.delete(DrinkApis.drinkImage(drinkId))
     }
 
     const deleteDrink = async (drinkId: number) => {
@@ -59,6 +73,6 @@ export const useDrinkService = () => {
       return data
     }
 
-    return { getDrinks, createDrink, updateDrink, deleteDrink, sendStockDigest }
+    return { getDrinks, createDrink, updateDrink, uploadDrinkImage, deleteDrinkImage, deleteDrink, sendStockDigest }
   }, [api])
 }

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import DecimalInput from '@/src/components/core/input/DecimalInput'
 import QuantityInput from '@/src/components/core/input/QuantityInput'
+import DrinkImage from '@/src/components/drinks/DrinkImage'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import TableCell from '@/src/components/table/TableCell'
 import { IDrink } from '@/src/interfaces'
@@ -28,7 +29,10 @@ const ProformaLineRow = ({ drink, quantity, price, discount, lineCents, onQuanti
       className={`grid grid-cols-2 gap-x-3 gap-y-3 md:grid-cols-[minmax(0,1fr)_150px_120px_100px_110px_80px] md:gap-x-4 items-center px-2 py-3 md:py-2 border-b-1 border-b-light-grey-alt border-solid last:border-b-0 ${STOCK_ROW_CLASS[getStockLevel(drink)]}`}
     >
       <TableCell isDense className="col-span-2 md:col-span-1">
-        <Paragraph text={drink.name} size="sm" color="black" />
+        <div className="flex items-center gap-x-3">
+          <DrinkImage src={drink.image?.url} alt={drink.image?.altText || drink.name} />
+          <Paragraph text={drink.name} size="sm" color="black" />
+        </div>
       </TableCell>
       <TableCell isDense label={t('proforma:table.quantity')}>
         <QuantityInput ariaLabel={drink.name} value={quantity} min={1} onChange={onQuantityChange} />

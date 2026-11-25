@@ -10,6 +10,20 @@ export interface IDrink {
   criticalQuantity: number
   warehouseId: number
   companyId: number
+  // the image of the drink (WebP, at most 1200x1200), null = no image
+  image: IImage | null
+}
+
+export interface IImage {
+  imageId: number
+  // public address of the file
+  url: string
+  mimeType: string
+  // bytes
+  size: number
+  width: number
+  height: number
+  altText: string | null
 }
 
 export interface IWarehouse {

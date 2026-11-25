@@ -34,7 +34,14 @@
     "criticalQuantity": "Has to be bought again below",
     "criticalQuantityPlh": "e.g. 5 (0 = off)",
     "warehouse": "Warehouse",
-    "warehousePlh": "Select a warehouse"
+    "warehousePlh": "Select a warehouse",
+    "image": "Image",
+    "imageChoose": "Choose image",
+    "imageChange": "Change image",
+    "imageRemove": "Remove image",
+    "imageHint": "Best: a square image of {{size}} px, the drink (bottle or glass) centered on a white or transparent background. JPG, PNG or WebP, up to {{maxMb}} MB. Bigger images are scaled down to {{size}} px, smaller ones are not enlarged. It is saved as an optimized WebP.",
+    "imageTooBig": "The image is bigger than {{maxMb}} MB.",
+    "imageNotImage": "Choose a JPG, PNG or WebP image."
   },
   "deleteWarehouseTitle": "Delete warehouse",
   "deleteWarehouseConfirm": "Are you sure you want to delete the warehouse \"{{name}}\"? This can not be undone.",

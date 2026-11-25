@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import DrinkImage from '@/src/components/drinks/DrinkImage'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import DefaultTableRowContainer from '@/src/components/table/DefaultTableRowContainer'
 import TableCell from '@/src/components/table/TableCell'
@@ -17,9 +18,13 @@ const DrinkRow = ({ drink, warehouseName, dropdownOptions }: Props) => {
   const level = getStockLevel(drink)
 
   return (
-    <DefaultTableRowContainer cols={6} className={STOCK_ROW_CLASS[level]} dropdownOptions={dropdownOptions}>
+    <DefaultTableRowContainer isCentered cols={6} className={STOCK_ROW_CLASS[level]} dropdownOptions={dropdownOptions}>
       <TableCell label={t('drink:table.code')}>
-        <Paragraph text={drink.code || '-'} size="sm" color="black" noWrap />
+        {/* the image first, then the code */}
+        <div className="flex items-center gap-x-3">
+          <DrinkImage src={drink.image?.url} alt={drink.image?.altText || drink.name} />
+          <Paragraph text={drink.code || '-'} size="sm" color="black" noWrap />
+        </div>
       </TableCell>
       <TableCell isTitle label={t('drink:table.name')} className="col-span-2 order-first md:order-none">
         <Paragraph text={drink.name} size="sm" color="black" />

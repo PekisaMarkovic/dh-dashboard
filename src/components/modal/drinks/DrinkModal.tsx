@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
+import DrinkImage from '@/src/components/drinks/DrinkImage'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
@@ -17,6 +18,11 @@ import { DRINK_VALIDATION } from '@/src/validations/inventory/drink'
 
 const NO_WAREHOUSES: IWarehouse[] = []
 
+// the same numbers as the api (storage.constants.ts): the api never keeps an image bigger than this
+const IMAGE_RECOMMENDED_SIZE = '1200 x 1200'
+const IMAGE_MAX_MB = 5
+const IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp'
+
 const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) })
 
 type DrinkModalData = { warehouseId?: number; drink?: IDrink } | null
@@ -28,9 +34,16 @@ const DrinkModal = () => {
   const { warehouseId: presetWarehouseId, drink } = (data as DrinkModalData) || {}
   // the warehouse can be picked only when adding a drink and none was preselected
   const needsWarehouse = !drink && !presetWarehouseId
-  const { createDrink, updateDrink } = useDrinkService()
+  const { createDrink, updateDrink, uploadDrinkImage, deleteDrinkImage } = useDrinkService()
   const dispatch = useAppDispatch()
   const { afterDrinkChange } = useRefreshData()
+  const imageInput = useRef<HTMLInputElement>(null)
+  // a picked file is sent after the drink is saved; removeImage deletes the image the drink already has
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [removeImage, setRemoveImage] = useState(false)
+  const [imageError, setImageError] = useState('')
+  const [preview, setPreview] = useState('')
+  const shownImage = preview || (removeImage ? '' : drink?.image?.url || '')
   const methods = useForm<FieldValues>({
     resolver: DRINK_VALIDATION as unknown as Resolver<FieldValues>,
     defaultValues: {
@@ -53,6 +66,50 @@ const DrinkModal = () => {
     }
   }, [warehouses, needsWarehouse])
 
+  useEffect(() => {
+    if (!imageFile) {
+      setPreview('')
+
+      return
+    }
+
+    const url = URL.createObjectURL(imageFile)
+    setPreview(url)
+
+    return () => URL.revokeObjectURL(url)
+  }, [imageFile])
+
+  const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+
+    if (!file) {
+      return
+    }
+
+    if (!IMAGE_ACCEPT.split(',').includes(file.type)) {
+      setImageError(t('warehouse:drinkModal.imageNotImage'))
+
+      return
+    }
+
+    if (file.size > IMAGE_MAX_MB * 1024 * 1024) {
+      setImageError(t('warehouse:drinkModal.imageTooBig', { maxMb: IMAGE_MAX_MB }))
+
+      return
+    }
+
+    setImageError('')
+    setImageFile(file)
+    setRemoveImage(false)
+  }
+
+  const handleRemoveImage = () => {
+    setImageFile(null)
+    setRemoveImage(true)
+    setImageError('')
+  }
+
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     const body = {
       code: values.code.trim(),
@@ -64,10 +121,15 @@ const DrinkModal = () => {
     }
 
     try {
-      if (drink) {
-        await updateDrink(drink.drinkId, body)
-      } else {
-        await createDrink({ ...body, warehouseId: Number(values.warehouse?.value || presetWarehouseId) })
+      const saved = drink
+        ? await updateDrink(drink.drinkId, body)
+        : await createDrink({ ...body, warehouseId: Number(values.warehouse?.value || presetWarehouseId) })
+      const drinkId: number = saved?.drinkId ?? drink?.drinkId
+
+      if (imageFile) {
+        await uploadDrinkImage(drinkId, imageFile)
+      } else if (removeImage && drink?.image) {
+        await deleteDrinkImage(drinkId)
       }
 
       afterDrinkChange()
@@ -139,6 +201,32 @@ const DrinkModal = () => {
             label={t('warehouse:drinkModal.criticalQuantity')}
             placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
           />
+
+          <div className="flex flex-col gap-y-2">
+            <span className="text-sm font-medium text-gray-700">{t('warehouse:drinkModal.image')}</span>
+            <div className="flex items-start gap-x-4">
+              <DrinkImage size="lg" src={shownImage} alt={(!preview && drink?.image?.altText) || drink?.name || ''} />
+              <div className="flex flex-col gap-y-2">
+                <div className="flex gap-x-2">
+                  <MainButton
+                    text={shownImage ? t('warehouse:drinkModal.imageChange') : t('warehouse:drinkModal.imageChoose')}
+                    variant="outlined"
+                    size="small"
+                    htmlType="button"
+                    onClick={() => imageInput.current?.click()}
+                  />
+                  {shownImage && (
+                    <MainButton text={t('warehouse:drinkModal.imageRemove')} variant="outlined" size="small" htmlType="button" onClick={handleRemoveImage} />
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  {t('warehouse:drinkModal.imageHint', { size: IMAGE_RECOMMENDED_SIZE, maxMb: IMAGE_MAX_MB })}
+                </p>
+                {imageError && <p className="text-xs text-red-600">{imageError}</p>}
+              </div>
+            </div>
+            <input ref={imageInput} type="file" accept={IMAGE_ACCEPT} onChange={handleImage} className="hidden" />
+          </div>
 
           <div className="flex justify-center">
             <MainButton text={t('g:button.submit')} variant="contained" size="medium" htmlType="submit" />

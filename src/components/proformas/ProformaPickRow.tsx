@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import DrinkImage from '@/src/components/drinks/DrinkImage'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import QuantityInput from '@/src/components/core/input/QuantityInput'
 import TableCell from '@/src/components/table/TableCell'
@@ -24,7 +25,10 @@ const ProformaPickRow = ({ drink, price, quantity, lineCents, onQuantityChange }
       className={`grid grid-cols-2 gap-x-3 gap-y-2 md:grid-cols-[minmax(0,1fr)_110px_110px_150px_110px] md:gap-x-4 items-center px-2 py-3 md:py-2 border-b-1 border-b-light-grey-alt border-solid last:border-b-0 ${STOCK_ROW_CLASS[level]}`}
     >
       <TableCell isDense className="col-span-2 md:col-span-1">
-        <Paragraph text={drink.name} size="sm" color="black" />
+        <div className="flex items-center gap-x-3">
+          <DrinkImage src={drink.image?.url} alt={drink.image?.altText || drink.name} />
+          <Paragraph text={drink.name} size="sm" color="black" />
+        </div>
       </TableCell>
       <TableCell isDense label={t('proforma:table.inStock')}>
         <p className={`font-poppins text-sm ${level === 'ok' && drink.quantity === 0 ? 'text-red' : STOCK_TEXT_CLASS[level]}`}>

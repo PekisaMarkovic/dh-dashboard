@@ -4,7 +4,7 @@ import customToast from '@/src/components/core/toast/CustomToast'
 import { getApiErrorMessage } from '@/src/utils/api-error'
 
 /**
- * Shows the message the API sent for a failed request, or the general error text
+ * Shows the message the API sent for a failed request, or the status of the failed request
  * when there is none. Use it in every catch block that talks to the API.
  */
 export const useErrorToast = () => {

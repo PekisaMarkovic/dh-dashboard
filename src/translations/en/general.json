@@ -22,6 +22,12 @@
     "maxCharError": "You have exceeded the maximum number of characters"
   },
   "errorMessage": "Something went wrong. Please try again later.",
+  "errors": {
+    "network": "Can not reach the server. Check your internet connection and try again.",
+    "timeout": "The server took too long to answer. Please try again.",
+    "tooLarge": "The file is too large.",
+    "status": "The request failed (error {{status}}). Please try again later."
+  },
   "profile": "Profile",
   "profileSaved": "Profile saved.",
   "logout": "Log out",

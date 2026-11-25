@@ -22,6 +22,12 @@
     "maxCharError": "Prekoračen je maksimalan broj karaktera"
   },
   "errorMessage": "Nešto je pošlo naopako. Pokušajte ponovo kasnije.",
+  "errors": {
+    "network": "Server nije dostupan. Proverite internet vezu i pokušajte ponovo.",
+    "timeout": "Server predugo odgovara. Pokušajte ponovo.",
+    "tooLarge": "Fajl je prevelik.",
+    "status": "Zahtev nije uspeo (greška {{status}}). Pokušajte ponovo kasnije."
+  },
   "profile": "Profil",
   "profileSaved": "Profil je sačuvan.",
   "logout": "Odjavi se",

@@ -1,6 +1,6 @@
 # DH Dashboard
 
-The web app of **DH**: companies keep track of the drinks in their warehouses, make proformas (price quotes) from them and add bought goods to the stock from a photo or a PDF of the document.
+The web app of **DH**: companies keep track of the drinks in their warehouses, make proformas (price quotes) from them, add bought goods to the stock from a photo or a PDF of the document, and manage their public website.
 
 Built with React, TypeScript, Vite, Tailwind and TanStack Query. It talks to the `dh-api` repo.
 
@@ -43,6 +43,7 @@ Log in with the super admin from the `.env` of the API.
 | Customers | `/customers` | all users (only admins can change) |
 | Warehouses | `/warehouses` | all users (only admins can change) |
 | Company | `/company` | admins only |
+| Website | `/website` | admins of a company that has a website (shown in the menu under Company only then) |
 | Profile | `/profile` | all users |
 
 Where you land after login: **Proforma**. A user without the right role is sent to the "not found" page, and admin pages are not even in their menu.
@@ -51,11 +52,17 @@ Where you land after login: **Proforma**. A user without the right role is sent 
 
 - **Proforma.** A table of the proformas of the company with a status (Active or Returned to stock). A click on a row opens its lines. The three dots on a row: **Download** (PDF), and for admins **Edit** (while it is active) and **Return to stock**. (The API can also search proformas by number, buyer or warehouse, the page has no search box yet.)
 - **Create proforma** (also used to edit). Step one: pick a warehouse (the default one is already selected) and the drinks, search them and set the quantity, and if needed a price and a discount for this proforma only. Step two: check the lines, pick a buyer (optional) and create. Creating takes the drinks off the stock, the PDF opens in a new tab together with the print window. If there is no warehouse or no drinks yet, the page says so and offers to create them.
-- **Drinks.** All drinks of the company, with search and filters (warehouse, and stock: warning or critical). A drink that is low is coloured orange (warning) or red (has to be bought again). Admins add, edit and delete.
+- **Drinks.** All drinks of the company, with search and filters (warehouse, and stock: warning or critical). A drink that is low is coloured orange (warning) or red (has to be bought again). Every drink shows its **picture** (a bottle icon while it has none) in front of the name, in all the lists that show drinks. Admins add, edit and delete, the window has the picture field with the recommended size (1200 × 1200) and uploads it together with the drink.
 - **Import goods.** Admins pick the warehouse and upload a photo or a PDF of a purchase document (on a phone the button also offers the camera, on a computer a file can be dropped on the box). The AI reads the drinks and quantities, they open in a window: every line already has the matching drink, the admin can change the drink or the quantity, skip a line, and then **Add to stock**. Below is the **history** of the uploads (search, pages): a click opens a document again, to add the lines that were left out, the three dots have **Delete**. The document itself is not kept anywhere.
 - **Customers.** The buyers, with search. Admins add, edit and delete.
 - **Warehouses.** A card for each warehouse with its drinks and the total value of the stock. The default warehouse is marked and preselected on the other pages. A warehouse can only be deleted when it is empty.
 - **Company.** Company info, the users (with their role), the **Add employee** button that sends an invitation, and the table of invitations (Pending, Accepted, Expired). The three dots on a Pending or Expired invitation have **Resend invitation**: the email goes out again and the link is valid for 7 more days.
+- **Website** (the page of a white label company, it manages its public site from the `dh-client` repo). A status panel on top (draft or published, what is still missing in red, the **Publish site** button that is inactive until everything is filled in) and tabs, every tab is one part of the site:
+  - **General info**: name, city, address, phone, Instagram, opening hours (one day per line), the logo, and the key of the site (the `ACCESS_KEY`, with a copy button).
+  - **Hero**, **Featured** (the title and the button and the recommended drinks, picked and ordered by the admin, at most 10), **Story**, **Promo**: the texts of the section and its picture (hero: the background).
+  - **SEO**: the title and the description of the site and of the menu page (what Google shows, with a counter) and the picture shown when the site is shared. The tab icon of the site is the logo.
+  - **Messages**: who contacted the company through the contact form of the site, newest first.
+  Every field is required (an error under the input when it is empty), a tab with something missing has a dot. A picture is saved the moment it is picked (the API makes a WebP of it), the preview shows the whole picture with its size and a click opens it in full size. The site shows a change at once (the API tells it to drop its cache).
 - **Profile.** Name and email are read only. Phone, date of birth and **language** can be changed. Log out is in the top menu.
 
 ## How it works
@@ -122,11 +129,11 @@ src/
     section/    DataSection (a card with a title), GlobalLoader
     skeleton/   loading placeholders
     table/      table row / card with the three dots menu
-    drinks/ customers/ proformas/ warehouses/ company/ purchase-import/   parts of a page
+    drinks/ customers/ proformas/ warehouses/ company/ purchase-import/ website/   parts of a page (drinks/DrinkImage is the picture of a drink)
   constatns/    routes, query keys, stale times, navigation (misspelled on purpose, see below)
   hooks/        use-api, use-roles, use-page-state, queries/ ...
   layouts/      page frame: left menu, top menu, language select
-  modules/      the content of a page (company, drinks, proformas, purchase-import, ...)
+  modules/      the content of a page (company, drinks, proformas, purchase-import, website, ...)
   pages/        one thin file per page
   routes/       routes and ProtectedRoute
   services/     the calls to the API
@@ -144,6 +151,8 @@ A page (`pages/`) is only the frame, the real work is in `modules/`.
 - **Svg files are URLs.** `import Icon from '...svg'` gives a path, not a component, and React then fails with `'/public/...svg' is not a valid name` (a white page). Use the icons from `src/icons`.
 - **Scrollbars** are green everywhere (`styles/general/scrollbar.scss`).
 - **Folder names** `constatns` and `paggination` are misspelled (they come from the old template). They are kept so imports keep working.
+- **Error messages say what happened.** `utils/api-error.ts` shows the message the API sent. When there is none it says there is no connection, the request timed out or the status of the answer, not a general text. In `local` the API also sends the real cause of an unexpected error.
+- **A section of the website** is built from `components/website/SectionTab.tsx` (a form of texts: fields, placeholders, validation) and `WebsiteImageField.tsx` (the picture of a slot). To add a section: a tab component, its yup rules in `validations/website/website.ts`, the texts in `translations/*/website.json` (`tabs`, `placeholders`, `missing`) and the field names in `errors.json`.
 - **`public/`** still has some images from an older project that are probably not used.
 - **Deploy.** `vercel.json` sends every address to `index.html`, which a single page app needs. Set `VITE_API_URL` before the build.
 - **There are no tests here yet**, the API has them (`pnpm test` in `dh-api`). `pnpm build` and `pnpm lint` are the checks.

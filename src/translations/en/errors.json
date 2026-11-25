@@ -81,6 +81,10 @@
     "subtitle": "a subtitle (at most 150 characters)",
     "buttonText": "a button text (at most 60 characters)",
     "paragraph1": "the first paragraph (at most 1000 characters)",
-    "paragraph2": "the second paragraph (at most 1000 characters)"
+    "paragraph2": "the second paragraph (at most 1000 characters)",
+    "seoTitle": "a site title (at most 70 characters)",
+    "seoDescription": "a site description (at most 160 characters)",
+    "menuTitle": "a menu page title (at most 70 characters)",
+    "menuDescription": "a menu page description (at most 160 characters)"
   }
 }

@@ -9,7 +9,8 @@
     "featured": "Preporučeno",
     "story": "Priča",
     "promo": "Promo",
-    "contacts": "Poruke"
+    "contacts": "Poruke",
+    "seo": "SEO"
   },
   "save": "Sačuvaj",
   "saved": "Izmene su sačuvane.",
@@ -86,7 +87,9 @@
     "hintLogo": "Najbolje: providna pozadina, oko 600 × 200 px. PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 600 px.",
     "required": "Slika je obavezna.",
     "info": "{{width}} × {{height}} px · {{size}} · WebP",
-    "open": "Otvori sliku u punoj veličini"
+    "open": "Otvori sliku u punoj veličini",
+    "og": "Slika za deljenje",
+    "hintOg": "Najbolje: 1200 × 630 px (odnos 1.91:1), glavni sadržaj u sredini. JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP."
   },
   "contacts": {
     "title": "Ko vas je kontaktirao",
@@ -152,6 +155,13 @@
       "text": "Tekst",
       "buttonText": "Tekst dugmeta",
       "image": "Slika"
+    },
+    "seo": {
+      "title": "Naslov sajta",
+      "description": "Opis sajta",
+      "menuTitle": "Naslov stranice sa kartom",
+      "menuDescription": "Opis stranice sa kartom",
+      "image": "Slika za deljenje"
     }
   },
   "placeholders": {
@@ -175,6 +185,25 @@
       "title": "npr. Specijalna ponuda",
       "text": "Kratak tekst o akciji, događaju, usluzi ili bilo čemu što želite da istaknete.",
       "buttonText": "npr. Kontaktirajte nas"
+    },
+    "seo": {
+      "title": "npr. Naziv radnje | Piće u Beogradu",
+      "description": "npr. Veliki izbor piva, vina i žestokih pića u Beogradu. Pogledajte kartu pića sa cenama i svratite do nas.",
+      "menuTitle": "npr. Karta pića | Cene piva, vina i žestokih pića",
+      "menuDescription": "npr. Kompletna karta pića sa cenama: pivo, vino, žestoka i bezalkoholna pića u našoj radnji."
     }
+  },
+  "seo": {
+    "title": "SEO: Google i deljenje",
+    "subtitle": "Ovo Google prikazuje u rezultatima pretrage i ovo se vidi kada se link sajta deli (Viber, WhatsApp, Facebook). Pišite jasno i uključite grad i čime se bavite.",
+    "fields": {
+      "title": "Naslov sajta (do 70 karaktera)",
+      "description": "Opis sajta (do 160 karaktera)",
+      "menuTitle": "Naslov stranice sa kartom pića",
+      "menuDescription": "Opis stranice sa kartom pića (do 160 karaktera)"
+    },
+    "ogSubtitle": "Slika koja se prikazuje kada neko podeli link vašeg sajta.",
+    "faviconTitle": "Ikonica sajta (favicon)",
+    "faviconText": "Ikonica koja se vidi u tabu browsera je logo koji ste otpremili u tabu „Opšte informacije“. Nije potrebno ništa dodatno."
   }
 }

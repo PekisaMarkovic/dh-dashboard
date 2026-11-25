@@ -14,7 +14,7 @@ import { openModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
 
 // the sections in the order of the tabs
-const SECTIONS = ['general', 'hero', 'featured', 'story', 'promo']
+const SECTIONS = ['general', 'hero', 'featured', 'story', 'promo', 'seo']
 
 const StatusBadge = ({ isPublished, text }: { isPublished: boolean; text: string }) => (
   <span

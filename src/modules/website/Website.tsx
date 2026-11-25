@@ -11,10 +11,11 @@ import GeneralTab from '@/src/components/website/GeneralTab'
 import HeroTab from '@/src/components/website/HeroTab'
 import PublishPanel from '@/src/components/website/PublishPanel'
 import PromoTab from '@/src/components/website/PromoTab'
+import SeoTab from '@/src/components/website/SeoTab'
 import StoryTab from '@/src/components/website/StoryTab'
 import { useWebsiteQuery } from '@/src/hooks/queries/use-website-queries'
 
-const TABS = ['general', 'hero', 'featured', 'story', 'promo', 'contacts'] as const
+const TABS = ['general', 'hero', 'featured', 'story', 'promo', 'seo', 'contacts'] as const
 type TabId = (typeof TABS)[number]
 
 const isTab = (value: string | null): value is TabId => TABS.includes(value as TabId)
@@ -59,6 +60,7 @@ const Website = () => {
       {tab === 'featured' && <FeaturedTab website={website} />}
       {tab === 'story' && <StoryTab website={website} />}
       {tab === 'promo' && <PromoTab website={website} />}
+      {tab === 'seo' && <SeoTab website={website} />}
       {tab === 'contacts' && <ContactsTab />}
     </div>
   )

@@ -1,4 +1,4 @@
-export type WebsiteImageSlot = 'logo' | 'hero' | 'story' | 'promo'
+export type WebsiteImageSlot = 'logo' | 'hero' | 'story' | 'promo' | 'og'
 
 export interface IWebsiteImage {
   imageId: number
@@ -18,6 +18,8 @@ export interface IWebsiteSections {
   featured?: { title?: string; buttonText?: string; drinkIds?: number[] }
   story?: { title?: string; paragraph1?: string; paragraph2?: string; buttonText?: string }
   promo?: { title?: string; text?: string; buttonText?: string }
+  // what Google and the social networks show: the title and the description of the site and of the menu page
+  seo?: { title?: string; description?: string; menuTitle?: string; menuDescription?: string }
 }
 
 export type WebsiteStatus = 'draft' | 'published'
@@ -47,6 +49,8 @@ export interface IWebsite {
   heroImage: IWebsiteImage | null
   storyImage: IWebsiteImage | null
   promoImage: IWebsiteImage | null
+  // the picture shown when the site is shared
+  ogImage: IWebsiteImage | null
   // the names of the picked recommended drinks, in the picked order
   featuredDrinks: { drinkId: number; name: string }[]
 }
@@ -63,6 +67,7 @@ export interface IWebsiteUpdate {
   featured?: IWebsiteSections['featured']
   story?: IWebsiteSections['story']
   promo?: IWebsiteSections['promo']
+  seo?: IWebsiteSections['seo']
 }
 
 // a message from the contact form of the site

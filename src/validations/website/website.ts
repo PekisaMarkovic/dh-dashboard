@@ -38,3 +38,13 @@ export const STORY_VALIDATION = yupResolver(
 export const PROMO_VALIDATION = yupResolver(
   Yup.object({ title: required('title', 150), text: required('text', 1000), buttonText: required('buttonText', 60) }),
 )
+
+// the messages are the names of the SEO fields (seoTitle...), the form fields are title, description, menuTitle, menuDescription
+export const SEO_VALIDATION = yupResolver(
+  Yup.object({
+    title: required('seoTitle', 70),
+    description: required('seoDescription', 160),
+    menuTitle: required('menuTitle', 70),
+    menuDescription: required('menuDescription', 160),
+  }),
+)

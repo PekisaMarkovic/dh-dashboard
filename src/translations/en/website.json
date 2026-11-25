@@ -9,7 +9,8 @@
     "featured": "Featured",
     "story": "Story",
     "promo": "Promo",
-    "contacts": "Messages"
+    "contacts": "Messages",
+    "seo": "SEO"
   },
   "save": "Save",
   "saved": "Changes saved.",
@@ -86,7 +87,9 @@
     "hintLogo": "Best: a transparent background, about 600 × 200 px. PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 600 px.",
     "required": "The picture is required.",
     "info": "{{width}} × {{height}} px · {{size}} · WebP",
-    "open": "Open the picture in full size"
+    "open": "Open the picture in full size",
+    "og": "Sharing picture",
+    "hintOg": "Best: 1200 × 630 px (ratio 1.91:1), the main content in the middle. JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP."
   },
   "contacts": {
     "title": "Who contacted you",
@@ -152,6 +155,13 @@
       "text": "Text",
       "buttonText": "Button text",
       "image": "Picture"
+    },
+    "seo": {
+      "title": "Site title",
+      "description": "Site description",
+      "menuTitle": "Menu page title",
+      "menuDescription": "Menu page description",
+      "image": "Sharing picture"
     }
   },
   "placeholders": {
@@ -175,6 +185,25 @@
       "title": "e.g. Special offer",
       "text": "A short text about a discount, an event, a service or anything you want to highlight.",
       "buttonText": "e.g. Contact us"
+    },
+    "seo": {
+      "title": "e.g. Store name | Drinks in Belgrade",
+      "description": "e.g. A big choice of beer, wine and spirits in Belgrade. See the drinks menu with prices and drop by.",
+      "menuTitle": "e.g. Drinks menu | Prices of beer, wine and spirits",
+      "menuDescription": "e.g. The complete drinks menu with prices: beer, wine, spirits and soft drinks in our store."
     }
+  },
+  "seo": {
+    "title": "SEO: Google and sharing",
+    "subtitle": "This is what Google shows in the search results and what is shown when a link to the site is shared (Viber, WhatsApp, Facebook). Write clearly and include the city and what you do.",
+    "fields": {
+      "title": "Site title (up to 70 characters)",
+      "description": "Site description (up to 160 characters)",
+      "menuTitle": "Title of the drinks menu page",
+      "menuDescription": "Description of the drinks menu page (up to 160 characters)"
+    },
+    "ogSubtitle": "The picture shown when somebody shares the link of your site.",
+    "faviconTitle": "Site icon (favicon)",
+    "faviconText": "The icon in the browser tab is the logo you uploaded in the “General info” tab. Nothing else is needed."
   }
 }

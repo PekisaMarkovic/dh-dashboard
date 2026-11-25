@@ -24,7 +24,7 @@ type Props = {
 }
 
 // how wide the picture is shown after it is uploaded: the whole picture, in its own proportions (it is not cropped)
-const MAX_PREVIEW_WIDTH: Record<WebsiteImageSlot, string> = { logo: 'max-w-sm', hero: 'max-w-xl', story: 'max-w-md', promo: 'max-w-[260px]' }
+const MAX_PREVIEW_WIDTH: Record<WebsiteImageSlot, string> = { logo: 'max-w-sm', hero: 'max-w-xl', story: 'max-w-md', promo: 'max-w-[260px]', og: 'max-w-md' }
 
 // a checkerboard behind the picture, so a transparent logo is visible
 const CHECKERBOARD = {
@@ -32,7 +32,7 @@ const CHECKERBOARD = {
   backgroundSize: '16px 16px',
 }
 
-const SLOT_FOLDERS = { logo: 'general', hero: 'hero', story: 'story', promo: 'promo' }
+const SLOT_FOLDERS = { logo: 'general', hero: 'hero', story: 'story', promo: 'promo', og: 'seo' }
 
 /**
  * One picture of the site (logo, background of the hero, story, promo). It is saved the moment it is picked,

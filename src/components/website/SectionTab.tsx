@@ -15,6 +15,8 @@ export type SectionField = {
   isTextarea?: boolean
   // the translation key of the example shown in the empty input
   placeholder?: string
+  // the most characters, the counter under a text area counts down to it
+  maxChar?: number
 }
 
 type Props = {
@@ -24,7 +26,7 @@ type Props = {
   // the saved texts of the section
   saved: Record<string, string | undefined> | undefined
   // which part of the body the texts go into, e.g. 'hero'
-  section: 'hero' | 'story' | 'promo'
+  section: 'hero' | 'story' | 'promo' | 'seo'
   validation: unknown
   // more content under the fields (e.g. the picked drinks)
   children?: ReactNode
@@ -50,9 +52,9 @@ const SectionTab = ({ title, subtitle, fields, saved, section, validation, child
     <DataSection title={title} subtitle={subtitle}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
-          {fields.map(({ name, label, isTextarea, placeholder }) =>
+          {fields.map(({ name, label, isTextarea, placeholder, maxChar }) =>
             isTextarea ? (
-              <InputTextarea key={name} isRequired name={name} initValue={values[name]} label={t(label)} placeholder={placeholder && t(placeholder)} rows={4} />
+              <InputTextarea key={name} isRequired name={name} initValue={values[name]} label={t(label)} placeholder={placeholder && t(placeholder)} rows={4} maxChar={maxChar} />
             ) : (
               <InputText key={name} isRequired name={name} initValue={values[name]} label={t(label)} placeholder={placeholder && t(placeholder)} />
             )

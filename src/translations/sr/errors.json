@@ -32,6 +32,10 @@
     "text": "tekst (najviše 1000 karaktera)",
     "buttonText": "tekst dugmeta (najviše 60 karaktera)",
     "paragraph1": "prvi pasus (najviše 1000 karaktera)",
-    "paragraph2": "drugi pasus (najviše 1000 karaktera)"
+    "paragraph2": "drugi pasus (najviše 1000 karaktera)",
+    "seoTitle": "naslov sajta (najviše 70 karaktera)",
+    "seoDescription": "opis sajta (najviše 160 karaktera)",
+    "menuTitle": "naslov stranice sa kartom (najviše 70 karaktera)",
+    "menuDescription": "opis stranice sa kartom (najviše 160 karaktera)"
   }
 }

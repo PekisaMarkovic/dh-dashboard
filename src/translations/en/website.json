@@ -50,15 +50,19 @@
     "title": "Featured from our offer",
     "subtitle": "The title of the section with drinks on the home page and the drinks it shows.",
     "picked": "Picked drinks",
-    "pickedEmpty": "No drink is picked, the first drinks of the menu are shown.",
+    "pickedEmpty": "No drink is picked. Pick an even number of drinks (2, 4, 6, 8 or 10).",
     "pickedLimit": "At most {{max}} drinks.",
-    "search": "Search drinks to add them",
+    "search": "Pick a drink from the list or search for it",
     "add": "Add",
     "remove": "Remove",
     "up": "Move up",
     "down": "Move down",
     "noResults": "No drinks for this search.",
-    "pickedRequired": "Pick at least one featured drink."
+    "pickedRequired": "Pick at least one featured drink.",
+    "added": "Added",
+    "loading": "Loading…",
+    "firstDrinks": "The first drinks of the menu, type to search",
+    "pickedOdd": "The number of drinks has to be even (2, 4, 6, 8 or 10) because the site shows them in pairs: add one more or remove one."
   },
   "story": {
     "title": "The story behind a good time",

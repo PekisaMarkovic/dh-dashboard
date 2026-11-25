@@ -2,12 +2,12 @@ type Props = {
   // public address of the image, empty = the drink has no image and the placeholder is shown
   src?: string | null
   alt: string
-  // sm: in the lists, lg: in the modal
-  size?: 'sm' | 'lg'
+  // sm: in the lists, md: the picked recommended drinks, lg: in the modal
+  size?: 'sm' | 'md' | 'lg'
 }
 
-const SIZE_CLASS = { sm: 'h-10 w-10 rounded-md', lg: 'h-24 w-24 rounded-lg' }
-const ICON_CLASS = { sm: 'h-6 w-6', lg: 'h-12 w-12' }
+const SIZE_CLASS = { sm: 'h-10 w-10 rounded-md', md: 'h-16 w-16 rounded-lg', lg: 'h-24 w-24 rounded-lg' }
+const ICON_CLASS = { sm: 'h-6 w-6', md: 'h-8 w-8', lg: 'h-12 w-12' }
 
 // the image of a drink, a bottle icon while the drink has none
 const DrinkImage = ({ src, alt, size = 'sm' }: Props) => (

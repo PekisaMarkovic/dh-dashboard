@@ -50,15 +50,19 @@
     "title": "Preporučeno iz naše ponude",
     "subtitle": "Naslov sekcije sa pićima na početnoj strani i pića koja se u njoj prikazuju.",
     "picked": "Izabrana pića",
-    "pickedEmpty": "Nijedno piće nije izabrano, prikazuju se prva pića sa karte.",
+    "pickedEmpty": "Nijedno piće nije izabrano. Izaberite paran broj pića (2, 4, 6, 8 ili 10).",
     "pickedLimit": "Najviše {{max}} pića.",
-    "search": "Pretražite pića da biste ih dodali",
+    "search": "Izaberite piće sa liste ili ga pretražite",
     "add": "Dodaj",
     "remove": "Ukloni",
     "up": "Pomeri gore",
     "down": "Pomeri dole",
     "noResults": "Nema pića za ovu pretragu.",
-    "pickedRequired": "Izaberite bar jedno preporučeno piće."
+    "pickedRequired": "Izaberite bar jedno preporučeno piće.",
+    "added": "Dodato",
+    "loading": "Učitavanje…",
+    "firstDrinks": "Prva pića sa karte, kucajte za pretragu",
+    "pickedOdd": "Broj pića mora biti paran (2, 4, 6, 8 ili 10) jer se na sajtu prikazuju u parovima: dodajte još jedno ili uklonite jedno."
   },
   "story": {
     "title": "Priča iza dobrog provoda",

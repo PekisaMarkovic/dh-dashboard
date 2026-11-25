@@ -51,8 +51,8 @@ export interface IWebsite {
   promoImage: IWebsiteImage | null
   // the picture shown when the site is shared
   ogImage: IWebsiteImage | null
-  // the names of the picked recommended drinks, in the picked order
-  featuredDrinks: { drinkId: number; name: string }[]
+  // the names and images of the picked recommended drinks, in the picked order
+  featuredDrinks: { drinkId: number; name: string; imageUrl: string | null }[]
 }
 
 // what is sent to change the site, an empty text removes the value

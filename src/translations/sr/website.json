@@ -202,8 +202,6 @@
       "menuTitle": "Naslov stranice sa kartom pića",
       "menuDescription": "Opis stranice sa kartom pića (do 160 karaktera)"
     },
-    "ogSubtitle": "Slika koja se prikazuje kada neko podeli link vašeg sajta.",
-    "faviconTitle": "Ikonica sajta (favicon)",
-    "faviconText": "Ikonica koja se vidi u tabu browsera je logo koji ste otpremili u tabu „Opšte informacije“. Nije potrebno ništa dodatno."
+    "ogSubtitle": "Slika koja se prikazuje kada neko podeli link vašeg sajta."
   }
 }

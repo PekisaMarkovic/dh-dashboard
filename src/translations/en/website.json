@@ -202,8 +202,6 @@
       "menuTitle": "Title of the drinks menu page",
       "menuDescription": "Description of the drinks menu page (up to 160 characters)"
     },
-    "ogSubtitle": "The picture shown when somebody shares the link of your site.",
-    "faviconTitle": "Site icon (favicon)",
-    "faviconText": "The icon in the browser tab is the logo you uploaded in the “General info” tab. Nothing else is needed."
+    "ogSubtitle": "The picture shown when somebody shares the link of your site."
   }
 }

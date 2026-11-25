@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import DataSection from '@/src/components/section/DataSection'
-import Paragraph from '@/src/components/core/typography/Paragraph'
 import SectionTab, { SectionField } from '@/src/components/website/SectionTab'
 import WebsiteImageField from '@/src/components/website/WebsiteImageField'
 import { IWebsite } from '@/src/interfaces'
@@ -35,9 +34,6 @@ const SeoTab = ({ website }: { website: IWebsite }) => {
           hint={t('website:image.hintOg', { maxMb: 5 })}
           previewClass="aspect-[1200/630] w-full max-w-md"
         />
-      </DataSection>
-      <DataSection title={t('website:seo.faviconTitle')}>
-        <Paragraph text={t('website:seo.faviconText')} size="sm" />
       </DataSection>
     </>
   )

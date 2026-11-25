@@ -23,6 +23,8 @@ import srCompany from './sr/company.json'
 import srPurchase from './sr/purchase.json'
 import srProforma from './sr/proforma.json'
 import srProfile from './sr/user/profile.json'
+import enWebsite from './en/website.json'
+import srWebsite from './sr/website.json'
 import { getStoredLanguage } from '@/src/utils/language'
 import { setDateLanguage } from '@/src/utils/date'
 
@@ -39,6 +41,7 @@ export const resources = {
     company: enCompany,
     proforma: enProforma,
     purchase: enPurchase,
+    website: enWebsite,
   },
   sr: {
     g: srGeneral,
@@ -52,6 +55,7 @@ export const resources = {
     company: srCompany,
     proforma: srProforma,
     purchase: srPurchase,
+    website: srWebsite,
   },
 } as const
 

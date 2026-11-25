@@ -89,3 +89,13 @@ export const openPdfTab = (): PdfTab | null => {
     close: () => tab.close(),
   }
 }
+
+/**
+ * A size in bytes as people read it: 840 B, 35.2 KB, 1.4 MB
+ */
+export const formatFileSize = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}

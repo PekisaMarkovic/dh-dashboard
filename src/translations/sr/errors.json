@@ -23,6 +23,15 @@
     "pib": "PIB sa tačno 9 cifara",
     "registrationNumber": "matični broj sa tačno 8 cifara",
     "phone": "ispravan broj telefona (cifre, +, -, razmaci, zagrade)",
-    "bankAccount": "tekući račun (18 cifara, ili u obliku 160-0000002761287-85)"
+    "bankAccount": "tekući račun (18 cifara, ili u obliku 160-0000002761287-85)",
+    "instagram": "ispravnu Instagram adresu (https://...)",
+    "workingHours": "radno vreme (najviše 500 karaktera)",
+    "address": "adresu (najviše 150 karaktera)",
+    "title": "naslov (najviše 150 karaktera)",
+    "subtitle": "podnaslov (najviše 150 karaktera)",
+    "text": "tekst (najviše 1000 karaktera)",
+    "buttonText": "tekst dugmeta (najviše 60 karaktera)",
+    "paragraph1": "prvi pasus (najviše 1000 karaktera)",
+    "paragraph2": "drugi pasus (najviše 1000 karaktera)"
   }
 }

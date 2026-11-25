@@ -7,7 +7,8 @@
       "drinks": "Pića",
       "customers": "Kupci",
       "company": "Kompanija",
-      "proformas": "Predračun"
+      "proformas": "Predračun",
+      "website": "Web sajt"
     },
     "leftSidePage": {
       "title": "navigacija",
@@ -16,6 +17,7 @@
       "customers": "Kupci",
       "company": "Kompanija",
       "profile": "Profil",
+      "website": "Web sajt",
       "proformas": "Predračun",
       "purchase-import": "Uvoz robe"
     }

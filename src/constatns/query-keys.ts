@@ -10,4 +10,6 @@ export const QUERY_KEYS = {
   proformas: ['proformas'] as const,
   proforma: ['proforma'] as const,
   purchaseImports: ['purchase-imports'] as const,
+  website: ['website'] as const,
+  websiteContacts: ['website-contacts'] as const,
 }

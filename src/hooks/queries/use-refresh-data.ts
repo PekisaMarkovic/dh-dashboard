@@ -26,6 +26,8 @@ export const useRefreshData = () => {
       afterPurchaseImport: () => reload(QUERY_KEYS.purchaseImports, QUERY_KEYS.drinks),
       afterCustomerChange: () => reload(QUERY_KEYS.customers),
       afterCompanyChange: () => reload(QUERY_KEYS.company),
+      // the content of the website changed (texts, pictures) or a message came
+      afterWebsiteChange: () => reload(QUERY_KEYS.website, QUERY_KEYS.websiteContacts),
       afterInvitationChange: () => reload(QUERY_KEYS.invitations, QUERY_KEYS.companyUsers),
     }
   }, [queryClient])

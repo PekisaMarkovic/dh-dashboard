@@ -8,6 +8,7 @@ export const ROUTE_NAMES = {
   createProforma: '/proformas/create',
   editProforma: '/proformas/:proformaId/edit',
   company: '/company',
+  website: '/website',
   firtTimeRegister: '/first-time-register/:invitationId',
   profile: '/profile',
   notFound: '/not-found',

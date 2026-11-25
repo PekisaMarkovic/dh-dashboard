@@ -10,6 +10,7 @@ import CreateProformaPage from '@/src/pages/proformas/CreateProformaPage'
 import CustomersPage from '@/src/pages/customers/CustomersPage'
 import ProformasPage from '@/src/pages/proformas/ProformasPage'
 import CompanyPage from '@/src/pages/company/CompanyPage'
+import WebsitePage from '@/src/pages/website/WebsitePage'
 import LogInPage from '@/src/pages/log-in/LogInPage'
 import NotFoundPage from '@/src/pages/not-found/NotFoundPage'
 import ProtectedRoute from './ProtectedRoute'
@@ -105,6 +106,15 @@ const AppRoutes = () => {
       element: (
         <ProtectedRoute allowedRoles={ALL_ROLES}>
           <ProformasPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: ROUTE_NAMES.website,
+      element: (
+        <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+          <WebsitePage />
         </ProtectedRoute>
       ),
     },

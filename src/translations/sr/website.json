@@ -1,0 +1,180 @@
+{
+  "title": "Web sajt",
+  "subtitle": "Ovde upravljate sadržajem svog web sajta. Izmene se na sajtu vide u roku od minut.",
+  "notEnabled": "Vaša kompanija nema web sajt.",
+  "tabs": {
+    "label": "Stranice sajta",
+    "general": "Opšte informacije",
+    "hero": "Hero",
+    "featured": "Preporučeno",
+    "story": "Priča",
+    "promo": "Promo",
+    "contacts": "Poruke"
+  },
+  "save": "Sačuvaj",
+  "saved": "Izmene su sačuvane.",
+  "keyLabel": "Ključ sajta (ACCESS_KEY)",
+  "keyHint": "Ovu vrednost sajt koristi da zna kojoj kompaniji pripada. Kopirajte je u podešavanja sajta.",
+  "copy": "Kopiraj",
+  "copied": "Ključ je kopiran.",
+  "general": {
+    "title": "Opšte informacije",
+    "subtitle": "Podaci koji se prikazuju na celom sajtu: zaglavlje, kontakt i podnožje.",
+    "name": "Naziv",
+    "namePlh": "npr. Naziv vaše radnje",
+    "city": "Grad",
+    "cityPlh": "npr. Beograd",
+    "address": "Mesto (adresa)",
+    "addressPlh": "npr. Bulevar kralja Aleksandra 73",
+    "phone": "Broj telefona",
+    "phonePlh": "npr. +381 11 345 6789",
+    "instagram": "Instagram adresa",
+    "instagramPlh": "https://www.instagram.com/vas_nalog",
+    "workingHours": "Radno vreme",
+    "workingHoursPlh": "Ponedeljak: 07:00-19:00\nUtorak: 07:00-19:00\nSreda: 07:00-19:00\nČetvrtak: 07:00-19:00\nPetak: 07:00-19:00\nSubota: 08:00-15:00\nNedelja: zatvoreno"
+  },
+  "fields": {
+    "title": "Naslov",
+    "subtitle": "Podnaslov",
+    "text": "Tekst",
+    "buttonText": "Tekst dugmeta",
+    "paragraph1": "Prvi pasus",
+    "paragraph2": "Drugi pasus"
+  },
+  "hero": {
+    "title": "Hero",
+    "subtitle": "Prvo što posetilac vidi na vrhu stranice: veliki naslov, tekst i dugme preko slike u pozadini."
+  },
+  "featured": {
+    "title": "Preporučeno iz naše ponude",
+    "subtitle": "Naslov sekcije sa pićima na početnoj strani i pića koja se u njoj prikazuju.",
+    "picked": "Izabrana pića",
+    "pickedEmpty": "Nijedno piće nije izabrano, prikazuju se prva pića sa karte.",
+    "pickedLimit": "Najviše {{max}} pića.",
+    "search": "Pretražite pića da biste ih dodali",
+    "add": "Dodaj",
+    "remove": "Ukloni",
+    "up": "Pomeri gore",
+    "down": "Pomeri dole",
+    "noResults": "Nema pića za ovu pretragu.",
+    "pickedRequired": "Izaberite bar jedno preporučeno piće."
+  },
+  "story": {
+    "title": "Priča iza dobrog provoda",
+    "subtitle": "Sekcija koja predstavlja vašu prodavnicu: naslov, dva pasusa, dugme i slika."
+  },
+  "promo": {
+    "title": "Promo sekcija",
+    "subtitle": "Sekcija koja poziva posetioce na akciju (akcija, događaj, usluga, poruka): naslov, tekst, dugme i slika."
+  },
+  "image": {
+    "hero": "Slika u pozadini",
+    "story": "Slika",
+    "promo": "Slika",
+    "logo": "Logo",
+    "choose": "Izaberi sliku",
+    "change": "Promeni sliku",
+    "remove": "Ukloni sliku",
+    "uploaded": "Slika je sačuvana.",
+    "removed": "Slika je uklonjena.",
+    "tooBig": "Slika je veća od {{maxMb}} MB.",
+    "notImage": "Izaberite JPG, PNG ili WebP sliku.",
+    "noImage": "Nema slike",
+    "hintHero": "Najbolje: široka slika 1920 × 1080 px (16:9), važni deo u sredini jer se na telefonu seče po stranama. JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 2000 px.",
+    "hintStory": "Najbolje: slika 1200 × 900 px (4:3). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px.",
+    "hintPromo": "Najbolje: uspravna slika 960 × 1200 px (4:5). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px.",
+    "hintLogo": "Najbolje: providna pozadina, oko 600 × 200 px. PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 600 px.",
+    "required": "Slika je obavezna.",
+    "info": "{{width}} × {{height}} px · {{size}} · WebP",
+    "open": "Otvori sliku u punoj veličini"
+  },
+  "contacts": {
+    "title": "Ko vas je kontaktirao",
+    "subtitle": "Poruke koje su posetioci poslali preko kontakt forme na sajtu, najnovije prvo.",
+    "date": "Datum",
+    "name": "Ime",
+    "phone": "Telefon",
+    "email": "Email",
+    "message": "Poruka",
+    "empty": "Još niko nije poslao poruku.",
+    "noMessage": "Bez poruke"
+  },
+  "status": {
+    "draft": "U izradi (draft)",
+    "published": "Objavljen"
+  },
+  "publish": {
+    "title": "Objavljivanje sajta",
+    "draftText": "Sajt je u izradi: posetioci vide stranicu „Sajt je u izradi“ i sajt je sakriven od Google-a. Kad popunite sve sekcije i otpremite sve slike, možete ga objaviti.",
+    "publishedText": "Sajt je objavljen i vidljiv svima.",
+    "publishedAt": "Objavljen: {{date}}",
+    "button": "Objavi sajt",
+    "unpublish": "Vrati u izradu",
+    "published": "Sajt je objavljen.",
+    "unpublished": "Sajt je vraćen u izradu.",
+    "missingTitle": "Još nedostaje:",
+    "complete": "Sve je popunjeno, sajt možete objaviti.",
+    "incompletePublished": "Sajt je objavljen, ali nešto nedostaje:",
+    "confirmUnpublishTitle": "Vratiti sajt u izradu?",
+    "confirmUnpublishMessage": "Posetioci će umesto sajta videti stranicu „Sajt je u izradi“, a Google ga neće prikazivati dok ga ponovo ne objavite."
+  },
+  "missing": {
+    "general": {
+      "name": "Naziv",
+      "city": "Grad",
+      "address": "Mesto (adresa)",
+      "phone": "Broj telefona",
+      "instagram": "Instagram adresa",
+      "workingHours": "Radno vreme",
+      "logo": "Logo"
+    },
+    "hero": {
+      "title": "Naslov",
+      "subtitle": "Podnaslov",
+      "text": "Tekst",
+      "buttonText": "Tekst dugmeta",
+      "image": "Slika u pozadini"
+    },
+    "featured": {
+      "title": "Naslov",
+      "buttonText": "Tekst dugmeta",
+      "drinks": "Bar jedno preporučeno piće"
+    },
+    "story": {
+      "title": "Naslov",
+      "paragraph1": "Prvi pasus",
+      "paragraph2": "Drugi pasus",
+      "buttonText": "Tekst dugmeta",
+      "image": "Slika"
+    },
+    "promo": {
+      "title": "Naslov",
+      "text": "Tekst",
+      "buttonText": "Tekst dugmeta",
+      "image": "Slika"
+    }
+  },
+  "placeholders": {
+    "hero": {
+      "title": "npr. Dobrodošli u našu radnju",
+      "subtitle": "npr. Od 2010. godine",
+      "text": "Kratak opis čime se bavite i šta posetilac može da nađe kod vas.",
+      "buttonText": "npr. Pogledaj ponudu"
+    },
+    "featured": {
+      "title": "npr. Preporučujemo",
+      "buttonText": "npr. Pogledaj sve"
+    },
+    "story": {
+      "title": "npr. O nama",
+      "paragraph1": "Predstavite se: ko ste, čime se bavite i po čemu ste drugačiji.",
+      "paragraph2": "Pozovite posetioce da vas posete ili pitaju za savet.",
+      "buttonText": "npr. Posetite nas"
+    },
+    "promo": {
+      "title": "npr. Specijalna ponuda",
+      "text": "Kratak tekst o akciji, događaju, usluzi ili bilo čemu što želite da istaknete.",
+      "buttonText": "npr. Kontaktirajte nas"
+    }
+  }
+}

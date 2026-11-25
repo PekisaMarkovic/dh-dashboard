@@ -6,6 +6,8 @@ interface IMenuLink {
   icon: NavigationIconType
   link: string
   adminOnly?: boolean
+  // shown only when the company has a white label website (the clients table has a row for it)
+  requiresWebsite?: boolean
 }
 
 // most used first: proforma, drinks, customers, then the warehouses that are set up once
@@ -16,6 +18,7 @@ export const LEFT_SIDE_MENU_LINKS: IMenuLink[] = [
   { text: 'customers', icon: 'Customer', link: ROUTE_NAMES.customers },
   { text: 'warehouses', icon: 'Warehouse', link: ROUTE_NAMES.warehouses },
   { text: 'company', icon: 'Company', link: ROUTE_NAMES.company, adminOnly: true },
+  { text: 'website', icon: 'Website', link: ROUTE_NAMES.website, adminOnly: true, requiresWebsite: true },
 ]
 
 export const TOP_MENU_LINKS_FOR_TRANSLATIONS = [...LEFT_SIDE_MENU_LINKS.map((e) => e.link), ROUTE_NAMES.profile]

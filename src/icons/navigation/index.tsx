@@ -4,8 +4,9 @@ import ProformaIcon from '@/src/icons/navigation/ProformaIcon'
 import CompanyIcon from '@/src/icons/navigation/CompanyIcon'
 import ImportIcon from '@/src/icons/navigation/ImportIcon'
 import CustomerIcon from '@/src/icons/navigation/CustomerIcon'
+import WebsiteIcon from '@/src/icons/navigation/WebsiteIcon'
 
-export type NavigationIconType = 'Warehouse' | 'Drink' | 'Customer' | 'Proforma' | 'Company' | 'Import'
+export type NavigationIconType = 'Warehouse' | 'Drink' | 'Customer' | 'Proforma' | 'Company' | 'Import' | 'Website'
 
 interface Props extends React.SVGProps<SVGSVGElement> {
   type: NavigationIconType
@@ -25,6 +26,8 @@ const NavigationIcons = ({ type, ...rest }: Props) => {
       return <ImportIcon {...rest} />
     case 'Company':
       return <CompanyIcon {...rest} />
+    case 'Website':
+      return <WebsiteIcon {...rest} />
 
     default:
       return null

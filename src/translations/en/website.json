@@ -1,0 +1,180 @@
+{
+  "title": "Website",
+  "subtitle": "Manage the content of your website here. Changes show on the site within a minute.",
+  "notEnabled": "Your company has no website.",
+  "tabs": {
+    "label": "Pages of the site",
+    "general": "General info",
+    "hero": "Hero",
+    "featured": "Featured",
+    "story": "Story",
+    "promo": "Promo",
+    "contacts": "Messages"
+  },
+  "save": "Save",
+  "saved": "Changes saved.",
+  "keyLabel": "Site key (ACCESS_KEY)",
+  "keyHint": "The site uses this value to know which company it belongs to. Copy it into the settings of the site.",
+  "copy": "Copy",
+  "copied": "The key was copied.",
+  "general": {
+    "title": "General info",
+    "subtitle": "The data shown across the whole site: header, contact and footer.",
+    "name": "Name",
+    "namePlh": "e.g. Your store name",
+    "city": "City",
+    "cityPlh": "e.g. Belgrade",
+    "address": "Place (address)",
+    "addressPlh": "e.g. Bulevar kralja Aleksandra 73",
+    "phone": "Phone number",
+    "phonePlh": "e.g. +381 11 345 6789",
+    "instagram": "Instagram address",
+    "instagramPlh": "https://www.instagram.com/your_account",
+    "workingHours": "Opening hours",
+    "workingHoursPlh": "Monday: 07:00-19:00\nTuesday: 07:00-19:00\nWednesday: 07:00-19:00\nThursday: 07:00-19:00\nFriday: 07:00-19:00\nSaturday: 08:00-15:00\nSunday: closed"
+  },
+  "fields": {
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "text": "Text",
+    "buttonText": "Button text",
+    "paragraph1": "First paragraph",
+    "paragraph2": "Second paragraph"
+  },
+  "hero": {
+    "title": "Hero",
+    "subtitle": "The first thing a visitor sees at the top: a big title, a text and a button over the background picture."
+  },
+  "featured": {
+    "title": "Featured from our offer",
+    "subtitle": "The title of the section with drinks on the home page and the drinks it shows.",
+    "picked": "Picked drinks",
+    "pickedEmpty": "No drink is picked, the first drinks of the menu are shown.",
+    "pickedLimit": "At most {{max}} drinks.",
+    "search": "Search drinks to add them",
+    "add": "Add",
+    "remove": "Remove",
+    "up": "Move up",
+    "down": "Move down",
+    "noResults": "No drinks for this search.",
+    "pickedRequired": "Pick at least one featured drink."
+  },
+  "story": {
+    "title": "The story behind a good time",
+    "subtitle": "The section that introduces your store: a title, two paragraphs, a button and a picture."
+  },
+  "promo": {
+    "title": "Promo section",
+    "subtitle": "A section that calls visitors to action (a deal, an event, a service, a message): a title, a text, a button and a picture."
+  },
+  "image": {
+    "hero": "Background picture",
+    "story": "Picture",
+    "promo": "Picture",
+    "logo": "Logo",
+    "choose": "Choose picture",
+    "change": "Change picture",
+    "remove": "Remove picture",
+    "uploaded": "The picture was saved.",
+    "removed": "The picture was removed.",
+    "tooBig": "The picture is bigger than {{maxMb}} MB.",
+    "notImage": "Choose a JPG, PNG or WebP picture.",
+    "noImage": "No picture",
+    "hintHero": "Best: a wide picture of 1920 × 1080 px (16:9), the important part in the middle because it is cropped at the sides on a phone. JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 2000 px.",
+    "hintStory": "Best: a picture of 1200 × 900 px (4:3). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px.",
+    "hintPromo": "Best: an upright picture of 960 × 1200 px (4:5). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px.",
+    "hintLogo": "Best: a transparent background, about 600 × 200 px. PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 600 px.",
+    "required": "The picture is required.",
+    "info": "{{width}} × {{height}} px · {{size}} · WebP",
+    "open": "Open the picture in full size"
+  },
+  "contacts": {
+    "title": "Who contacted you",
+    "subtitle": "The messages visitors sent through the contact form of the site, newest first.",
+    "date": "Date",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "message": "Message",
+    "empty": "Nobody has sent a message yet.",
+    "noMessage": "No message"
+  },
+  "status": {
+    "draft": "In progress (draft)",
+    "published": "Published"
+  },
+  "publish": {
+    "title": "Publishing the site",
+    "draftText": "The site is a draft: visitors see a \"coming soon\" page and the site is hidden from Google. When you fill in all sections and upload all pictures you can publish it.",
+    "publishedText": "The site is published and visible to everyone.",
+    "publishedAt": "Published: {{date}}",
+    "button": "Publish site",
+    "unpublish": "Back to draft",
+    "published": "The site was published.",
+    "unpublished": "The site is a draft again.",
+    "missingTitle": "Still missing:",
+    "complete": "Everything is filled in, you can publish the site.",
+    "incompletePublished": "The site is published, but something is missing:",
+    "confirmUnpublishTitle": "Take the site back to a draft?",
+    "confirmUnpublishMessage": "Visitors will see a \"coming soon\" page instead of the site and Google will not show it until you publish it again."
+  },
+  "missing": {
+    "general": {
+      "name": "Name",
+      "city": "City",
+      "address": "Place (address)",
+      "phone": "Phone number",
+      "instagram": "Instagram address",
+      "workingHours": "Opening hours",
+      "logo": "Logo"
+    },
+    "hero": {
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "text": "Text",
+      "buttonText": "Button text",
+      "image": "Background picture"
+    },
+    "featured": {
+      "title": "Title",
+      "buttonText": "Button text",
+      "drinks": "At least one featured drink"
+    },
+    "story": {
+      "title": "Title",
+      "paragraph1": "First paragraph",
+      "paragraph2": "Second paragraph",
+      "buttonText": "Button text",
+      "image": "Picture"
+    },
+    "promo": {
+      "title": "Title",
+      "text": "Text",
+      "buttonText": "Button text",
+      "image": "Picture"
+    }
+  },
+  "placeholders": {
+    "hero": {
+      "title": "e.g. Welcome to our store",
+      "subtitle": "e.g. Since 2010",
+      "text": "A short description of what you do and what a visitor can find with you.",
+      "buttonText": "e.g. See our offer"
+    },
+    "featured": {
+      "title": "e.g. We recommend",
+      "buttonText": "e.g. See all"
+    },
+    "story": {
+      "title": "e.g. About us",
+      "paragraph1": "Introduce yourself: who you are, what you do and what makes you different.",
+      "paragraph2": "Invite visitors to drop by or ask for advice.",
+      "buttonText": "e.g. Visit us"
+    },
+    "promo": {
+      "title": "e.g. Special offer",
+      "text": "A short text about a discount, an event, a service or anything you want to highlight.",
+      "buttonText": "e.g. Contact us"
+    }
+  }
+}

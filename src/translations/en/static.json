@@ -7,7 +7,8 @@
       "drinks": "Drinks",
       "customers": "Customers",
       "company": "Company",
-      "proformas": "Proforma"
+      "proformas": "Proforma",
+      "website": "Website"
     },
     "leftSidePage": {
       "title": "navigation",
@@ -16,6 +17,7 @@
       "customers": "Customers",
       "company": "Company",
       "profile": "Profile",
+      "website": "Website",
       "proformas": "Proforma",
       "purchase-import": "Import goods"
     }

@@ -6,6 +6,7 @@ export const ROUTE_NAMES = {
   purchaseImport: '/purchase-import',
   customers: '/customers',
   proformas: '/proformas',
+  orders: '/orders',
   createProforma: '/proformas/create',
   editProforma: '/proformas/:proformaId/edit',
   company: '/company',

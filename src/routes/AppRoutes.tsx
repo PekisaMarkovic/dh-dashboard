@@ -10,6 +10,7 @@ import EditProformaPage from '@/src/pages/proformas/EditProformaPage'
 import CreateProformaPage from '@/src/pages/proformas/CreateProformaPage'
 import CustomersPage from '@/src/pages/customers/CustomersPage'
 import ProformasPage from '@/src/pages/proformas/ProformasPage'
+import OrdersPage from '@/src/pages/orders/OrdersPage'
 import CompanyPage from '@/src/pages/company/CompanyPage'
 import WebsitePage from '@/src/pages/website/WebsitePage'
 import LogInPage from '@/src/pages/log-in/LogInPage'
@@ -80,6 +81,15 @@ const AppRoutes = () => {
       element: (
         <ProtectedRoute allowedRoles={ADMIN_ROLES}>
           <PurchaseImportPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: ROUTE_NAMES.orders,
+      element: (
+        <ProtectedRoute allowedRoles={ALL_ROLES}>
+          <OrdersPage />
         </ProtectedRoute>
       ),
     },

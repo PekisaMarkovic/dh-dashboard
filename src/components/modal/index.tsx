@@ -6,6 +6,8 @@ import WarehouseModal from '@/src/components/modal/warehouses/WarehouseModal'
 import ConfirmModal from '@/src/components/modal/ConfirmModal'
 import InviteModal from '@/src/components/modal/company/InviteModal'
 import ProformaDetailModal from '@/src/components/modal/proformas/ProformaDetailModal'
+import OrderDetailModal from '@/src/components/modal/orders/OrderDetailModal'
+import CancelOrderModal from '@/src/components/modal/orders/CancelOrderModal'
 import PurchaseImportModal from '@/src/components/modal/purchase-import/PurchaseImportModal'
 import DrinkModal from '@/src/components/modal/drinks/DrinkModal'
 import CategoryModal from '@/src/components/modal/categories/CategoryModal'
@@ -38,6 +40,12 @@ const MainModal = ({ variant }: Props) => {
 
       case ModalEnums.PROFORMA_DETAIL:
         return <ProformaDetailModal />
+
+      case ModalEnums.ORDER_DETAIL:
+        return <OrderDetailModal />
+
+      case ModalEnums.ORDER_CANCEL:
+        return <CancelOrderModal />
 
       case ModalEnums.PURCHASE_IMPORT:
         return <PurchaseImportModal />

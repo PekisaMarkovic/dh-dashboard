@@ -9,7 +9,8 @@
       "company": "Company",
       "proformas": "Proforma",
       "website": "Website",
-      "categories": "Categories"
+      "categories": "Categories",
+      "orders": "Orders"
     },
     "leftSidePage": {
       "title": "navigation",
@@ -21,7 +22,8 @@
       "website": "Website",
       "proformas": "Proforma",
       "purchase-import": "Import goods",
-      "categories": "Categories"
+      "categories": "Categories",
+      "orders": "Orders"
     }
   },
   "welcome": "Welcome, {{name}}."

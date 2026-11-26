@@ -8,12 +8,14 @@ import NavigationIcons from '@/src/icons/navigation'
 import Logo from '@/src/icons/Logo'
 import { useRoles } from '@/src/hooks/use-roles'
 import { useHasWebsite } from '@/src/hooks/use-has-website'
+import { useOrdersEnabledQuery } from '@/src/hooks/queries/use-order-queries'
 
 const LeftMenu = () => {
   const { t } = useTranslation(['static'])
   const { pathname } = useLocation()
   const { isAdmin } = useRoles()
   const hasWebsite = useHasWebsite()
+  const isOrderingAllowed = useOrdersEnabledQuery().data === true
 
   return (
     <div className="py-8 px-5 flex flex-col gap-y-8 border-r-1 border-r-lighy-grey border-solid h-full w-full">
@@ -23,7 +25,9 @@ const LeftMenu = () => {
       <div className="px-0.5 flex flex-col gap-y-6">
         <Heading text={t('static:navigation.leftSide.title')} variant="2" size="base" color="grey" />
         <div className="flex flex-col gap-y-4">
-          {LEFT_SIDE_MENU_LINKS.filter((link) => (isAdmin || !link.adminOnly) && (!link.requiresWebsite || hasWebsite)).map(({ text, icon, link }, index) => (
+          {LEFT_SIDE_MENU_LINKS.filter(
+            (link) => (isAdmin || !link.adminOnly) && (!link.requiresWebsite || hasWebsite) && (!link.requiresOrdering || isOrderingAllowed),
+          ).map(({ text, icon, link }, index) => (
             <NavigationLink
               isActiv={checkIsLinkActiv(pathname, link)}
               href={link}

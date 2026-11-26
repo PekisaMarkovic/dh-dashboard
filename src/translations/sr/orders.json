@@ -1,0 +1,53 @@
+{
+  "title": "Porudžbine",
+  "subtitle": "Porudžbine sa vašeg sajta, najnovije prve. Kliknite na porudžbinu da vidite pića i promenite status (U dostavi kad je kurir preuzme, Dostavljena kad je preda).",
+  "filterStatus": "Status",
+  "allStatuses": "Svi statusi",
+  "empty": "Nema porudžbina.",
+  "open": "Otvori",
+  "status": {
+    "new": "Nova",
+    "in_progress": "U dostavi",
+    "delivered": "Dostavljena",
+    "cancelled": "Otkazana"
+  },
+  "action": {
+    "cancelled": "Otkaži"
+  },
+  "statusChanged": "Porudžbina #{{number}}: {{status}}.",
+  "table": {
+    "number": "Broj",
+    "buyer": "Kupac",
+    "pickupDate": "Dostava",
+    "createdAt": "Stigla",
+    "total": "Ukupno",
+    "status": "Status"
+  },
+  "detail": {
+    "title": "Porudžbina #{{number}}",
+    "pickupDate": "Dan dostave",
+    "buyer": "Kupac",
+    "phone": "Telefon",
+    "email": "Email",
+    "createdAt": "Stigla",
+    "address": "Adresa za dostavu",
+    "cancelReason": "Razlog otkazivanja",
+    "noReason": "Nije naveden"
+  },
+  "items": {
+    "name": "Piće",
+    "quantity": "Količina",
+    "price": "Cena",
+    "amount": "Iznos",
+    "total": "Ukupno"
+  },
+  "cancel": {
+    "title": "Otkazivanje porudžbine #{{number}}",
+    "message": "Kupac će dobiti mejl da je porudžbina otkazana, sa razlogom ako ga napišete.",
+    "reason": "Razlog (nije obavezan)",
+    "reasonPlh": "npr. Nemamo više ovo piće na stanju.",
+    "back": "Nazad",
+    "confirm": "Otkaži porudžbinu",
+    "done": "Porudžbina #{{number}} je otkazana, kupcu je poslat mejl."
+  }
+}

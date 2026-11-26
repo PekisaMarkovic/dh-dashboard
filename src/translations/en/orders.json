@@ -1,0 +1,53 @@
+{
+  "title": "Orders",
+  "subtitle": "The orders from your website, the newest first. Click an order to see the drinks and change the status (In progress when the courier takes it, Delivered when it is handed over).",
+  "filterStatus": "Status",
+  "allStatuses": "All statuses",
+  "empty": "No orders.",
+  "open": "Open",
+  "status": {
+    "new": "New",
+    "in_progress": "In progress",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled"
+  },
+  "action": {
+    "cancelled": "Cancel"
+  },
+  "statusChanged": "Order #{{number}}: {{status}}.",
+  "table": {
+    "number": "Number",
+    "buyer": "Buyer",
+    "pickupDate": "Delivery",
+    "createdAt": "Came",
+    "total": "Total",
+    "status": "Status"
+  },
+  "detail": {
+    "title": "Order #{{number}}",
+    "pickupDate": "Delivery day",
+    "buyer": "Buyer",
+    "phone": "Phone",
+    "email": "Email",
+    "createdAt": "Came",
+    "address": "Delivery address",
+    "cancelReason": "Why it was cancelled",
+    "noReason": "Not given"
+  },
+  "items": {
+    "name": "Drink",
+    "quantity": "Quantity",
+    "price": "Price",
+    "amount": "Amount",
+    "total": "Total"
+  },
+  "cancel": {
+    "title": "Cancel the order #{{number}}",
+    "message": "The buyer gets an email that the order is cancelled, with the reason if you write one.",
+    "reason": "Reason (optional)",
+    "reasonPlh": "e.g. We no longer have this drink.",
+    "back": "Back",
+    "confirm": "Cancel the order",
+    "done": "Order #{{number}} is cancelled, the buyer got an email."
+  }
+}

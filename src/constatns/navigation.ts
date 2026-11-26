@@ -8,11 +8,14 @@ interface IMenuLink {
   adminOnly?: boolean
   // shown only when the company has a white label website (the clients table has a row for it)
   requiresWebsite?: boolean
+  // shown only when the website of the company lets the visitors order (clients.is_ordering_allowed)
+  requiresOrdering?: boolean
 }
 
 // most used first: proforma, drinks, customers, then the warehouses that are set up once
 export const LEFT_SIDE_MENU_LINKS: IMenuLink[] = [
   { text: 'proformas', icon: 'Proforma', link: ROUTE_NAMES.proformas },
+  { text: 'orders', icon: 'Order', link: ROUTE_NAMES.orders, requiresOrdering: true },
   { text: 'drinks', icon: 'Drink', link: ROUTE_NAMES.drinks },
   { text: 'categories', icon: 'Category', link: ROUTE_NAMES.categories },
   { text: 'purchaseImport', icon: 'Import', link: ROUTE_NAMES.purchaseImport, adminOnly: true },

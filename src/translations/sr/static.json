@@ -9,7 +9,8 @@
       "company": "Kompanija",
       "proformas": "Predračun",
       "website": "Web sajt",
-      "categories": "Kategorije"
+      "categories": "Kategorije",
+      "orders": "Porudžbine"
     },
     "leftSidePage": {
       "title": "navigacija",
@@ -21,7 +22,8 @@
       "website": "Web sajt",
       "proformas": "Predračun",
       "purchase-import": "Uvoz robe",
-      "categories": "Kategorije"
+      "categories": "Kategorije",
+      "orders": "Porudžbine"
     }
   },
   "welcome": "Dobrodošli, {{name}}."

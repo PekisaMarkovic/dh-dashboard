@@ -10,6 +10,7 @@ import enDrinks from './en/drinks.json'
 import enCustomers from './en/customers.json'
 import enPurchase from './en/purchase.json'
 import enProforma from './en/proforma.json'
+import enOrders from './en/orders.json'
 import profile from './en/user/profile.json'
 
 import srGeneral from './sr/general.json'
@@ -22,6 +23,7 @@ import srCustomers from './sr/customers.json'
 import srCompany from './sr/company.json'
 import srPurchase from './sr/purchase.json'
 import srProforma from './sr/proforma.json'
+import srOrders from './sr/orders.json'
 import srProfile from './sr/user/profile.json'
 import enWebsite from './en/website.json'
 import srWebsite from './sr/website.json'
@@ -40,6 +42,7 @@ export const resources = {
     customer: enCustomers,
     company: enCompany,
     proforma: enProforma,
+    order: enOrders,
     purchase: enPurchase,
     website: enWebsite,
   },
@@ -54,6 +57,7 @@ export const resources = {
     customer: srCustomers,
     company: srCompany,
     proforma: srProforma,
+    order: srOrders,
     purchase: srPurchase,
     website: srWebsite,
   },

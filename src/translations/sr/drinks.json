@@ -27,5 +27,24 @@
     "sent": "Poslato na {{recipients}} adrese: {{critical}} kritičnih, {{warning}} za upozorenje.",
     "nothingLow": "Ništa nije na izmaku, mejl nije poslat.",
     "noRecipients": "Nema kome da se pošalje mejl."
+  },
+  "filterCategory": "Kategorija",
+  "allCategories": "Sve kategorije",
+  "categories": {
+    "add": "Dodaj kategoriju",
+    "search": "Pretraži kategorije..",
+    "empty": "Nema pronađenih kategorija.",
+    "table": {
+      "name": "Naziv",
+      "drinks": "Broj pića"
+    },
+    "addTitle": "Dodaj kategoriju",
+    "editTitle": "Izmeni kategoriju",
+    "name": "Naziv",
+    "namePlh": "npr. Pivo",
+    "deleteTitle": "Brisanje kategorije",
+    "deleteConfirm_one": "Obrisati kategoriju „{{name}}“? {{count}} piće ostaje, samo više nije u ovoj kategoriji.",
+    "deleteConfirm_few": "Obrisati kategoriju „{{name}}“? {{count}} pića ostaju, samo više nisu u ovoj kategoriji.",
+    "deleteConfirm_other": "Obrisati kategoriju „{{name}}“? Pića ({{count}}) ostaju, samo više nisu u ovoj kategoriji."
   }
 }

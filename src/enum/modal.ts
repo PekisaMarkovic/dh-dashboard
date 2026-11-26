@@ -1,6 +1,7 @@
 export enum ModalEnums {
   WAREHOUSE = 'WAREHOUSE',
   DRINK = 'DRINK',
+  CATEGORY = 'CATEGORY',
   CUSTOMER = 'CUSTOMER',
   COMPANY = 'COMPANY',
   CONFIRM = 'CONFIRM',

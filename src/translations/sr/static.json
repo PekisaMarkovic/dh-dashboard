@@ -8,7 +8,8 @@
       "customers": "Kupci",
       "company": "Kompanija",
       "proformas": "Predračun",
-      "website": "Web sajt"
+      "website": "Web sajt",
+      "categories": "Kategorije"
     },
     "leftSidePage": {
       "title": "navigacija",
@@ -19,7 +20,8 @@
       "profile": "Profil",
       "website": "Web sajt",
       "proformas": "Predračun",
-      "purchase-import": "Uvoz robe"
+      "purchase-import": "Uvoz robe",
+      "categories": "Kategorije"
     }
   },
   "welcome": "Dobrodošli, {{name}}."

@@ -1,5 +1,5 @@
 import { ChangeEventHandler, Fragment, ReactNode, useEffect, useRef, useState } from 'react'
-import DropdownIcon from '@/src/public/images/general/select-dropdown-arrow.svg'
+import GeneralIcons from '@/src/icons/general'
 import Divider from '../divider/Divider'
 import MultySelectedOption from './partials/MultySelectedOption'
 import CheckboxOption from '../checkbox/CheckboxOption'
@@ -7,7 +7,6 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import Label from '../typography/Label'
 import ErrorMessage from '../typography/ErrorMessage'
 import get from 'lodash.get'
-import SearchIcon from '@/public/images/general/search.svg'
 import { useTranslation } from 'react-i18next'
 import { OVERFLOW_OPTION } from '@/src/constatns/select'
 import { Nullable, SelectOption } from '@/src/interfaces'
@@ -51,7 +50,8 @@ const MultySelect = ({
   const occupiedKeys = occupied.map((opt: SelectOption) => opt?.value)
   const [open, setOpen] = useState<boolean>(false)
   const [inputValue, setInputvalue] = useState('')
-  const [flitered, setFiltered] = useState(options)
+  // from the options on every render, so options that load later (from the api) are shown too
+  const flitered = options.filter((opt) => opt.name.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()))
   const [isReverse, setIsReverse] = useState<boolean>(false)
   const scrollableDivRef = useRef<Nullable<HTMLDivElement>>(null)
   const [isSearching, setIsSearching] = useState<boolean>(false)
@@ -99,7 +99,6 @@ const MultySelect = ({
   const handleOnChangeInput: ChangeEventHandler<HTMLInputElement> = (e) => {
     setIsSearching(true)
     setInputvalue(e.target.value)
-    setFiltered(options.filter((opt) => opt.name.toLocaleLowerCase().includes(e.target.value?.toLocaleLowerCase())))
   }
 
   const handleIntersection = (entries: IntersectionObserverEntry[]) => {
@@ -123,7 +122,6 @@ const MultySelect = ({
 
       if (!open) {
         setInputvalue('')
-        setFiltered(options)
       }
     }
   }, [scrollableDivRef, open])
@@ -164,7 +162,7 @@ const MultySelect = ({
           <p className="flex-1 font-poppins text-sm text-grey">{placeholder}</p>
         )}
 
-        <DropdownIcon className={`${open ? 'rotate-180' : ''}`} />
+        <GeneralIcons type="ArrowSelect" className={`${open ? 'rotate-180' : ''}`} />
       </div>
 
       {isExtended && selected && (
@@ -195,7 +193,10 @@ const MultySelect = ({
               className={`shadow-drop-down bg-white rounded-xs-plus max-h-60 overflow-y-scroll border-1 border-light-grey-alt`}
             >
               <div className="flex items-center gap-x-1 px-3 border-1 border-light-grey-alt mx-2 mt-4 mb-3 rounded-xxl">
-                <SearchIcon />
+                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-grey" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" />
+                </svg>
                 <input
                   autoComplete="off"
                   value={inputValue}

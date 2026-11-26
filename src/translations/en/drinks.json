@@ -27,5 +27,23 @@
     "sent": "Sent to {{recipients}} people: {{critical}} critical, {{warning}} warning.",
     "nothingLow": "Nothing is low, no email was sent.",
     "noRecipients": "There is nobody to send the email to."
+  },
+  "filterCategory": "Category",
+  "allCategories": "All categories",
+  "categories": {
+    "add": "Add category",
+    "search": "Search categories..",
+    "empty": "No categories found.",
+    "table": {
+      "name": "Name",
+      "drinks": "Drinks"
+    },
+    "addTitle": "Add category",
+    "editTitle": "Edit category",
+    "name": "Name",
+    "namePlh": "e.g. Beer",
+    "deleteTitle": "Delete category",
+    "deleteConfirm_one": "Delete the category “{{name}}”? {{count}} drink stays, it is only no longer in this category.",
+    "deleteConfirm_other": "Delete the category “{{name}}”? The drinks ({{count}}) stay, they are only no longer in this category."
   }
 }

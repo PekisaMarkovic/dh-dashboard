@@ -5,7 +5,8 @@ import { QUERY_KEYS } from '@/src/constatns/query-keys'
 /**
  * Call the right one after something was changed, so the lists that show it load again.
  * It says in one place what depends on what:
- * - a drink changed: the lists of drinks
+ * - a drink changed: the lists of drinks and the categories (their numbers of drinks)
+ * - a category changed: the categories and the drinks (they show their categories)
  * - a warehouse changed: the warehouses and the drinks
  * - a proforma was made or returned: the proformas and the drinks (the stock changed)
  * - a customer, the company or an invitation changed: only their own data
@@ -19,7 +20,8 @@ export const useRefreshData = () => {
     }
 
     return {
-      afterDrinkChange: () => reload(QUERY_KEYS.drinks),
+      afterDrinkChange: () => reload(QUERY_KEYS.drinks, QUERY_KEYS.categories),
+      afterCategoryChange: () => reload(QUERY_KEYS.categories, QUERY_KEYS.drinks),
       afterWarehouseChange: () => reload(QUERY_KEYS.warehouses, QUERY_KEYS.drinks),
       afterProformaChange: () => reload(QUERY_KEYS.proformas, QUERY_KEYS.proforma, QUERY_KEYS.drinks),
       // a document was read (a new line of the history) or added to the stock (the drinks changed too)

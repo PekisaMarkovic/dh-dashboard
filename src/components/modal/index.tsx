@@ -8,6 +8,7 @@ import InviteModal from '@/src/components/modal/company/InviteModal'
 import ProformaDetailModal from '@/src/components/modal/proformas/ProformaDetailModal'
 import PurchaseImportModal from '@/src/components/modal/purchase-import/PurchaseImportModal'
 import DrinkModal from '@/src/components/modal/drinks/DrinkModal'
+import CategoryModal from '@/src/components/modal/categories/CategoryModal'
 import CustomerModal from '@/src/components/modal/customers/CustomerModal'
 import CompanyModal from '@/src/components/modal/company/CompanyModal'
 
@@ -25,6 +26,9 @@ const MainModal = ({ variant }: Props) => {
 
       case ModalEnums.DRINK:
         return <DrinkModal />
+
+      case ModalEnums.CATEGORY:
+        return <CategoryModal />
 
       case ModalEnums.COMPANY:
         return <CompanyModal />

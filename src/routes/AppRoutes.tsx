@@ -5,6 +5,7 @@ import { RoleEnums } from '@/src/enum'
 import WarehousesPage from '@/src/pages/warehouses/WarehousesPage'
 import PurchaseImportPage from '@/src/pages/purchase-import/PurchaseImportPage'
 import DrinksPage from '@/src/pages/drinks/DrinksPage'
+import CategoriesPage from '@/src/pages/categories/CategoriesPage'
 import EditProformaPage from '@/src/pages/proformas/EditProformaPage'
 import CreateProformaPage from '@/src/pages/proformas/CreateProformaPage'
 import CustomersPage from '@/src/pages/customers/CustomersPage'
@@ -61,6 +62,15 @@ const AppRoutes = () => {
       element: (
         <ProtectedRoute allowedRoles={ALL_ROLES}>
           <DrinksPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: ROUTE_NAMES.categories,
+      element: (
+        <ProtectedRoute allowedRoles={ALL_ROLES}>
+          <CategoriesPage />
         </ProtectedRoute>
       ),
     },

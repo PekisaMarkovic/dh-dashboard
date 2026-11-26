@@ -1,12 +1,13 @@
 import WarehouseIcon from '@/src/icons/navigation/WarehouseIcon'
 import DrinkIcon from '@/src/icons/navigation/DrinkIcon'
+import CategoryIcon from '@/src/icons/navigation/CategoryIcon'
 import ProformaIcon from '@/src/icons/navigation/ProformaIcon'
 import CompanyIcon from '@/src/icons/navigation/CompanyIcon'
 import ImportIcon from '@/src/icons/navigation/ImportIcon'
 import CustomerIcon from '@/src/icons/navigation/CustomerIcon'
 import WebsiteIcon from '@/src/icons/navigation/WebsiteIcon'
 
-export type NavigationIconType = 'Warehouse' | 'Drink' | 'Customer' | 'Proforma' | 'Company' | 'Import' | 'Website'
+export type NavigationIconType = 'Warehouse' | 'Drink' | 'Category' | 'Customer' | 'Proforma' | 'Company' | 'Import' | 'Website'
 
 interface Props extends React.SVGProps<SVGSVGElement> {
   type: NavigationIconType
@@ -18,6 +19,8 @@ const NavigationIcons = ({ type, ...rest }: Props) => {
       return <WarehouseIcon {...rest} />
     case 'Drink':
       return <DrinkIcon {...rest} />
+    case 'Category':
+      return <CategoryIcon {...rest} />
     case 'Customer':
       return <CustomerIcon {...rest} />
     case 'Proforma':

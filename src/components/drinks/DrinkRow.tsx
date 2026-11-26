@@ -28,6 +28,17 @@ const DrinkRow = ({ drink, warehouseName, dropdownOptions }: Props) => {
       </TableCell>
       <TableCell isTitle label={t('drink:table.name')} className="col-span-2 order-first md:order-none">
         <Paragraph text={drink.name} size="sm" color="black" />
+        {!!drink.categories?.length && (
+          <div className="mt-1 flex flex-wrap gap-1">
+            {[...drink.categories]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((category) => (
+                <span key={category.categoryId} className="font-poppins rounded-full bg-green-transparent px-2 py-0.5 text-xs text-green">
+                  {category.name}
+                </span>
+              ))}
+          </div>
+        )}
       </TableCell>
       <TableCell label={t('drink:table.warehouse')}>
         <Paragraph text={warehouseName} size="sm" color="black" />

@@ -8,15 +8,17 @@ import InputText from '@/src/components/core/input/InputText'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
+import { useCategoriesQuery } from '@/src/hooks/queries/use-category-queries'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { useDrinkService } from '@/src/services/use-drink-service'
-import { IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
+import { ICategory, IDrink, IWarehouse, SelectOption } from '@/src/interfaces'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { formatPrice, parsePriceInput } from '@/src/utils/money'
 import { DRINK_VALIDATION } from '@/src/validations/inventory/drink'
 
 const NO_WAREHOUSES: IWarehouse[] = []
+const NO_CATEGORIES: ICategory[] = []
 
 // the same numbers as the api (storage.constants.ts): the api never keeps an image bigger than this
 const IMAGE_RECOMMENDED_SIZE = '1200 x 1200'
@@ -43,6 +45,9 @@ const DrinkModal = () => {
   const [removeImage, setRemoveImage] = useState(false)
   const [imageError, setImageError] = useState('')
   const [preview, setPreview] = useState('')
+  // the categories of the drink, a click on a chip puts it in or takes it out
+  const [categoryIds, setCategoryIds] = useState<number[]>(() => drink?.categories?.map((c) => c.categoryId) ?? [])
+  const categories = useCategoriesQuery().data ?? NO_CATEGORIES
   const shownImage = preview || (removeImage ? '' : drink?.image?.url || '')
   const methods = useForm<FieldValues>({
     resolver: DRINK_VALIDATION as unknown as Resolver<FieldValues>,
@@ -118,6 +123,7 @@ const DrinkModal = () => {
       quantity: Number(values.quantity),
       warningQuantity: Number(values.warningQuantity),
       criticalQuantity: Number(values.criticalQuantity),
+      categoryIds,
     }
 
     try {
@@ -201,6 +207,40 @@ const DrinkModal = () => {
             label={t('warehouse:drinkModal.criticalQuantity')}
             placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
           />
+
+          <div className="flex flex-col gap-y-2">
+            <span className="text-sm font-medium text-gray-700">{t('warehouse:drinkModal.categories')}</span>
+            {categories.length ? (
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => {
+                  const isOn = categoryIds.includes(category.categoryId)
+
+                  return (
+                    <button
+                      key={category.categoryId}
+                      type="button"
+                      aria-pressed={isOn}
+                      onClick={() =>
+                        setCategoryIds((ids) => (isOn ? ids.filter((id) => id !== category.categoryId) : [...ids, category.categoryId]))
+                      }
+                      className={`font-poppins flex items-center gap-1 rounded-full border-1 border-solid px-3 py-1 text-sm transition-colors ${
+                        isOn ? 'border-green bg-green text-white' : 'border-light-grey-alt bg-white text-grey-secondary hover:border-green hover:text-green'
+                      }`}
+                    >
+                      {isOn && (
+                        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="m5 12 5 5 9-10" />
+                        </svg>
+                      )}
+                      {category.name}
+                    </button>
+                  )
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500">{t('warehouse:drinkModal.noCategories')}</p>
+            )}
+          </div>
 
           <div className="flex flex-col gap-y-2">
             <span className="text-sm font-medium text-gray-700">{t('warehouse:drinkModal.image')}</span>

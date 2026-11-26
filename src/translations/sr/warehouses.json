@@ -41,7 +41,9 @@
     "imageRemove": "Ukloni sliku",
     "imageHint": "Najbolje: kvadratna slika {{size}} px, piće (flaša ili čaša) u sredini na beloj ili providnoj pozadini. JPG, PNG ili WebP, do {{maxMb}} MB. Veće slike se smanjuju na {{size}} px, manje se ne uvećavaju. Čuva se kao optimizovan WebP.",
     "imageTooBig": "Slika je veća od {{maxMb}} MB.",
-    "imageNotImage": "Izaberite JPG, PNG ili WebP sliku."
+    "imageNotImage": "Izaberite JPG, PNG ili WebP sliku.",
+    "categories": "Kategorije",
+    "noCategories": "Još nema kategorija. Dodajte ih na stranici „Kategorije“."
   },
   "deleteWarehouseTitle": "Brisanje magacina",
   "deleteWarehouseConfirm": "Da li ste sigurni da želite da obrišete magacin \"{{name}}\"? Ova radnja se ne može poništiti.",

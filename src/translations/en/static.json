@@ -8,7 +8,8 @@
       "customers": "Customers",
       "company": "Company",
       "proformas": "Proforma",
-      "website": "Website"
+      "website": "Website",
+      "categories": "Categories"
     },
     "leftSidePage": {
       "title": "navigation",
@@ -19,7 +20,8 @@
       "profile": "Profile",
       "website": "Website",
       "proformas": "Proforma",
-      "purchase-import": "Import goods"
+      "purchase-import": "Import goods",
+      "categories": "Categories"
     }
   },
   "welcome": "Welcome, {{name}}."

@@ -6,6 +6,7 @@ export const QUERY_KEYS = {
   invitations: ['invitations'] as const,
   warehouses: ['warehouses'] as const,
   drinks: ['drinks'] as const,
+  categories: ['categories'] as const,
   customers: ['customers'] as const,
   proformas: ['proformas'] as const,
   proforma: ['proforma'] as const,

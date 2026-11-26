@@ -2,6 +2,7 @@ export const ROUTE_NAMES = {
   index: '/',
   warehouses: '/warehouses',
   drinks: '/drinks',
+  categories: '/categories',
   purchaseImport: '/purchase-import',
   customers: '/customers',
   proformas: '/proformas',

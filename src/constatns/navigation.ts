@@ -14,6 +14,7 @@ interface IMenuLink {
 export const LEFT_SIDE_MENU_LINKS: IMenuLink[] = [
   { text: 'proformas', icon: 'Proforma', link: ROUTE_NAMES.proformas },
   { text: 'drinks', icon: 'Drink', link: ROUTE_NAMES.drinks },
+  { text: 'categories', icon: 'Category', link: ROUTE_NAMES.categories },
   { text: 'purchaseImport', icon: 'Import', link: ROUTE_NAMES.purchaseImport, adminOnly: true },
   { text: 'customers', icon: 'Customer', link: ROUTE_NAMES.customers },
   { text: 'warehouses', icon: 'Warehouse', link: ROUTE_NAMES.warehouses },

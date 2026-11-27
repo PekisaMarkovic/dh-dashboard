@@ -6,6 +6,8 @@ export const DRINK_VALIDATION = yupResolver(
   Yup.object({
     code: Yup.string().typeError('code').trim().required('code').max(50, 'code'),
     name: Yup.string().typeError('name').trim().required('name').max(150, 'name'),
+    // optional, the same limit as the api
+    description: Yup.string().trim().max(150, 'drinkDescription'),
     // typed like it is shown: 2,304.500 (up to 3 decimals, commas separate thousands)
     price: Yup.string()
       .required('price')

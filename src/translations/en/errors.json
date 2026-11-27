@@ -85,6 +85,7 @@
     "seoTitle": "the SEO title (at most 70 characters)",
     "seoDescription": "the SEO description (at most 160 characters)",
     "pageTitle": "the page name (at most 100 characters)",
-    "slug": "a valid address (lowercase letters, digits and dashes, at most 100 characters)"
+    "slug": "a valid address (lowercase letters, digits and dashes, at most 100 characters)",
+    "drinkDescription": "a description (at most 150 characters)"
   }
 }

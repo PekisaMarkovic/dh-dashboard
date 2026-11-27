@@ -36,6 +36,7 @@
     "seoTitle": "SEO naslov (najviše 70 karaktera)",
     "seoDescription": "SEO opis (najviše 160 karaktera)",
     "pageTitle": "naziv stranice (najviše 100 karaktera)",
-    "slug": "ispravnu adresu (mala slova, brojevi i crtice, najviše 100 karaktera)"
+    "slug": "ispravnu adresu (mala slova, brojevi i crtice, najviše 100 karaktera)",
+    "drinkDescription": "opis (najviše 150 karaktera)"
   }
 }

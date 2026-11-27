@@ -6,6 +6,8 @@ import { IDrink, PageParams, Paginated } from '@/src/interfaces'
 type UpdateDrinkBody = {
   code: string
   name: string
+  // empty removes it
+  description: string
   price: number
   quantity: number
   warningQuantity: number

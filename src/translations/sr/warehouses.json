@@ -43,7 +43,9 @@
     "imageTooBig": "Slika je veća od {{maxMb}} MB.",
     "imageNotImage": "Izaberite JPG, PNG ili WebP sliku.",
     "categories": "Kategorije",
-    "noCategories": "Još nema kategorija. Dodajte ih na stranici „Kategorije“."
+    "noCategories": "Još nema kategorija. Dodajte ih na stranici „Kategorije“.",
+    "description": "Opis (za sajt)",
+    "descriptionPlh": "Kratak opis pića koji kupci vide na sajtu, do 150 karaktera."
   },
   "deleteWarehouseTitle": "Brisanje magacina",
   "deleteWarehouseConfirm": "Da li ste sigurni da želite da obrišete magacin \"{{name}}\"? Ova radnja se ne može poništiti.",

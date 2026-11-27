@@ -5,6 +5,7 @@ import SingleSelect from '@/src/components/core/select/SingleSelect'
 import DrinkImage from '@/src/components/drinks/DrinkImage'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
+import InputTextarea from '@/src/components/core/input/InputTextarea'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import Heading from '@/src/components/core/typography/Heading'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
@@ -24,6 +25,9 @@ const NO_CATEGORIES: ICategory[] = []
 const IMAGE_RECOMMENDED_SIZE = '1200 x 1200'
 const IMAGE_MAX_MB = 5
 const IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp'
+
+// the same as the api (DRINK_DESCRIPTION_MAX): a short text for the detail of the drink on the site
+const DESCRIPTION_MAX = 150
 
 const toOption = (w: IWarehouse): SelectOption => ({ id: String(w.warehouseId), name: w.name, value: String(w.warehouseId) })
 
@@ -54,6 +58,7 @@ const DrinkModal = () => {
     defaultValues: {
       code: drink?.code || '',
       name: drink?.name || '',
+      description: drink?.description || '',
       price: drink ? formatPrice(drink.price) : '',
       quantity: drink ? String(drink.quantity) : '',
       warningQuantity: String(drink?.warningQuantity ?? 0),
@@ -119,6 +124,8 @@ const DrinkModal = () => {
     const body = {
       code: values.code.trim(),
       name: values.name,
+      // empty removes the description
+      description: values.description?.trim() ?? '',
       price: parsePriceInput(values.price) ?? 0,
       quantity: Number(values.quantity),
       warningQuantity: Number(values.warningQuantity),
@@ -174,6 +181,15 @@ const DrinkModal = () => {
             initValue={drink?.name}
             label={t('warehouse:drinkModal.name')}
             placeholder={t('warehouse:drinkModal.namePlh')}
+          />
+
+          <InputTextarea
+            name="description"
+            initValue={drink?.description ?? ''}
+            label={t('warehouse:drinkModal.description')}
+            placeholder={t('warehouse:drinkModal.descriptionPlh')}
+            rows={3}
+            maxChar={DESCRIPTION_MAX}
           />
 
           <InputText

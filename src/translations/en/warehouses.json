@@ -43,7 +43,9 @@
     "imageTooBig": "The image is bigger than {{maxMb}} MB.",
     "imageNotImage": "Choose a JPG, PNG or WebP image.",
     "categories": "Categories",
-    "noCategories": "No categories yet. Add them on the “Categories” page."
+    "noCategories": "No categories yet. Add them on the “Categories” page.",
+    "description": "Description (for the site)",
+    "descriptionPlh": "A short description of the drink that customers see on the site, up to 150 characters."
   },
   "deleteWarehouseTitle": "Delete warehouse",
   "deleteWarehouseConfirm": "Are you sure you want to delete the warehouse \"{{name}}\"? This can not be undone.",

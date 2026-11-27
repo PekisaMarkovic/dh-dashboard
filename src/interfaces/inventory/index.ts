@@ -2,6 +2,8 @@ export interface IDrink {
   drinkId: number
   code: string
   name: string
+  // a short text for the detail of the drink on the site (at most 150 characters)
+  description: string | null
   price: number
   quantity: number
   // below this quantity the drink is orange (0 = off)

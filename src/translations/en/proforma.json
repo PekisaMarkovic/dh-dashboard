@@ -3,7 +3,8 @@
     "warehouse": "Warehouse",
     "warehousePlh": "Select a warehouse",
     "customer": "Customer",
-    "customerPlh": "Select a customer (optional)"
+    "customerPlh": "Select or type a customer (optional)",
+    "customerAdd": "Add customer: \"{{name}}\""
   },
   "noWarehouseTitle": "You need a warehouse first",
   "noWarehouse": "A proforma is made from the drinks of a warehouse. Create a warehouse and add your drinks to start.",

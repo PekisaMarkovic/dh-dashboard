@@ -113,6 +113,8 @@ const CreateProforma = ({ proformaId }: Props) => {
         'customer',
         buyer ? toCustomerOption(buyer) : { id: String(proforma.customerId), name: proforma.customerName || '', value: String(proforma.customerId) },
       )
+    } else if (proforma.customerName) {
+      methods.setValue('customer', { id: '', name: proforma.customerName, value: '' })
     }
 
     // the drinks are known by what was on the proforma, the real ones replace them when a page of the warehouse loads
@@ -193,7 +195,10 @@ const CreateProforma = ({ proformaId }: Props) => {
   const added = byIds(lines)
   const totalCents = added.reduce((sum, d) => sum + lineTotalCents(d, lines[d.drinkId]), 0)
   const totalVatCents = added.reduce((sum, d) => sum + vatCents(lineTotalCents(d, lines[d.drinkId])), 0)
-  const linesPage = usePagedList(added)
+  // the search filters the added drinks too, the totals and the save always use all of them
+  const needle = search.toLocaleLowerCase()
+  const shown = needle ? added.filter((d) => `${d.name} ${d.code}`.toLocaleLowerCase().includes(needle)) : added
+  const linesPage = usePagedList(shown)
   const drafted = byIds(draft)
   const draftCents = drafted.reduce((sum, d) => sum + lineTotalCents(d, draft[d.drinkId] || 0), 0)
   const draftVatCents = drafted.reduce((sum, d) => sum + vatCents(lineTotalCents(d, draft[d.drinkId] || 0)), 0)
@@ -201,6 +206,7 @@ const CreateProforma = ({ proformaId }: Props) => {
   // step 1 -> step 2: the chosen drinks go on the proforma
   const handleNext = () => {
     setLines(Object.fromEntries(Object.entries(draft).filter(([, quantity]) => quantity > 0)))
+    methods.setValue('search', '')
     setView('review')
   }
 
@@ -225,8 +231,8 @@ const CreateProforma = ({ proformaId }: Props) => {
     try {
       const proforma = await createProforma({
         warehouseId,
-        // only when a customer was picked
-        ...(customer?.value && { customerId: Number(customer.value) }),
+        // a picked customer, or a name typed by hand
+        ...(customer?.value ? { customerId: Number(customer.value) } : customer?.name && { customerName: customer.name }),
         items: added.map((d) => ({
           drinkId: d.drinkId,
           quantity: lines[d.drinkId],
@@ -276,6 +282,7 @@ const CreateProforma = ({ proformaId }: Props) => {
       const saved = await updateProforma(proformaId as number, {
         // the buyer can be removed too
         customerId: customer?.value ? Number(customer.value) : null,
+        customerName: customer?.value ? undefined : customer?.name || null,
         items: added.map((d) => ({
           drinkId: d.drinkId,
           quantity: lines[d.drinkId],
@@ -381,8 +388,14 @@ const CreateProforma = ({ proformaId }: Props) => {
             className="mt-1"
           />
 
-          {/* warehouse and search side by side */}
+          {/* the same filters on both steps: search, warehouse, customer */}
           <div className="flex flex-wrap items-start gap-4 mt-6">
+            {(!isPick || drinks.length > 0 || search !== '') && (
+              <div className="w-full sm:w-60">
+                <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
+              </div>
+            )}
+
             <div className="w-full sm:w-60">
               <SingleSelect
                 name="warehouse"
@@ -393,22 +406,15 @@ const CreateProforma = ({ proformaId }: Props) => {
               />
             </div>
 
-            {!isPick && (
-              <div className="w-full sm:w-60">
-                <SingleSelect
-                  name="customer"
-                  label={t('proforma:builder.customer')}
-                  placeholder={t('proforma:builder.customerPlh')}
-                  options={customers.map(toCustomerOption)}
-                />
-              </div>
-            )}
-
-            {isPick && (drinks.length > 0 || search !== '') && (
-              <div className="w-full sm:w-60">
-                <InputText name="search" label={t('g:search')} placeholder={t('drink:search')} />
-              </div>
-            )}
+            <div className="w-full sm:w-60">
+              <SingleSelect
+                name="customer"
+                label={t('proforma:builder.customer')}
+                placeholder={t('proforma:builder.customerPlh')}
+                options={customers.map(toCustomerOption)}
+                createLabel={(name) => t('proforma:builder.customerAdd', { name })}
+              />
+            </div>
           </div>
         </div>
 
@@ -436,7 +442,7 @@ const CreateProforma = ({ proformaId }: Props) => {
             )
           ) : (
             <div>
-              {added.length ? (
+              {shown.length ? (
                 <ProformaLinesList
                   drinks={linesPage.pageItems}
                   quantities={lines}

@@ -25,6 +25,8 @@ type Props = {
   mb?: Spacing
   errorMessageType?: Variant
   onClickCallback?: () => void
+  // set: typed text that matches no option can be picked too, as { id: '', value: '', name: text }
+  createLabel?: (text: string) => string
 }
 
 const SingleSelect = ({
@@ -41,6 +43,7 @@ const SingleSelect = ({
   isDisabled,
   errorMessageType = 'select',
   onClickCallback,
+  createLabel,
 }: Props) => {
   let marginTop = ''
   let marginBottom = ''
@@ -151,6 +154,17 @@ const SingleSelect = ({
     setFiltered(options)
   }, [options])
 
+  const typed = inputValue.trim()
+  const canCreate = !!createLabel && !!typed && !options.some((opt) => opt.name.toLocaleLowerCase() === typed.toLocaleLowerCase())
+
+  const handleCreate = () => {
+    setValue(name, { id: '', value: '', name: typed })
+    setInputvalue(typed)
+    setOpen(false)
+    clearErrors(name)
+    dispatch(handleAllowScroll())
+  }
+
   return (
     <div className={`flex flex-col relative ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} ${marginTop} ${marginBottom}`}>
       <Label htmlFor={name} label={label} isRequired={isRequired} isLabelHidden={isLabelHidden} />
@@ -187,6 +201,9 @@ const SingleSelect = ({
               onScroll={handleScroll}
               className="shadow-drop-down bg-white w-full rounded-xs-plus max-h-60 overflow-y-scroll border-1 border-light-grey-alt border-solid"
             >
+              {canCreate && (
+                <SingleOption handleOnClick={handleCreate} option={{ id: '', value: '', name: createLabel(typed) }} checked={false} />
+              )}
               {flitered.map((option, index) => (
                 <SingleOption
                   handleOnClick={() => {

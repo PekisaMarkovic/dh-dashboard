@@ -16,12 +16,16 @@ type CreateProformaBody = {
   warehouseId?: number
   // the buyer, can be left out
   customerId?: number
+  // a buyer typed by hand, when customerId is left out
+  customerName?: string
   items: ProformaItemBody[]
 }
 
 type UpdateProformaBody = {
   // left out = unchanged, null = no buyer
   customerId?: number | null
+  // a buyer typed by hand, used when customerId is null
+  customerName?: string | null
   // all the items, they replace the old ones
   items: ProformaItemBody[]
 }

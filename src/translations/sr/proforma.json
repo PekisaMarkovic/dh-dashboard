@@ -3,7 +3,8 @@
     "warehouse": "Magacin",
     "warehousePlh": "Izaberite magacin",
     "customer": "Kupac",
-    "customerPlh": "Izaberite kupca (nije obavezno)"
+    "customerPlh": "Izaberite ili upišite kupca (nije obavezno)",
+    "customerAdd": "Dodaj kupca: „{{name}}”"
   },
   "noWarehouseTitle": "Prvo vam treba magacin",
   "noWarehouse": "Predračun se pravi od pića iz magacina. Napravite magacin i dodajte pića da biste počeli.",

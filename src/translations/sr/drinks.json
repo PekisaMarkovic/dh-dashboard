@@ -9,6 +9,12 @@
     "warning": "Upozorenje",
     "critical": "Kritično"
   },
+  "sortBy": "Sortiranje",
+  "sortByName": "Po nazivu",
+  "sort": {
+    "price_asc": "Cena: od najniže",
+    "price_desc": "Cena: od najviše"
+  },
   "filterWarehouse": "Magacin",
   "search": "Pretraži pića po nazivu ili šifri..",
   "table": {

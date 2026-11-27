@@ -7,7 +7,7 @@ import MultySelect from '@/src/components/core/select/MultySelect'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import { ModalEnums } from '@/src/enum'
-import { DrinkStockFilter } from '@/src/services/use-drink-service'
+import { DrinkSort, DrinkStockFilter } from '@/src/services/use-drink-service'
 import { useCategoriesQuery } from '@/src/hooks/queries/use-category-queries'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import { useWarehousesQuery } from '@/src/hooks/queries/use-warehouse-queries'
@@ -23,6 +23,7 @@ import DrinksList from '@/src/modules/drinks/DrinksList'
 
 const NO_WAREHOUSES: IWarehouse[] = []
 const STOCK_FILTERS: DrinkStockFilter[] = ['warning', 'critical']
+const SORTS: DrinkSort[] = ['price_asc', 'price_desc']
 const NO_DRINKS: IDrink[] = []
 const NO_CATEGORIES: ICategory[] = []
 
@@ -41,7 +42,9 @@ const Drinks = () => {
   // the drinks in any of the picked categories, as "1,4" (also the key of the cached page)
   const selectedCategories: SelectOption[] | undefined = useWatch({ control: filterForm.control, name: 'categories' })
   const categoryIds = (selectedCategories ?? []).map((c) => c.value).join(',')
-  const [page, setPage] = usePageState([search, warehouseId, stockLevel, categoryIds])
+  // cleared by picking the selected option again: sorted by name
+  const sort: DrinkSort | undefined = useWatch({ control: filterForm.control, name: 'sort' })?.value || undefined
+  const [page, setPage] = usePageState([search, warehouseId, stockLevel, categoryIds, sort])
   // the warehouses are cached; the drinks come a page at a time, every page and search is cached too
   const warehousesQuery = useWarehousesQuery()
   const drinksQuery = useDrinksQuery({
@@ -50,6 +53,7 @@ const Drinks = () => {
     warehouseId: warehouseId ? Number(warehouseId) : undefined,
     stockLevel,
     categoryIds: categoryIds || undefined,
+    sort,
   })
   const warehouses = warehousesQuery.data ?? NO_WAREHOUSES
   const categories = useCategoriesQuery().data ?? NO_CATEGORIES
@@ -99,6 +103,15 @@ const Drinks = () => {
               label={t('drink:filterStock')}
               placeholder={t('drink:allStock')}
               options={STOCK_FILTERS.map((s) => ({ id: s, name: t(`drink:stock.${s}`), value: s }))}
+            />
+          </div>
+
+          <div className="w-full sm:w-56">
+            <SingleSelect
+              name="sort"
+              label={t('drink:sortBy')}
+              placeholder={t('drink:sortByName')}
+              options={SORTS.map((s) => ({ id: s, name: t(`drink:sort.${s}`), value: s }))}
             />
           </div>
         </FormProvider>

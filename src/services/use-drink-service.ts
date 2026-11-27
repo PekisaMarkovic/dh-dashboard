@@ -22,7 +22,14 @@ type CreateDrinkBody = UpdateDrinkBody & {
 
 export type DrinkStockFilter = 'warning' | 'critical'
 
-export type DrinkListParams = PageParams & { warehouseId?: number; stockLevel?: DrinkStockFilter; categoryIds?: string }
+export type DrinkSort = 'price_asc' | 'price_desc'
+
+export type DrinkListParams = PageParams & {
+  warehouseId?: number
+  stockLevel?: DrinkStockFilter
+  categoryIds?: string
+  sort?: DrinkSort
+}
 
 export type StockDigestResult = { critical: number; warning: number; recipients: number }
 
@@ -32,9 +39,9 @@ export const useDrinkService = () => {
   return useMemo(() => {
     // one page of drinks; without a warehouse it is the drinks of all warehouses
     // categoryIds: "1,4" = the drinks in any of these categories
-    const getDrinks = async ({ warehouseId, stockLevel, categoryIds, search, ...paging }: DrinkListParams) => {
+    const getDrinks = async ({ warehouseId, stockLevel, categoryIds, sort, search, ...paging }: DrinkListParams) => {
       const { data } = await api.get<Paginated<IDrink>>(DrinkApis.getDrinks(), {
-        params: { ...paging, warehouseId, stockLevel, categoryIds, search: search || undefined },
+        params: { ...paging, warehouseId, stockLevel, categoryIds, sort, search: search || undefined },
       })
 
       return data

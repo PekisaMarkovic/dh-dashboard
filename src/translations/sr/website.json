@@ -5,12 +5,7 @@
   "tabs": {
     "label": "Stranice sajta",
     "general": "Opšte informacije",
-    "hero": "Hero",
-    "featured": "Preporučeno",
-    "story": "Priča",
-    "promo": "Promo",
-    "contacts": "Poruke",
-    "seo": "SEO"
+    "contacts": "Poruke"
   },
   "save": "Sačuvaj",
   "saved": "Izmene su sačuvane.",
@@ -42,10 +37,6 @@
     "paragraph1": "Prvi pasus",
     "paragraph2": "Drugi pasus"
   },
-  "hero": {
-    "title": "Hero",
-    "subtitle": "Prvo što posetilac vidi na vrhu stranice: veliki naslov, tekst i dugme preko slike u pozadini."
-  },
   "featured": {
     "title": "Preporučeno iz naše ponude",
     "subtitle": "Naslov sekcije sa pićima na početnoj strani i pića koja se u njoj prikazuju.",
@@ -64,18 +55,9 @@
     "firstDrinks": "Prva pića sa karte, kucajte za pretragu",
     "pickedOdd": "Broj pića mora biti paran (2, 4, 6, 8 ili 10) jer se na sajtu prikazuju u parovima: dodajte još jedno ili uklonite jedno."
   },
-  "story": {
-    "title": "Priča iza dobrog provoda",
-    "subtitle": "Sekcija koja predstavlja vašu prodavnicu: naslov, dva pasusa, dugme i slika."
-  },
-  "promo": {
-    "title": "Promo sekcija",
-    "subtitle": "Sekcija koja poziva posetioce na akciju (akcija, događaj, usluga, poruka): naslov, tekst, dugme i slika."
-  },
   "image": {
     "hero": "Slika u pozadini",
     "story": "Slika",
-    "promo": "Slika",
     "logo": "Logo",
     "choose": "Izaberi sliku",
     "change": "Promeni sliku",
@@ -87,13 +69,13 @@
     "noImage": "Nema slike",
     "hintHero": "Najbolje: široka slika 1920 × 1080 px (16:9), važni deo u sredini jer se na telefonu seče po stranama. JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 2000 px.",
     "hintStory": "Najbolje: slika 1200 × 900 px (4:3). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px.",
-    "hintPromo": "Najbolje: uspravna slika 960 × 1200 px (4:5). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px.",
     "hintLogo": "Najbolje: providna pozadina, oko 600 × 200 px. PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 600 px.",
     "required": "Slika je obavezna.",
-    "info": "{{width}} × {{height}} px · {{size}} · WebP",
+    "info": "Slika",
     "open": "Otvori sliku u punoj veličini",
     "og": "Slika za deljenje",
-    "hintOg": "Najbolje: 1200 × 630 px (odnos 1.91:1), glavni sadržaj u sredini. JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP."
+    "hintOg": "Najbolje: 1200 × 630 px (odnos 1.91:1), glavni sadržaj u sredini. JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP.",
+    "hintInfo": "Najbolje: uspravna slika 960 × 1200 px (4:5). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px."
   },
   "contacts": {
     "title": "Ko vas je kontaktirao",
@@ -112,7 +94,7 @@
   },
   "publish": {
     "title": "Objavljivanje sajta",
-    "draftText": "Sajt je u izradi: posetioci vide stranicu „Sajt je u izradi“ i sajt je sakriven od Google-a. Kad popunite sve sekcije i otpremite sve slike, možete ga objaviti.",
+    "draftText": "Sajt je u izradi: posetioci vide stranicu „Sajt je u izradi“ i sajt je sakriven od Google-a. Kad popunite opšte informacije i sve na objavljenim stranicama, možete ga objaviti.",
     "publishedText": "Sajt je objavljen i vidljiv svima.",
     "publishedAt": "Objavljen: {{date}}",
     "button": "Objavi sajt",
@@ -135,37 +117,21 @@
       "workingHours": "Radno vreme",
       "logo": "Logo"
     },
-    "hero": {
+    "pageSeo": "{{title}} (SEO)",
+    "page": {
+      "seoTitle": "Naslov",
+      "seoDescription": "Opis",
+      "seoImage": "Slika za deljenje"
+    },
+    "section": {
       "title": "Naslov",
       "subtitle": "Podnaslov",
       "text": "Tekst",
       "buttonText": "Tekst dugmeta",
-      "image": "Slika u pozadini"
-    },
-    "featured": {
-      "title": "Naslov",
-      "buttonText": "Tekst dugmeta",
-      "drinks": "Bar jedno preporučeno piće"
-    },
-    "story": {
-      "title": "Naslov",
       "paragraph1": "Prvi pasus",
       "paragraph2": "Drugi pasus",
-      "buttonText": "Tekst dugmeta",
-      "image": "Slika"
-    },
-    "promo": {
-      "title": "Naslov",
-      "text": "Tekst",
-      "buttonText": "Tekst dugmeta",
-      "image": "Slika"
-    },
-    "seo": {
-      "title": "Naslov sajta",
-      "description": "Opis sajta",
-      "menuTitle": "Naslov stranice sa kartom",
-      "menuDescription": "Opis stranice sa kartom",
-      "image": "Slika za deljenje"
+      "image": "Slika",
+      "drinks": "Bar jedno preporučeno piće"
     }
   },
   "placeholders": {
@@ -185,27 +151,102 @@
       "paragraph2": "Pozovite posetioce da vas posete ili pitaju za savet.",
       "buttonText": "npr. Posetite nas"
     },
-    "promo": {
+    "seo": {
+      "title": "npr. Naziv radnje | Piće u Beogradu",
+      "description": "npr. Veliki izbor piva, vina i žestokih pića u Beogradu. Pogledajte kartu pića sa cenama i svratite do nas."
+    },
+    "info": {
       "title": "npr. Specijalna ponuda",
       "text": "Kratak tekst o akciji, događaju, usluzi ili bilo čemu što želite da istaknete.",
       "buttonText": "npr. Kontaktirajte nas"
-    },
-    "seo": {
-      "title": "npr. Naziv radnje | Piće u Beogradu",
-      "description": "npr. Veliki izbor piva, vina i žestokih pića u Beogradu. Pogledajte kartu pića sa cenama i svratite do nas.",
-      "menuTitle": "npr. Karta pića | Cene piva, vina i žestokih pića",
-      "menuDescription": "npr. Kompletna karta pića sa cenama: pivo, vino, žestoka i bezalkoholna pića u našoj radnji."
     }
   },
   "seo": {
     "title": "SEO: Google i deljenje",
-    "subtitle": "Ovo Google prikazuje u rezultatima pretrage i ovo se vidi kada se link sajta deli (Viber, WhatsApp, Facebook). Pišite jasno i uključite grad i čime se bavite.",
+    "subtitle": "Ovo Google prikazuje u rezultatima pretrage za ovu stranicu i ovo se vidi kada se njen link deli (Viber, WhatsApp, Facebook). Pišite jasno i uključite grad i čime se bavite.",
     "fields": {
-      "title": "Naslov sajta (do 70 karaktera)",
-      "description": "Opis sajta (do 160 karaktera)",
-      "menuTitle": "Naslov stranice sa kartom pića",
-      "menuDescription": "Opis stranice sa kartom pića (do 160 karaktera)"
+      "title": "Naslov stranice (do 70 karaktera)",
+      "description": "Opis stranice (do 160 karaktera)"
     },
-    "ogSubtitle": "Slika koja se prikazuje kada neko podeli link vašeg sajta."
+    "ogSubtitle": "Slika koja se prikazuje kada neko podeli link vašeg sajta.",
+    "ogSubtitlePage": "Slika koja se prikazuje kada neko podeli link ove stranice. Ako je nema, koristi se slika početne stranice."
+  },
+  "types": {
+    "hero": "Hero",
+    "featured": "Preporučeno",
+    "story": "Priča",
+    "info": "Info"
+  },
+  "typeHints": {
+    "hero": "Prvo što posetilac vidi na vrhu stranice: veliki naslov, tekst i dugme preko slike u pozadini.",
+    "featured": "Naslov sekcije sa pićima na početnoj strani i pića koja se u njoj prikazuju.",
+    "story": "Sekcija koja predstavlja vašu prodavnicu: naslov, dva pasusa, dugme i slika.",
+    "info": "Sekcija koja poziva posetioce na akciju (akcija, događaj, usluga, poruka): naslov, tekst, dugme i slika."
+  },
+  "section": {
+    "back": "Nazad na stranicu",
+    "delete": "Obriši sekciju",
+    "deleteTitle": "Obrisati sekciju „{{name}}”?",
+    "deleteMessage": "Sekcija se briše sa sajta zajedno sa svojom slikom.",
+    "deleteShared": "Sekcija je na {{count}} stranice i biće obrisana sa svih, zajedno sa slikom.",
+    "deleted": "Sekcija je obrisana.",
+    "shared": "Ova sekcija je na stranicama: {{pages}}. Izmene se vide na svima."
+  },
+  "content": {
+    "title": "Sekcije stranice",
+    "subtitle": "Dodajte i organizujte sadržaj stranice. Kliknite na sekciju da izmenite njen tekst i sliku.",
+    "visible": "Vidljiva",
+    "hidden": "Skrivena",
+    "show": "Prikaži",
+    "hide": "Sakrij",
+    "up": "Pomeri gore",
+    "down": "Pomeri dole",
+    "edit": "Izmeni",
+    "remove": "Ukloni sa stranice",
+    "removed": "Sekcija je uklonjena sa stranice.",
+    "add": "Dodaj sekciju",
+    "added": "Sekcija je dodata.",
+    "newSection": "Nova sekcija",
+    "existingSection": "Ili dodajte postojeću sekciju",
+    "existingHint": "Ista sekcija može biti na više stranica: izmena se vidi na svima.",
+    "cancel": "Odustani",
+    "empty": "Stranica još nema sekcija.",
+    "incomplete": "Nešto nedostaje"
+  },
+  "pages": {
+    "title": "Stranice",
+    "add": "Nova stranica",
+    "titlePlh": "Naziv nove stranice",
+    "create": "Napravi stranicu",
+    "created": "Stranica je napravljena kao nacrt.",
+    "draft": "nacrt",
+    "siteSettings": "Podešavanja sajta"
+  },
+  "page": {
+    "tabs": "Delovi stranice",
+    "content": "Sadržaj",
+    "seo": "SEO",
+    "settings": "Podešavanja",
+    "statusPublished": "Objavljena",
+    "statusDraft": "Nacrt",
+    "settingsTitle": "Stranica",
+    "title": "Naziv stranice",
+    "titlePlh": "npr. O nama",
+    "slug": "Adresa",
+    "slugPlh": "npr. o-nama",
+    "slugHint": "Mala slova, brojevi i crtice, npr. o-nama: stranica je tada na adresi /o-nama.",
+    "systemSlug": "Adresa početne stranice i karte pića se ne menja.",
+    "statusTitle": "Objavljivanje stranice",
+    "publishedText": "Stranica je na sajtu i u meniju.",
+    "draftText": "Stranica je nacrt: nije na sajtu dok je ne objavite.",
+    "systemStatus": "Početna stranica i karta pića su uvek na sajtu i ne mogu se obrisati.",
+    "publish": "Objavi stranicu",
+    "unpublish": "Vrati u nacrt",
+    "published": "Stranica je objavljena.",
+    "unpublished": "Stranica je vraćena u nacrt.",
+    "delete": "Obriši stranicu",
+    "deleteTitle": "Obrisati stranicu „{{title}}”?",
+    "deleteMessage": "Stranica se briše sa sajta. Njene sekcije ostaju i možete ih dodati na drugu stranicu.",
+    "deleted": "Stranica je obrisana."
   }
 }

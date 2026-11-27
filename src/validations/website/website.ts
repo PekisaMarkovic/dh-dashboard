@@ -35,16 +35,20 @@ export const STORY_VALIDATION = yupResolver(
   }),
 )
 
-export const PROMO_VALIDATION = yupResolver(
+export const INFO_VALIDATION = yupResolver(
   Yup.object({ title: required('title', 150), text: required('text', 1000), buttonText: required('buttonText', 60) }),
 )
 
-// the messages are the names of the SEO fields (seoTitle...), the form fields are title, description, menuTitle, menuDescription
-export const SEO_VALIDATION = yupResolver(
+// the messages are the names of the SEO fields (seoTitle...), the form fields are title and description
+export const SEO_VALIDATION = yupResolver(Yup.object({ title: required('seoTitle', 70), description: required('seoDescription', 160) }))
+
+// lowercase letters, digits and single dashes, the same as the api (SLUG_PATTERN)
+export const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
+export const PAGE_VALIDATION = yupResolver(
   Yup.object({
-    title: required('seoTitle', 70),
-    description: required('seoDescription', 160),
-    menuTitle: required('menuTitle', 70),
-    menuDescription: required('menuDescription', 160),
+    title: required('pageTitle', 100),
+    // the home page has no address, its field is disabled
+    slug: Yup.string().trim().max(100, 'slug').matches(SLUG_PATTERN, { message: 'slug', excludeEmptyString: true }),
   }),
 )

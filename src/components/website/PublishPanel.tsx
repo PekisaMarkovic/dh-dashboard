@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
@@ -12,9 +13,31 @@ import { useWebsiteService } from '@/src/services/use-website-service'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
+import { sectionLabel } from '@/src/utils/website'
 
-// the sections in the order of the tabs
-const SECTIONS = ['general', 'hero', 'featured', 'story', 'promo', 'seo']
+/** What is missing, grouped: the general info, the SEO of a page (by its title), a section (by its name) */
+const groupMissing = (website: IWebsite, t: TFunction) => {
+  const groups = new Map<string, string[]>()
+
+  for (const key of website.completeness.missing) {
+    const [kind, id, field] = key.split('.')
+    let group = t('website:tabs.general')
+    let item = t(`website:missing.general.${id}`)
+
+    if (kind === 'page') {
+      group = t('website:missing.pageSeo', { title: website.pages.find((page) => String(page.pageId) === id)?.title ?? '' })
+      item = t(`website:missing.page.${field}`)
+    } else if (kind === 'section') {
+      const section = website.sections.find((s) => String(s.sectionId) === id)
+      group = section ? sectionLabel(section, t) : ''
+      item = t(`website:missing.section.${field}`)
+    }
+
+    groups.set(group, [...(groups.get(group) ?? []), item])
+  }
+
+  return [...groups]
+}
 
 const StatusBadge = ({ isPublished, text }: { isPublished: boolean; text: string }) => (
   <span
@@ -26,7 +49,7 @@ const StatusBadge = ({ isPublished, text }: { isPublished: boolean; text: string
 
 /**
  * The state of the site (draft or published) and what is missing before it can be published.
- * A site is a draft until every section is filled in and every picture is uploaded, only then it can be published.
+ * A site is a draft until the general info and everything on its published pages is filled in, only then it can be published.
  */
 const PublishPanel = ({ website }: { website: IWebsite }) => {
   const { t } = useTranslation(['website', 'g'])
@@ -35,7 +58,7 @@ const PublishPanel = ({ website }: { website: IWebsite }) => {
   const { publishWebsite, unpublishWebsite } = useWebsiteService()
   const { afterWebsiteChange } = useRefreshData()
   const isPublished = website.status === 'published'
-  const { isComplete, missing } = website.completeness
+  const { isComplete } = website.completeness
 
   const run = async (action: () => Promise<unknown>, doneText: string) => {
     try {
@@ -85,15 +108,11 @@ const PublishPanel = ({ website }: { website: IWebsite }) => {
         <div className="mt-4">
           <Paragraph text={isPublished ? t('website:publish.incompletePublished') : t('website:publish.missingTitle')} size="sm" color="red" weight="medium" />
           <ul className="mt-2 flex flex-col gap-y-1">
-            {SECTIONS.map((section) => {
-              const items = missing.filter((key) => key.startsWith(`${section}.`))
-
-              return items.length ? (
-                <li key={section} className="font-poppins text-sm text-red">
-                  <span className="font-medium">{t(`website:tabs.${section}`)}:</span> {items.map((key) => t(`website:missing.${key}`)).join(', ')}
-                </li>
-              ) : null
-            })}
+            {groupMissing(website, t).map(([group, items]) => (
+              <li key={group} className="font-poppins text-sm text-red">
+                <span className="font-medium">{group}:</span> {items.join(', ')}
+              </li>
+            ))}
           </ul>
         </div>
       )}

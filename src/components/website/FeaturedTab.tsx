@@ -1,4 +1,4 @@
-import { KeyboardEvent, ReactNode, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
@@ -8,8 +8,10 @@ import DrinkImage from '@/src/components/drinks/DrinkImage'
 import DataSection from '@/src/components/section/DataSection'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import { useDebouncedValue } from '@/src/hooks/use-debounced-value'
-import { useSaveWebsite } from '@/src/hooks/use-save-website'
-import { IDrink, IWebsite } from '@/src/interfaces'
+import IconButton from '@/src/components/website/IconButton'
+import { useWebsiteAction } from '@/src/hooks/use-save-website'
+import { IDrink, IWebsiteSection } from '@/src/interfaces'
+import { useWebsiteService } from '@/src/services/use-website-service'
 import { FEATURED_VALIDATION } from '@/src/validations/website/website'
 
 // the same as the api (MAX_FEATURED_DRINKS)
@@ -18,33 +20,20 @@ const MAX_PICKED = 10
 const LIST_LIMIT = 10
 const NO_DRINKS: IDrink[] = []
 
-type Picked = IWebsite['featuredDrinks'][number]
-
-const IconButton = ({ label, onClick, disabled, danger, children }: { label: string; onClick: () => void; disabled?: boolean; danger?: boolean; children: ReactNode }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    disabled={disabled}
-    aria-label={label}
-    title={label}
-    className={`flex h-8 w-8 items-center justify-center rounded-md border-1 border-solid border-light-grey-alt bg-white transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-      danger ? 'text-red hover:border-red hover:bg-red/5' : 'text-grey-secondary hover:border-green hover:text-green'
-    }`}
-  >
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {children}
-    </svg>
-  </button>
-)
+type Picked = IWebsiteSection['drinks'][number]
 
 // "Preporučeno iz naše ponude": the title and the button of the section and the drinks it shows, in the order the admin picks
-const FeaturedTab = ({ website }: { website: IWebsite }) => {
+const FeaturedTab = ({ section }: { section: IWebsiteSection }) => {
   const { t } = useTranslation(['website'])
-  const save = useSaveWebsite()
-  const featured = website.sections.featured
-  const values = useMemo(() => ({ title: featured?.title ?? '', buttonText: featured?.buttonText ?? '' }), [featured])
+  const run = useWebsiteAction()
+  const { updateSection } = useWebsiteService()
+  const featured = section.content
+  const values = useMemo(
+    () => ({ title: featured.title ?? '', buttonText: featured.buttonText ?? '' }),
+    [featured],
+  )
   const methods = useForm<FieldValues>({ resolver: FEATURED_VALIDATION as unknown as Resolver<FieldValues>, values })
-  const [picked, setPicked] = useState<Picked[]>(website.featuredDrinks)
+  const [picked, setPicked] = useState<Picked[]>(section.drinks)
   // true after a try to save without a picked drink (at least one is required)
   const [hasPickedError, setHasPickedError] = useState(false)
   // true after a try to save an odd number of drinks (the site shows them in pairs)
@@ -62,7 +51,7 @@ const FeaturedTab = ({ website }: { website: IWebsite }) => {
   const options = drinksQuery.data?.items ?? NO_DRINKS
 
   // the saved list came again from the api
-  useEffect(() => setPicked(website.featuredDrinks), [website.featuredDrinks])
+  useEffect(() => setPicked(section.drinks), [section.drinks])
   useEffect(() => {
     if (picked.length) setHasPickedError(false)
     if (picked.length % 2 === 0) setHasOddError(false)
@@ -135,7 +124,13 @@ const FeaturedTab = ({ website }: { website: IWebsite }) => {
       return
     }
 
-    await save({ featured: { title: data.title ?? '', buttonText: data.buttonText ?? '', drinkIds: picked.map((p) => p.drinkId) } })
+    await run(() =>
+      updateSection(section.sectionId, {
+        title: data.title ?? '',
+        buttonText: data.buttonText ?? '',
+        drinkIds: picked.map((p) => p.drinkId),
+      }),
+    )
   }
 
   return (

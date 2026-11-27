@@ -75,7 +75,8 @@ const GeneralTab = ({ website }: Props) => {
 
       <DataSection title={t('website:image.logo')}>
         <WebsiteImageField
-          slot="logo"
+          path="logo"
+          kind="logo"
           image={website.logoImage}
           label={t('website:image.logo')}
           hint={t('website:image.hintLogo', { maxMb: 5 })}

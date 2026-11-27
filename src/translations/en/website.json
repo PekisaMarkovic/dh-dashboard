@@ -5,12 +5,7 @@
   "tabs": {
     "label": "Pages of the site",
     "general": "General info",
-    "hero": "Hero",
-    "featured": "Featured",
-    "story": "Story",
-    "promo": "Promo",
-    "contacts": "Messages",
-    "seo": "SEO"
+    "contacts": "Messages"
   },
   "save": "Save",
   "saved": "Changes saved.",
@@ -42,10 +37,6 @@
     "paragraph1": "First paragraph",
     "paragraph2": "Second paragraph"
   },
-  "hero": {
-    "title": "Hero",
-    "subtitle": "The first thing a visitor sees at the top: a big title, a text and a button over the background picture."
-  },
   "featured": {
     "title": "Featured from our offer",
     "subtitle": "The title of the section with drinks on the home page and the drinks it shows.",
@@ -64,18 +55,9 @@
     "firstDrinks": "The first drinks of the menu, type to search",
     "pickedOdd": "The number of drinks has to be even (2, 4, 6, 8 or 10) because the site shows them in pairs: add one more or remove one."
   },
-  "story": {
-    "title": "The story behind a good time",
-    "subtitle": "The section that introduces your store: a title, two paragraphs, a button and a picture."
-  },
-  "promo": {
-    "title": "Promo section",
-    "subtitle": "A section that calls visitors to action (a deal, an event, a service, a message): a title, a text, a button and a picture."
-  },
   "image": {
     "hero": "Background picture",
     "story": "Picture",
-    "promo": "Picture",
     "logo": "Logo",
     "choose": "Choose picture",
     "change": "Change picture",
@@ -87,13 +69,13 @@
     "noImage": "No picture",
     "hintHero": "Best: a wide picture of 1920 × 1080 px (16:9), the important part in the middle because it is cropped at the sides on a phone. JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 2000 px.",
     "hintStory": "Best: a picture of 1200 × 900 px (4:3). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px.",
-    "hintPromo": "Best: an upright picture of 960 × 1200 px (4:5). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px.",
     "hintLogo": "Best: a transparent background, about 600 × 200 px. PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 600 px.",
     "required": "The picture is required.",
-    "info": "{{width}} × {{height}} px · {{size}} · WebP",
+    "info": "Picture",
     "open": "Open the picture in full size",
     "og": "Sharing picture",
-    "hintOg": "Best: 1200 × 630 px (ratio 1.91:1), the main content in the middle. JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP."
+    "hintOg": "Best: 1200 × 630 px (ratio 1.91:1), the main content in the middle. JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP.",
+    "hintInfo": "Best: an upright picture of 960 × 1200 px (4:5). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px."
   },
   "contacts": {
     "title": "Who contacted you",
@@ -112,7 +94,7 @@
   },
   "publish": {
     "title": "Publishing the site",
-    "draftText": "The site is a draft: visitors see a \"coming soon\" page and the site is hidden from Google. When you fill in all sections and upload all pictures you can publish it.",
+    "draftText": "The site is a draft: visitors see a \"coming soon\" page and the site is hidden from Google. When you fill in the general info and everything on the published pages you can publish it.",
     "publishedText": "The site is published and visible to everyone.",
     "publishedAt": "Published: {{date}}",
     "button": "Publish site",
@@ -135,37 +117,21 @@
       "workingHours": "Opening hours",
       "logo": "Logo"
     },
-    "hero": {
+    "pageSeo": "{{title}} (SEO)",
+    "page": {
+      "seoTitle": "Title",
+      "seoDescription": "Description",
+      "seoImage": "Picture for sharing"
+    },
+    "section": {
       "title": "Title",
       "subtitle": "Subtitle",
       "text": "Text",
       "buttonText": "Button text",
-      "image": "Background picture"
-    },
-    "featured": {
-      "title": "Title",
-      "buttonText": "Button text",
-      "drinks": "At least one featured drink"
-    },
-    "story": {
-      "title": "Title",
       "paragraph1": "First paragraph",
       "paragraph2": "Second paragraph",
-      "buttonText": "Button text",
-      "image": "Picture"
-    },
-    "promo": {
-      "title": "Title",
-      "text": "Text",
-      "buttonText": "Button text",
-      "image": "Picture"
-    },
-    "seo": {
-      "title": "Site title",
-      "description": "Site description",
-      "menuTitle": "Menu page title",
-      "menuDescription": "Menu page description",
-      "image": "Sharing picture"
+      "image": "Picture",
+      "drinks": "At least one recommended drink"
     }
   },
   "placeholders": {
@@ -185,27 +151,102 @@
       "paragraph2": "Invite visitors to drop by or ask for advice.",
       "buttonText": "e.g. Visit us"
     },
-    "promo": {
+    "seo": {
+      "title": "e.g. Store name | Drinks in Belgrade",
+      "description": "e.g. A big choice of beer, wine and spirits in Belgrade. See the drinks menu with prices and drop by."
+    },
+    "info": {
       "title": "e.g. Special offer",
       "text": "A short text about a discount, an event, a service or anything you want to highlight.",
       "buttonText": "e.g. Contact us"
-    },
-    "seo": {
-      "title": "e.g. Store name | Drinks in Belgrade",
-      "description": "e.g. A big choice of beer, wine and spirits in Belgrade. See the drinks menu with prices and drop by.",
-      "menuTitle": "e.g. Drinks menu | Prices of beer, wine and spirits",
-      "menuDescription": "e.g. The complete drinks menu with prices: beer, wine, spirits and soft drinks in our store."
     }
   },
   "seo": {
     "title": "SEO: Google and sharing",
-    "subtitle": "This is what Google shows in the search results and what is shown when a link to the site is shared (Viber, WhatsApp, Facebook). Write clearly and include the city and what you do.",
+    "subtitle": "This is what Google shows in the search results for this page and what is shown when its link is shared (Viber, WhatsApp, Facebook). Write clearly and include the city and what you do.",
     "fields": {
-      "title": "Site title (up to 70 characters)",
-      "description": "Site description (up to 160 characters)",
-      "menuTitle": "Title of the drinks menu page",
-      "menuDescription": "Description of the drinks menu page (up to 160 characters)"
+      "title": "Page title (up to 70 characters)",
+      "description": "Page description (up to 160 characters)"
     },
-    "ogSubtitle": "The picture shown when somebody shares the link of your site."
+    "ogSubtitle": "The picture shown when someone shares the link of your site.",
+    "ogSubtitlePage": "The picture shown when someone shares the link of this page. Without it, the picture of the home page is used."
+  },
+  "types": {
+    "hero": "Hero",
+    "featured": "Recommended",
+    "story": "Story",
+    "info": "Info"
+  },
+  "typeHints": {
+    "hero": "The first thing a visitor sees at the top: a big title, a text and a button over the background picture.",
+    "featured": "The title of the section with drinks on the home page and the drinks it shows.",
+    "story": "The section that introduces your store: a title, two paragraphs, a button and a picture.",
+    "info": "A section that calls visitors to action (a deal, an event, a service, a message): a title, a text, a button and a picture."
+  },
+  "section": {
+    "back": "Back to the page",
+    "delete": "Delete section",
+    "deleteTitle": "Delete the section “{{name}}”?",
+    "deleteMessage": "The section is deleted from the site together with its picture.",
+    "deleteShared": "The section is on {{count}} pages and will be deleted from all of them, together with its picture.",
+    "deleted": "The section was deleted.",
+    "shared": "This section is on the pages: {{pages}}. A change shows on all of them."
+  },
+  "content": {
+    "title": "Page sections",
+    "subtitle": "Add and arrange the content of the page. Click a section to change its text and picture.",
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "show": "Show",
+    "hide": "Hide",
+    "up": "Move up",
+    "down": "Move down",
+    "edit": "Edit",
+    "remove": "Remove from the page",
+    "removed": "The section was removed from the page.",
+    "add": "Add section",
+    "added": "The section was added.",
+    "newSection": "New section",
+    "existingSection": "Or add an existing section",
+    "existingHint": "The same section can be on more pages: a change shows on all of them.",
+    "cancel": "Cancel",
+    "empty": "The page has no sections yet.",
+    "incomplete": "Something is missing"
+  },
+  "pages": {
+    "title": "Pages",
+    "add": "New page",
+    "titlePlh": "Name of the new page",
+    "create": "Create page",
+    "created": "The page was created as a draft.",
+    "draft": "draft",
+    "siteSettings": "Site settings"
+  },
+  "page": {
+    "tabs": "Parts of the page",
+    "content": "Content",
+    "seo": "SEO",
+    "settings": "Settings",
+    "statusPublished": "Published",
+    "statusDraft": "Draft",
+    "settingsTitle": "Page",
+    "title": "Page name",
+    "titlePlh": "e.g. About us",
+    "slug": "Address",
+    "slugPlh": "e.g. about-us",
+    "slugHint": "Lowercase letters, digits and dashes, e.g. about-us: the page is then at /about-us.",
+    "systemSlug": "The address of the home page and of the drinks menu does not change.",
+    "statusTitle": "Publishing the page",
+    "publishedText": "The page is on the site and in the menu.",
+    "draftText": "The page is a draft: it is not on the site until you publish it.",
+    "systemStatus": "The home page and the drinks menu are always on the site and can not be deleted.",
+    "publish": "Publish page",
+    "unpublish": "Back to draft",
+    "published": "The page was published.",
+    "unpublished": "The page is a draft again.",
+    "delete": "Delete page",
+    "deleteTitle": "Delete the page “{{title}}”?",
+    "deleteMessage": "The page is deleted from the site. Its sections stay and you can add them to another page.",
+    "deleted": "The page was deleted."
   }
 }

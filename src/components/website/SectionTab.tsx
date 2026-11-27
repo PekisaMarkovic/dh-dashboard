@@ -5,8 +5,6 @@ import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import InputTextarea from '@/src/components/core/input/InputTextarea'
 import DataSection from '@/src/components/section/DataSection'
-import { useSaveWebsite } from '@/src/hooks/use-save-website'
-import { IWebsiteUpdate } from '@/src/interfaces'
 
 export type SectionField = {
   name: string
@@ -23,29 +21,26 @@ type Props = {
   title: string
   subtitle: string
   fields: SectionField[]
-  // the saved texts of the section
-  saved: Record<string, string | undefined> | undefined
-  // which part of the body the texts go into, e.g. 'hero'
-  section: 'hero' | 'story' | 'promo' | 'seo'
+  // the saved texts
+  saved: Record<string, string | null | undefined> | undefined
+  // saves the texts of the form, by their names
+  onSave: (values: Record<string, string>) => Promise<unknown>
   validation: unknown
   // more content under the fields (e.g. the picked drinks)
   children?: ReactNode
 }
 
 /**
- * The form of one section of the site: its texts. A text that is left empty is removed, then the site uses its default text.
- * The picture of the section is its own field under it (it is saved when it is picked).
+ * A form of texts of the site (a section, the SEO of a page). Every text is required.
+ * A picture is its own field under it (it is saved when it is picked).
  */
-const SectionTab = ({ title, subtitle, fields, saved, section, validation, children }: Props) => {
+const SectionTab = ({ title, subtitle, fields, saved, onSave, validation, children }: Props) => {
   const { t } = useTranslation(['website'])
-  const save = useSaveWebsite()
   const values = useMemo(() => Object.fromEntries(fields.map(({ name }) => [name, saved?.[name] ?? ''])), [fields, saved])
   const methods = useForm<FieldValues>({ resolver: validation as Resolver<FieldValues>, values })
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const body = { [section]: Object.fromEntries(fields.map(({ name }) => [name, data[name] ?? ''])) } as IWebsiteUpdate
-
-    await save(body)
+    await onSave(Object.fromEntries(fields.map(({ name }) => [name, data[name] ?? ''])))
   }
 
   return (

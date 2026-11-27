@@ -6,19 +6,18 @@ import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { IWebsiteUpdate } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 
-/** Saves a change of the website, shows the result and loads the website again. Returns true when it was saved. */
-export const useSaveWebsite = () => {
+/** Runs a change of the website, loads the website again and shows the result. Returns true when it worked. */
+export const useWebsiteAction = () => {
   const { t } = useTranslation(['website'])
   const showError = useErrorToast()
-  const { updateWebsite } = useWebsiteService()
   const { afterWebsiteChange } = useRefreshData()
 
   return useCallback(
-    async (body: IWebsiteUpdate) => {
+    async (action: () => Promise<unknown>, doneText: string = t('website:saved')) => {
       try {
-        await updateWebsite(body)
+        await action()
         await afterWebsiteChange()
-        customToast.success(t('website:saved'))
+        customToast.success(doneText)
 
         return true
       } catch (error) {
@@ -27,6 +26,14 @@ export const useSaveWebsite = () => {
         return false
       }
     },
-    [updateWebsite, afterWebsiteChange, showError, t],
+    [afterWebsiteChange, showError, t],
   )
+}
+
+/** Saves the general info of the website */
+export const useSaveWebsite = () => {
+  const run = useWebsiteAction()
+  const { updateWebsite } = useWebsiteService()
+
+  return useCallback((body: IWebsiteUpdate) => run(() => updateWebsite(body)), [run, updateWebsite])
 }

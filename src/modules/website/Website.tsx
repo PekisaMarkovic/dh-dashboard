@@ -1,38 +1,43 @@
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import EmptyComponent from '@/src/components/core/empty/EmptyComponent'
-import TabBar from '@/src/components/core/navigation/TabBar'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import InfoGridSkeleton from '@/src/components/skeleton/InfoGridSkeleton'
 import ContactsTab from '@/src/components/website/ContactsTab'
-import FeaturedTab from '@/src/components/website/FeaturedTab'
 import GeneralTab from '@/src/components/website/GeneralTab'
-import HeroTab from '@/src/components/website/HeroTab'
+import PageEditor from '@/src/components/website/PageEditor'
+import PagesSidebar from '@/src/components/website/PagesSidebar'
 import PublishPanel from '@/src/components/website/PublishPanel'
-import PromoTab from '@/src/components/website/PromoTab'
-import SeoTab from '@/src/components/website/SeoTab'
-import StoryTab from '@/src/components/website/StoryTab'
+import SectionEditor from '@/src/components/website/SectionEditor'
 import { useWebsiteQuery } from '@/src/hooks/queries/use-website-queries'
+import { PAGE_TABS, PageTab, pagesOfSection } from '@/src/utils/website'
 
-const TABS = ['general', 'hero', 'featured', 'story', 'promo', 'seo', 'contacts'] as const
-type TabId = (typeof TABS)[number]
+const SITE_VIEWS = ['general', 'contacts'] as const
+type SiteView = (typeof SITE_VIEWS)[number]
 
-const isTab = (value: string | null): value is TabId => TABS.includes(value as TabId)
+const oneOf = <T extends string>(values: readonly T[], value: string | null, fallback: T): T => (values.includes(value as T) ? (value as T) : fallback)
 
-// "Web sajt": the pages of the white label site of the company, every tab is one section of the site
+/**
+ * "Web sajt": the pages of the site on the left, the open page (its sections, SEO and settings) or the settings of the site on the right.
+ * What is open is in the address (?page=3&tab=seo, ?page=3&section=7, ?site=general, ?site=contacts), so a refresh or a link opens the same place.
+ */
 const Website = () => {
   const { t } = useTranslation(['website'])
   const [params, setParams] = useSearchParams()
-  const tab: TabId = isTab(params.get('tab')) ? (params.get('tab') as TabId) : 'general'
   const { data: website, isPending } = useWebsiteQuery()
-
-  // the tab is in the address (?tab=hero), so a refresh or a link opens the same tab
-  const handleTab = (id: TabId) => setParams({ tab: id }, { replace: true })
 
   if (isPending) return <InfoGridSkeleton items={6} />
 
   if (!website) return <EmptyComponent text={t('website:notEnabled')} />
+
+  const siteView = params.get('site') ? oneOf(SITE_VIEWS, params.get('site'), 'general') : null
+  // the open page: the one in the address, else the home page
+  const page = siteView ? undefined : (website.pages.find((p) => String(p.pageId) === params.get('page')) ?? website.pages[0])
+  const section = page && website.sections.find((s) => String(s.sectionId) === params.get('section'))
+
+  const openPage = (pageId: number, extra: Record<string, string> = {}) => setParams({ page: String(pageId), ...extra }, { replace: true })
+  const openSite = (view: SiteView) => setParams({ site: view }, { replace: true })
 
   return (
     <div className="pb-8">
@@ -41,27 +46,40 @@ const Website = () => {
         <Paragraph text={t('website:subtitle')} className="mt-2.5" />
       </div>
 
-      <PublishPanel website={website} />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-[240px_1fr]">
+        <div>
+          <PagesSidebar
+            website={website}
+            activePageId={page?.pageId ?? null}
+            activeSite={siteView}
+            onPage={(pageId) => openPage(pageId)}
+            onSiteSettings={() => openSite('general')}
+            onContacts={() => openSite('contacts')}
+          />
+        </div>
 
-      <TabBar
-        label={t('website:tabs.label')}
-        active={tab}
-        onChange={handleTab}
-        tabs={TABS.map((id) => ({
-          id,
-          label: t(`website:tabs.${id}`),
-          // a dot on the tab when something on it is missing
-          hasWarning: website.completeness.missing.some((key) => key.startsWith(`${id}.`)),
-        }))}
-      />
-
-      {tab === 'general' && <GeneralTab website={website} />}
-      {tab === 'hero' && <HeroTab website={website} />}
-      {tab === 'featured' && <FeaturedTab website={website} />}
-      {tab === 'story' && <StoryTab website={website} />}
-      {tab === 'promo' && <PromoTab website={website} />}
-      {tab === 'seo' && <SeoTab website={website} />}
-      {tab === 'contacts' && <ContactsTab />}
+        <div className="min-w-0">
+          {page && section ? (
+            <SectionEditor section={section} pages={pagesOfSection(website, section.sectionId)} onBack={() => openPage(page.pageId)} />
+          ) : page ? (
+            <PageEditor
+              website={website}
+              page={page}
+              tab={oneOf(PAGE_TABS, params.get('tab'), 'content')}
+              onTab={(tab: PageTab) => openPage(page.pageId, { tab })}
+              onEditSection={(sectionId) => openPage(page.pageId, { section: String(sectionId) })}
+              onDeleted={() => openPage(website.pages[0].pageId)}
+            />
+          ) : siteView === 'contacts' ? (
+            <ContactsTab />
+          ) : (
+            <>
+              <PublishPanel website={website} />
+              <GeneralTab website={website} />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

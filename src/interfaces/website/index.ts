@@ -1,5 +1,3 @@
-export type WebsiteImageSlot = 'logo' | 'hero' | 'story' | 'promo' | 'og'
-
 export interface IWebsiteImage {
   imageId: number
   // public address of the file (WebP)
@@ -12,19 +10,47 @@ export interface IWebsiteImage {
   altText: string | null
 }
 
-// the texts of the sections, a missing text means the site uses its own default text
-export interface IWebsiteSections {
-  hero?: { title?: string; subtitle?: string; text?: string; buttonText?: string }
-  featured?: { title?: string; buttonText?: string; drinkIds?: number[] }
-  story?: { title?: string; paragraph1?: string; paragraph2?: string; buttonText?: string }
-  promo?: { title?: string; text?: string; buttonText?: string }
-  // what Google and the social networks show: the title and the description of the site and of the menu page
-  seo?: { title?: string; description?: string; menuTitle?: string; menuDescription?: string }
+export type SectionType = 'hero' | 'featured' | 'story' | 'info'
+
+// the texts of a section (only the ones of its type), a missing text means the site leaves it out
+export interface ISectionContent {
+  title?: string
+  subtitle?: string
+  text?: string
+  paragraph1?: string
+  paragraph2?: string
+  buttonText?: string
+  // the picked recommended drinks, in this order (only the recommended drinks)
+  drinkIds?: number[]
+}
+
+// a part of a page (hero, recommended drinks, story, info); the same section can be on more pages
+export interface IWebsiteSection {
+  sectionId: number
+  type: SectionType
+  // the name in the dashboard, not shown on the site
+  name: string
+  content: ISectionContent
+  image: IWebsiteImage | null
+  // the names and images of the picked recommended drinks, in the picked order
+  drinks: { drinkId: number; name: string; imageUrl: string | null }[]
+}
+
+// a page of the site: its address ('' is the home page), its SEO and its sections in order
+export interface IWebsitePage {
+  pageId: number
+  title: string
+  slug: string
+  // a draft page is not on the site
+  status: WebsiteStatus
+  position: number
+  seo: { title: string | null; description: string | null; image: IWebsiteImage | null }
+  sections: { sectionId: number; position: number; isVisible: boolean }[]
 }
 
 export type WebsiteStatus = 'draft' | 'published'
 
-// what is still missing before the site can be published, every item is <section>.<field> (e.g. general.logo, hero.image)
+// what is still missing before the site can be published: general.<field>, page.<pageId>.<seoTitle|seoDescription|seoImage>, section.<sectionId>.<field|image|drinks>
 export interface IWebsiteCompleteness {
   isComplete: boolean
   missing: string[]
@@ -44,18 +70,14 @@ export interface IWebsite {
   phone: string | null
   instagram: string | null
   workingHours: string | null
-  sections: IWebsiteSections
   logoImage: IWebsiteImage | null
-  heroImage: IWebsiteImage | null
-  storyImage: IWebsiteImage | null
-  promoImage: IWebsiteImage | null
-  // the picture shown when the site is shared
-  ogImage: IWebsiteImage | null
-  // the names and images of the picked recommended drinks, in the picked order
-  featuredDrinks: { drinkId: number; name: string; imageUrl: string | null }[]
+  // the pages in the order of the menu
+  pages: IWebsitePage[]
+  // every section of the site, also the ones on no page
+  sections: IWebsiteSection[]
 }
 
-// what is sent to change the site, an empty text removes the value
+// what is sent to change the general info of the site
 export interface IWebsiteUpdate {
   name?: string
   city?: string
@@ -63,12 +85,16 @@ export interface IWebsiteUpdate {
   phone?: string
   instagram?: string
   workingHours?: string
-  hero?: IWebsiteSections['hero']
-  featured?: IWebsiteSections['featured']
-  story?: IWebsiteSections['story']
-  promo?: IWebsiteSections['promo']
-  seo?: IWebsiteSections['seo']
 }
+
+export interface IPageUpdate {
+  title?: string
+  slug?: string
+  status?: WebsiteStatus
+  seo?: { title?: string; description?: string }
+}
+
+export type ISectionUpdate = ISectionContent & { name?: string }
 
 // a message from the contact form of the site
 export interface IWebsiteContact {

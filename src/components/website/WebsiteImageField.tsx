@@ -4,7 +4,7 @@ import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
-import { IWebsiteImage, WebsiteImageSlot } from '@/src/interfaces'
+import { IWebsiteImage } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 import { formatFileSize } from '@/src/utils/files'
 
@@ -12,8 +12,13 @@ import { formatFileSize } from '@/src/utils/files'
 const IMAGE_MAX_MB = 5
 const IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp'
 
+// what the picture is, it sets how big the preview is
+export type ImageKind = 'logo' | 'hero' | 'story' | 'info' | 'og'
+
 type Props = {
-  slot: WebsiteImageSlot
+  // where the api keeps it: 'logo', 'sections/<id>/image' or 'pages/<id>/seo/image'
+  path: string
+  kind: ImageKind
   image: IWebsiteImage | null
   // the title above the picture
   label: string
@@ -21,10 +26,12 @@ type Props = {
   hint: string
   // the shape of the preview: it is the shape the picture has on the site
   previewClass?: string
+  // false: the site has a fallback picture (e.g. the picture of the home page)
+  isRequired?: boolean
 }
 
 // how wide the picture is shown after it is uploaded: the whole picture, in its own proportions (it is not cropped)
-const MAX_PREVIEW_WIDTH: Record<WebsiteImageSlot, string> = { logo: 'max-w-sm', hero: 'max-w-xl', story: 'max-w-md', promo: 'max-w-[260px]', og: 'max-w-md' }
+const MAX_PREVIEW_WIDTH: Record<ImageKind, string> = { logo: 'max-w-sm', hero: 'max-w-xl', story: 'max-w-md', info: 'max-w-[260px]', og: 'max-w-md' }
 
 // a checkerboard behind the picture, so a transparent logo is visible
 const CHECKERBOARD = {
@@ -32,13 +39,11 @@ const CHECKERBOARD = {
   backgroundSize: '16px 16px',
 }
 
-const SLOT_FOLDERS = { logo: 'general', hero: 'hero', story: 'story', promo: 'promo', og: 'seo' }
-
 /**
- * One picture of the site (logo, background of the hero, story, promo). It is saved the moment it is picked,
- * the api makes a WebP of it and keeps it in the folder client/<section> of the company.
+ * One picture of the site (logo, the picture of a section, the picture for sharing a page). It is saved the moment it is picked,
+ * the api makes a WebP of it and keeps it in the folder client/<kind> of the company.
  */
-const WebsiteImageField = ({ slot, image, label, hint, previewClass = 'aspect-video w-64' }: Props) => {
+const WebsiteImageField = ({ path, kind, image, label, hint, previewClass = 'aspect-video w-64', isRequired = true }: Props) => {
   const { t } = useTranslation(['website'])
   const showError = useErrorToast()
   const { uploadImage, deleteImage } = useWebsiteService()
@@ -80,18 +85,18 @@ const WebsiteImageField = ({ slot, image, label, hint, previewClass = 'aspect-vi
     }
 
     setError('')
-    void run(() => uploadImage(slot, file), t('website:image.uploaded'))
+    void run(() => uploadImage(path, file), t('website:image.uploaded'))
   }
 
   return (
-    <div className="flex flex-col gap-y-3" data-folder={SLOT_FOLDERS[slot]}>
+    <div className="flex flex-col gap-y-3">
       <span className="font-poppins text-sm font-medium text-black">
         {label}
-        <span className="text-red"> *</span>
+        {isRequired && <span className="text-red"> *</span>}
       </span>
       <div className="flex flex-wrap items-start gap-4">
         {image ? (
-          <div className={`w-full ${MAX_PREVIEW_WIDTH[slot]} flex flex-col gap-y-1`}>
+          <div className={`w-full ${MAX_PREVIEW_WIDTH[kind]} flex flex-col gap-y-1`}>
             {/* click to see the picture in its full size */}
             <a href={image.url} target="_blank" rel="noopener noreferrer" title={t('website:image.open')} className="block overflow-hidden rounded-sm border-1 border-light-grey-alt border-solid">
               <img
@@ -108,7 +113,9 @@ const WebsiteImageField = ({ slot, image, label, hint, previewClass = 'aspect-vi
             </span>
           </div>
         ) : (
-          <div className={`${previewClass} flex items-center justify-center overflow-hidden rounded-sm border-1 border-red border-solid bg-grey-100`}>
+          <div
+            className={`${previewClass} flex items-center justify-center overflow-hidden rounded-sm border-1 border-solid bg-grey-100 ${isRequired ? 'border-red' : 'border-light-grey-alt'}`}
+          >
             <span className="font-poppins text-xs text-grey">{t('website:image.noImage')}</span>
           </div>
         )}
@@ -129,12 +136,12 @@ const WebsiteImageField = ({ slot, image, label, hint, previewClass = 'aspect-vi
                 size="small"
                 htmlType="button"
                 disabled={isBusy}
-                onClick={() => void run(() => deleteImage(slot), t('website:image.removed'))}
+                onClick={() => void run(() => deleteImage(path), t('website:image.removed'))}
               />
             )}
           </div>
           <p className="font-poppins text-xs text-dark-grey">{hint}</p>
-          {!image && <p className="font-poppins text-sm text-red">{t('website:image.required')}</p>}
+          {!image && isRequired && <p className="font-poppins text-sm text-red">{t('website:image.required')}</p>}
           {error && <p className="font-poppins text-xs text-red">{error}</p>}
         </div>
       </div>

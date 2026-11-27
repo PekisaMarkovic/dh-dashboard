@@ -5,6 +5,9 @@ import { IWebsite, IWebsitePage, IWebsiteSection } from '@/src/interfaces'
 export const PAGE_TABS = ['content', 'seo', 'settings'] as const
 export type PageTab = (typeof PAGE_TABS)[number]
 
+// the most pages in the main menu of the site (the same as the api, MAX_MENU_PAGES)
+export const MAX_MENU_PAGES = 5
+
 // the home page and the drinks menu: every site has them, they keep their address and stay published (the same as the api)
 export const isSystemPage = (page: IWebsitePage) => page.slug === '' || page.slug === 'karta-pica'
 
@@ -22,4 +25,9 @@ export const pagesOfSection = (website: IWebsite, sectionId: number) =>
   website.pages.filter((page) => page.sections.some((item) => item.sectionId === sectionId))
 
 // how a section is called in the dashboard: its title, its kind until it has one
-export const sectionLabel = (section: IWebsiteSection, t: TFunction) => section.content.title?.trim() || t(`website:types.${section.type}`)
+export const sectionLabel = (section: IWebsiteSection, t: TFunction) => {
+  // a text section has no title: the start of its text
+  const start = section.content.html?.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40)
+
+  return section.content.title?.trim() || start || t(`website:types.${section.type}`)
+}

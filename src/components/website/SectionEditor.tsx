@@ -5,6 +5,7 @@ import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
 import DataSection from '@/src/components/section/DataSection'
 import FeaturedTab from '@/src/components/website/FeaturedTab'
 import SectionTab, { SectionField } from '@/src/components/website/SectionTab'
+import TextSectionForm from '@/src/components/website/TextSectionForm'
 import WebsiteImageField, { ImageKind } from '@/src/components/website/WebsiteImageField'
 import { ModalEnums } from '@/src/enum'
 import { useWebsiteAction } from '@/src/hooks/use-save-website'
@@ -19,10 +20,11 @@ type TextsConfig = {
   fields: SectionField[]
   validation: unknown
   image: { kind: ImageKind; label: string; hint: string; previewClass: string }
+  toggle?: { name: string; label: string; fields: string[] }
 }
 
-// the texts and the picture of every kind of section, except the recommended drinks (they have their own form)
-const TEXTS: Record<Exclude<SectionType, 'featured'>, TextsConfig> = {
+// the texts and the picture of every kind of section, except the recommended drinks and the free text (they have their own forms)
+const TEXTS: Record<Exclude<SectionType, 'featured' | 'text'>, TextsConfig> = {
   hero: {
     fields: [
       { name: 'title', label: 'website:fields.title', placeholder: 'website:placeholders.hero.title' },
@@ -31,6 +33,8 @@ const TEXTS: Record<Exclude<SectionType, 'featured'>, TextsConfig> = {
       { name: 'buttonText', label: 'website:fields.buttonText', placeholder: 'website:placeholders.hero.buttonText' },
     ],
     validation: HERO_VALIDATION,
+    // the button is shown unless it is turned off, then it needs no text
+    toggle: { name: 'showButton', label: 'website:fields.showButton', fields: ['buttonText'] },
     image: { kind: 'hero', label: 'website:image.hero', hint: 'website:image.hintHero', previewClass: 'aspect-video w-full max-w-md' },
   },
   story: {
@@ -67,7 +71,7 @@ const SectionEditor = ({ section, pages, onBack }: Props) => {
   const run = useWebsiteAction()
   const dispatch = useAppDispatch()
   const { updateSection, deleteSection } = useWebsiteService()
-  const config = section.type === 'featured' ? null : TEXTS[section.type]
+  const config = section.type === 'featured' || section.type === 'text' ? null : TEXTS[section.type]
 
   const handleDelete = () =>
     dispatch(
@@ -108,6 +112,7 @@ const SectionEditor = ({ section, pages, onBack }: Props) => {
             fields={config.fields}
             saved={{ ...section.content, drinkIds: undefined }}
             validation={config.validation}
+            toggle={config.toggle}
             onSave={(values) => run(() => updateSection(section.sectionId, values))}
           />
           <DataSection title={t(config.image.label)}>
@@ -121,6 +126,8 @@ const SectionEditor = ({ section, pages, onBack }: Props) => {
             />
           </DataSection>
         </>
+      ) : section.type === 'text' ? (
+        <TextSectionForm section={section} />
       ) : (
         <FeaturedTab section={section} />
       )}

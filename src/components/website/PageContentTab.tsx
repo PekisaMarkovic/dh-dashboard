@@ -8,7 +8,7 @@ import { IWebsite, IWebsitePage, SectionType } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 import { isSectionMissing, sectionLabel } from '@/src/utils/website'
 
-const SECTION_TYPES: SectionType[] = ['hero', 'featured', 'story', 'info']
+const SECTION_TYPES: SectionType[] = ['hero', 'featured', 'story', 'info', 'text']
 
 // a line icon for every kind of section
 const TYPE_ICONS: Record<SectionType, JSX.Element> = {
@@ -16,6 +16,7 @@ const TYPE_ICONS: Record<SectionType, JSX.Element> = {
   featured: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
   story: <path d="M4 6h16M4 10h16M4 14h10M4 18h12" />,
   info: <path d="M3 11v2l13 5V6L3 11zM16 9h2a3 3 0 0 1 0 6h-2" />,
+  text: <path d="M4 7V4h16v3M9 20h6M12 4v16" />,
 }
 
 const TypeIcon = ({ type }: { type: SectionType }) => (

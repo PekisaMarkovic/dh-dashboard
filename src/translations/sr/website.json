@@ -35,7 +35,8 @@
     "text": "Tekst",
     "buttonText": "Tekst dugmeta",
     "paragraph1": "Prvi pasus",
-    "paragraph2": "Drugi pasus"
+    "paragraph2": "Drugi pasus",
+    "showButton": "Prikaži dugme"
   },
   "featured": {
     "title": "Preporučeno iz naše ponude",
@@ -131,7 +132,8 @@
       "paragraph1": "Prvi pasus",
       "paragraph2": "Drugi pasus",
       "image": "Slika",
-      "drinks": "Bar jedno preporučeno piće"
+      "drinks": "Bar jedno preporučeno piće",
+      "html": "Tekst"
     }
   },
   "placeholders": {
@@ -175,13 +177,15 @@
     "hero": "Hero",
     "featured": "Preporučeno",
     "story": "Priča",
-    "info": "Info"
+    "info": "Info",
+    "text": "Tekst"
   },
   "typeHints": {
     "hero": "Prvo što posetilac vidi na vrhu stranice: veliki naslov, tekst i dugme preko slike u pozadini.",
     "featured": "Naslov sekcije sa pićima na početnoj strani i pića koja se u njoj prikazuju.",
     "story": "Sekcija koja predstavlja vašu prodavnicu: naslov, dva pasusa, dugme i slika.",
-    "info": "Sekcija koja poziva posetioce na akciju (akcija, događaj, usluga, poruka): naslov, tekst, dugme i slika."
+    "info": "Sekcija koja poziva posetioce na akciju (akcija, događaj, usluga, poruka): naslov, tekst, dugme i slika.",
+    "text": "Slobodan tekst: naslovi, podebljan i iskošen tekst, liste, citati i linkovi. Možete pisati ovde ili nalepiti tekst sa drugog sajta ili iz Word-a, formatiranje ostaje."
   },
   "section": {
     "back": "Nazad na stranicu",
@@ -247,6 +251,20 @@
     "delete": "Obriši stranicu",
     "deleteTitle": "Obrisati stranicu „{{title}}”?",
     "deleteMessage": "Stranica se briše sa sajta. Njene sekcije ostaju i možete ih dodati na drugu stranicu.",
-    "deleted": "Stranica je obrisana."
+    "deleted": "Stranica je obrisana.",
+    "menuTitle": "Meni sajta",
+    "inMenu": "Stranica je u glavnom meniju na vrhu sajta.",
+    "inFooter": "Stranica nije u glavnom meniju: link do nje je u podnožju sajta (npr. uslovi korišćenja).",
+    "menuFull": "U glavnom meniju može biti najviše {{max}} stranica. Prvo izbacite neku iz menija. Do tada je ova u podnožju sajta.",
+    "menuHome": "Do početne stranice vodi logo, zato nije u meniju.",
+    "menuAdd": "Dodaj u glavni meni",
+    "menuRemove": "Premesti u podnožje",
+    "menuAdded": "Stranica je dodata u glavni meni.",
+    "menuRemoved": "Stranica je premeštena u podnožje."
+  },
+  "text": {
+    "label": "Tekst",
+    "required": "Upišite tekst.",
+    "tooLong": "Tekst je predugačak (najviše oko 20.000 karaktera sa formatiranjem)."
   }
 }

@@ -35,7 +35,8 @@
     "text": "Text",
     "buttonText": "Button text",
     "paragraph1": "First paragraph",
-    "paragraph2": "Second paragraph"
+    "paragraph2": "Second paragraph",
+    "showButton": "Show the button"
   },
   "featured": {
     "title": "Featured from our offer",
@@ -131,7 +132,8 @@
       "paragraph1": "First paragraph",
       "paragraph2": "Second paragraph",
       "image": "Picture",
-      "drinks": "At least one recommended drink"
+      "drinks": "At least one recommended drink",
+      "html": "Text"
     }
   },
   "placeholders": {
@@ -175,13 +177,15 @@
     "hero": "Hero",
     "featured": "Recommended",
     "story": "Story",
-    "info": "Info"
+    "info": "Info",
+    "text": "Text"
   },
   "typeHints": {
     "hero": "The first thing a visitor sees at the top: a big title, a text and a button over the background picture.",
     "featured": "The title of the section with drinks on the home page and the drinks it shows.",
     "story": "The section that introduces your store: a title, two paragraphs, a button and a picture.",
-    "info": "A section that calls visitors to action (a deal, an event, a service, a message): a title, a text, a button and a picture."
+    "info": "A section that calls visitors to action (a deal, an event, a service, a message): a title, a text, a button and a picture.",
+    "text": "Free text: headings, bold and italic text, lists, quotes and links. Write here or paste text from another site or Word, the formatting stays."
   },
   "section": {
     "back": "Back to the page",
@@ -247,6 +251,20 @@
     "delete": "Delete page",
     "deleteTitle": "Delete the page “{{title}}”?",
     "deleteMessage": "The page is deleted from the site. Its sections stay and you can add them to another page.",
-    "deleted": "The page was deleted."
+    "deleted": "The page was deleted.",
+    "menuTitle": "Site menu",
+    "inMenu": "The page is in the main menu at the top of the site.",
+    "inFooter": "The page is not in the main menu: its link is in the footer of the site (e.g. terms of use).",
+    "menuFull": "The main menu can have at most {{max}} pages. Take one out first. Until then this page is in the footer.",
+    "menuHome": "The logo leads to the home page, so it is not in the menu.",
+    "menuAdd": "Add to the main menu",
+    "menuRemove": "Move to the footer",
+    "menuAdded": "The page was added to the main menu.",
+    "menuRemoved": "The page was moved to the footer."
+  },
+  "text": {
+    "label": "Text",
+    "required": "Write the text.",
+    "tooLong": "The text is too long (at most about 20,000 characters with formatting)."
   }
 }

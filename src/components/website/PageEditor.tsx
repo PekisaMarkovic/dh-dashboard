@@ -54,7 +54,9 @@ const PageEditor = ({ website, page, tab, onTab, onEditSection, onDeleted }: Pro
 
       {tab === 'content' && <PageContentTab website={website} page={page} onEditSection={onEditSection} />}
       {tab === 'seo' && <PageSeoTab page={page} />}
-      {tab === 'settings' && <PageSettingsTab page={page} onDeleted={onDeleted} />}
+      {tab === 'settings' && (
+        <PageSettingsTab page={page} menuCount={website.pages.filter((p) => p.isInMenu).length} onDeleted={onDeleted} />
+      )}
     </div>
   )
 }

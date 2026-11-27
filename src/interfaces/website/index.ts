@@ -10,7 +10,7 @@ export interface IWebsiteImage {
   altText: string | null
 }
 
-export type SectionType = 'hero' | 'featured' | 'story' | 'info'
+export type SectionType = 'hero' | 'featured' | 'story' | 'info' | 'text'
 
 // the texts of a section (only the ones of its type), a missing text means the site leaves it out
 export interface ISectionContent {
@@ -20,8 +20,12 @@ export interface ISectionContent {
   paragraph1?: string
   paragraph2?: string
   buttonText?: string
+  // a hero shows its button unless this is false
+  showButton?: boolean
   // the picked recommended drinks, in this order (only the recommended drinks)
   drinkIds?: number[]
+  // the HTML of a text section (from the rich text editor)
+  html?: string
 }
 
 // a part of a page (hero, recommended drinks, story, info); the same section can be on more pages
@@ -43,6 +47,8 @@ export interface IWebsitePage {
   slug: string
   // a draft page is not on the site
   status: WebsiteStatus
+  // in the main menu of the site (at most 5), else in the footer
+  isInMenu: boolean
   position: number
   seo: { title: string | null; description: string | null; image: IWebsiteImage | null }
   sections: { sectionId: number; position: number; isVisible: boolean }[]
@@ -91,6 +97,7 @@ export interface IPageUpdate {
   title?: string
   slug?: string
   status?: WebsiteStatus
+  isInMenu?: boolean
   seo?: { title?: string; description?: string }
 }
 

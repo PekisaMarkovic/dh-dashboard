@@ -12,18 +12,20 @@ import { IWebsitePage } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 import { useAppDispatch } from '@/src/state/redux-hooks/reduxHooks'
 import { openModal } from '@/src/state/shared/modal'
-import { isSystemPage } from '@/src/utils/website'
+import { isSystemPage, MAX_MENU_PAGES } from '@/src/utils/website'
 import { PAGE_VALIDATION } from '@/src/validations/website/website'
 
 type Props = {
   page: IWebsitePage
+  // how many pages are in the main menu
+  menuCount: number
   // after the page is deleted
   onDeleted: () => void
 }
 
 // "Podešavanja" of a page: its name, its address, whether it is on the site, and deleting it.
 // The home page and the drinks menu keep their address, stay published and can not be deleted
-const PageSettingsTab = ({ page, onDeleted }: Props) => {
+const PageSettingsTab = ({ page, menuCount, onDeleted }: Props) => {
   const { t } = useTranslation(['website'])
   const run = useWebsiteAction()
   const dispatch = useAppDispatch()
@@ -42,6 +44,12 @@ const PageSettingsTab = ({ page, onDeleted }: Props) => {
       () => updatePage(page.pageId, { status: isPublished ? 'draft' : 'published' }),
       isPublished ? t('website:page.unpublished') : t('website:page.published'),
     )
+
+  const isHome = page.slug === ''
+  const isMenuFull = !page.isInMenu && menuCount >= MAX_MENU_PAGES
+
+  const handleMenu = () =>
+    void run(() => updatePage(page.pageId, { isInMenu: !page.isInMenu }), page.isInMenu ? t('website:page.menuRemoved') : t('website:page.menuAdded'))
 
   const handleDelete = () =>
     dispatch(
@@ -73,6 +81,33 @@ const PageSettingsTab = ({ page, onDeleted }: Props) => {
             </div>
           </form>
         </FormProvider>
+      </DataSection>
+
+      <DataSection title={t('website:page.menuTitle')}>
+        <Paragraph
+          text={
+            isHome
+              ? t('website:page.menuHome')
+              : page.isInMenu
+                ? t('website:page.inMenu')
+                : isMenuFull
+                  ? t('website:page.menuFull', { max: MAX_MENU_PAGES })
+                  : t('website:page.inFooter')
+          }
+          size="sm"
+        />
+        {!isHome && (
+          <div className="mt-4">
+            <MainButton
+              text={page.isInMenu ? t('website:page.menuRemove') : t('website:page.menuAdd')}
+              variant={page.isInMenu ? 'alternative' : 'contained'}
+              size="small"
+              htmlType="button"
+              isInactive={isMenuFull}
+              onClick={handleMenu}
+            />
+          </div>
+        )}
       </DataSection>
 
       <DataSection title={t('website:page.statusTitle')}>

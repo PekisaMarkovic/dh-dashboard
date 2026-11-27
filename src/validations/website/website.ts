@@ -21,7 +21,13 @@ export const GENERAL_VALIDATION = yupResolver(
 )
 
 export const HERO_VALIDATION = yupResolver(
-  Yup.object({ title: required('title', 150), subtitle: required('subtitle', 150), text: required('text', 500), buttonText: required('buttonText', 60) }),
+  Yup.object({
+    title: required('title', 150),
+    subtitle: required('subtitle', 150),
+    text: required('text', 500),
+    // only when the button is shown
+    buttonText: Yup.string().when('showButton.checked', { is: false, then: (s) => s.notRequired(), otherwise: () => required('buttonText', 60) }),
+  }),
 )
 
 export const FEATURED_VALIDATION = yupResolver(Yup.object({ title: required('title', 150), buttonText: required('buttonText', 60) }))

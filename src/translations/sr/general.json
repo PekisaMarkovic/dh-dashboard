@@ -37,5 +37,19 @@
     "superAdmin": "Super administrator",
     "admin": "Administrator",
     "user": "Korisnik"
+  },
+  "richText": {
+    "h2": "Naslov",
+    "h3": "Podnaslov",
+    "bold": "Podebljano",
+    "italic": "Iskošeno",
+    "underline": "Podvučeno",
+    "strike": "Precrtano",
+    "bulletList": "Lista",
+    "orderedList": "Numerisana lista",
+    "quote": "Citat",
+    "link": "Link",
+    "clear": "Ukloni formatiranje",
+    "linkPrompt": "Adresa linka (prazno uklanja link):"
   }
 }

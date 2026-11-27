@@ -31,7 +31,8 @@ const Website = () => {
 
   if (!website) return <EmptyComponent text={t('website:notEnabled')} />
 
-  const siteView = params.get('site') ? oneOf(SITE_VIEWS, params.get('site'), 'general') : null
+  // without a page in the address the settings of the site are open
+  const siteView = params.get('page') ? null : oneOf(SITE_VIEWS, params.get('site'), 'general')
   // the open page: the one in the address, else the home page
   const page = siteView ? undefined : (website.pages.find((p) => String(p.pageId) === params.get('page')) ?? website.pages[0])
   const section = page && website.sections.find((s) => String(s.sectionId) === params.get('section'))

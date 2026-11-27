@@ -29,7 +29,7 @@ const PAGE_ICON = 'M6 3h9l4 4v14H6zM9 12h6M9 16h6'
 const MESSAGES_ICON = 'M4 5h16v11H8l-4 4z'
 const SETTINGS_ICON = 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1'
 
-/** The pages of the site (a dot: something on it is missing), a new page, the settings of the whole site and the messages */
+/** The settings of the whole site and the messages on top, then the pages of the site (a dot: something on it is missing) and a new page */
 const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSettings, onContacts }: Props) => {
   const { t } = useTranslation(['website'])
   const run = useWebsiteAction()
@@ -66,6 +66,18 @@ const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSetting
 
   return (
     <aside className="flex flex-col rounded-sm bg-light-grey-transparent p-3">
+      <button type="button" onClick={onSiteSettings} className={itemClass(activeSite === 'general')}>
+        <Icon d={SETTINGS_ICON} />
+        <span>{t('website:pages.siteSettings')}</span>
+        {website.completeness.missing.some((key) => key.startsWith('general.')) && <Dot label={t('website:content.incomplete')} />}
+      </button>
+      <button type="button" onClick={onContacts} className={itemClass(activeSite === 'contacts')}>
+        <Icon d={MESSAGES_ICON} />
+        <span>{t('website:tabs.contacts')}</span>
+      </button>
+
+      <div className="my-3 border-t-1 border-solid border-light-grey-alt" />
+
       <div className="flex items-center justify-between px-1 pb-2">
         <span className="font-poppins text-xs font-medium uppercase tracking-wide text-dark-grey">{t('website:pages.title')}</span>
         <button
@@ -111,17 +123,6 @@ const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSetting
         ))}
       </nav>
 
-      <div className="my-3 border-t-1 border-solid border-light-grey-alt" />
-
-      <button type="button" onClick={onSiteSettings} className={itemClass(activeSite === 'general')}>
-        <Icon d={SETTINGS_ICON} />
-        <span>{t('website:pages.siteSettings')}</span>
-        {website.completeness.missing.some((key) => key.startsWith('general.')) && <Dot label={t('website:content.incomplete')} />}
-      </button>
-      <button type="button" onClick={onContacts} className={itemClass(activeSite === 'contacts')}>
-        <Icon d={MESSAGES_ICON} />
-        <span>{t('website:tabs.contacts')}</span>
-      </button>
     </aside>
   )
 }

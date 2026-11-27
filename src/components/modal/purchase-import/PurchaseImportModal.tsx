@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
-import SingleSelectFormless from '@/src/components/core/select/SingleSelectFormless'
 import customToast from '@/src/components/core/toast/CustomToast'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import Skeleton from '@/src/components/skeleton/Skeleton'
 import TableSkeleton from '@/src/components/skeleton/TableSkeleton'
+import PurchaseImportLineRow, { COLUMNS, Row } from '@/src/components/purchase-import/PurchaseImportLineRow'
 import PurchaseImportStatusPill from '@/src/components/purchase-import/PurchaseImportStatusPill'
 import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { usePurchaseImportQuery } from '@/src/hooks/queries/use-purchase-import-queries'
@@ -17,26 +17,12 @@ import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHoo
 import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { formatDate } from '@/src/utils/date'
 
-type Row = {
-  id: number
-  name: string
-  quantity: string
-  drink: SelectOption | null
-  skip: boolean
-  // the line was already added to the stock, it can not be changed any more
-  isAdded: boolean
-}
-
 const toOption = (drink: { drinkId: number; name: string }): SelectOption => ({
   id: String(drink.drinkId),
   name: drink.name,
   value: String(drink.drinkId),
 })
 
-// the names take the free space, the quantity and the button have a fixed width so nothing overlaps (the same columns in the header)
-const COLUMNS = 'md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_5.5rem_6rem]'
-
-const INPUT_CLASS = 'w-full py-3 px-3 rounded-xs-plus border-1 border-solid border-grey font-poppins text-sm focus:outline-none focus:border-green'
 
 // the lines the AI read: the matched drink is already chosen, the user changes what is wrong and adds the rest to the stock.
 // A document can be opened again later to add the lines that were left out.
@@ -104,6 +90,7 @@ const PurchaseImportModal = () => {
   }
 
   const appliedCount = detail.items.filter((i) => i.appliedDrinkId !== null).length
+  const drinkOptions = detail.drinks.map(toOption)
 
   return (
     <div className="w-[760px] max-w-full">
@@ -135,65 +122,12 @@ const PurchaseImportModal = () => {
 
           {/* the window scrolls, not the list: an open list of drinks must not be cut off by the edge of the list */}
           {rows.map((row) => (
-            <div
+            <PurchaseImportLineRow
               key={`${row.id}-${detail.items.length}-${row.isAdded}`}
-              className={`grid grid-cols-2 ${COLUMNS} gap-x-4 gap-y-2 items-center px-1 py-3 border-b-1 border-b-light-grey-alt border-solid ${
-                row.isAdded ? 'bg-green-transparent/40' : ''
-              }`}
-            >
-              <div className={`col-span-2 md:col-span-1 min-w-0 break-words ${row.skip ? 'opacity-50' : ''}`}>
-                <Paragraph text={row.name} size="sm" color="black" />
-              </div>
-
-              {row.isAdded ? (
-                <>
-                  <div className="col-span-2 md:col-span-1 min-w-0 break-words">
-                    <Paragraph text={row.drink?.name ?? ''} size="sm" color="green" />
-                  </div>
-                  <div className="col-span-2 md:col-span-1">
-                    <Paragraph text={row.quantity} size="sm" color="green" />
-                  </div>
-                  <span className="hidden md:block" />
-                </>
-              ) : (
-                <>
-                  <div className={`col-span-2 md:col-span-1 min-w-0 ${row.skip ? 'opacity-50' : ''}`}>
-                    <SingleSelectFormless
-                      isLabelHidden
-                      disabled={row.skip}
-                      name={`drink-${row.id}`}
-                      label={t('purchase:modal.drink')}
-                      placeholder={t('purchase:modal.pickDrink')}
-                      options={detail.drinks.map(toOption)}
-                      selected={row.drink}
-                      setSelected={(drink: SelectOption | null) => updateRow(row.id, { drink })}
-                    />
-                  </div>
-
-                  <div className={`min-w-0 ${row.skip ? 'opacity-50' : ''}`}>
-                    <span className="md:hidden block mb-0.5 font-poppins text-xs text-grey">{t('purchase:modal.quantity')}</span>
-                    <input
-                      type="number"
-                      min={1}
-                      disabled={row.skip}
-                      value={row.quantity}
-                      onChange={(e) => updateRow(row.id, { quantity: e.target.value })}
-                      className={INPUT_CLASS}
-                    />
-                  </div>
-
-                  <div className="flex justify-end items-end md:items-center">
-                    <MainButton
-                      text={row.skip ? t('purchase:modal.include') : t('purchase:modal.skip')}
-                      variant="text"
-                      size="extra-small"
-                      className="whitespace-nowrap"
-                      onClick={() => updateRow(row.id, { skip: !row.skip })}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
+              row={row}
+              options={drinkOptions}
+              onChange={(change) => updateRow(row.id, change)}
+            />
           ))}
         </div>
       )}

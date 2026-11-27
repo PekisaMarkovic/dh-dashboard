@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
 import Paragraph from '@/src/components/core/typography/Paragraph'
-import DrinkImage from '@/src/components/drinks/DrinkImage'
 import DataSection from '@/src/components/section/DataSection'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
 import { useDebouncedValue } from '@/src/hooks/use-debounced-value'
-import IconButton from '@/src/components/website/IconButton'
+import FeaturedDrinkOption from '@/src/components/website/FeaturedDrinkOption'
+import PickedDrinkRow from '@/src/components/website/PickedDrinkRow'
 import { useWebsiteAction } from '@/src/hooks/use-save-website'
 import { IDrink, IWebsiteSection } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
@@ -210,39 +210,18 @@ const FeaturedTab = ({ section }: { section: IWebsiteSection }) => {
                       <li className="font-poppins px-3 py-3 text-sm text-dark-grey">{t('website:featured.loading')}</li>
                     ) : options.length ? (
                       options.map((drink, index) => {
-                        const added = isPicked(drink.drinkId)
-                        const disabled = !added && isFull
+                        const isAdded = isPicked(drink.drinkId)
 
                         return (
-                          <li
+                          <FeaturedDrinkOption
                             key={drink.drinkId}
-                            role="option"
-                            aria-selected={added}
-                            aria-disabled={disabled}
-                            // keeps the focus in the search so the list stays open
-                            onMouseDown={(event) => event.preventDefault()}
-                            onClick={() => !disabled && toggle(drink)}
-                            onMouseEnter={() => setActive(index)}
-                            className={`flex items-center gap-3 px-3 py-2 transition-colors ${
-                              disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
-                            } ${index === active && !disabled ? 'bg-green-transparent' : ''}`}
-                          >
-                            <DrinkImage src={drink.image?.url} alt={drink.name} />
-                            <span className="flex min-w-0 flex-1 flex-col">
-                              <span className="font-poppins truncate text-sm font-medium text-black">{drink.name}</span>
-                              <span className="font-poppins truncate text-xs text-dark-grey">{drink.code}</span>
-                            </span>
-                            {added ? (
-                              <span className="font-poppins flex items-center gap-1 text-xs font-medium text-green">
-                                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                  <path d="m5 12 5 5 9-10" />
-                                </svg>
-                                {t('website:featured.added')}
-                              </span>
-                            ) : (
-                              !disabled && <span className="font-poppins text-xs font-medium text-green">+ {t('website:featured.add')}</span>
-                            )}
-                          </li>
+                            drink={drink}
+                            isAdded={isAdded}
+                            isDisabled={!isAdded && isFull}
+                            isActive={index === active}
+                            onToggle={() => toggle(drink)}
+                            onHover={() => setActive(index)}
+                          />
                         )
                       })
                     ) : (
@@ -262,27 +241,15 @@ const FeaturedTab = ({ section }: { section: IWebsiteSection }) => {
             {picked.length ? (
               <ol className="flex flex-col gap-2">
                 {picked.map((drink, index) => (
-                  <li
+                  <PickedDrinkRow
                     key={drink.drinkId}
-                    className="flex items-center gap-3 rounded-lg border-1 border-solid border-light-grey-alt bg-white p-2 pr-3 transition-shadow hover:shadow-md"
-                  >
-                    <span className="font-poppins flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-transparent text-xs font-semibold text-green">
-                      {index + 1}
-                    </span>
-                    <DrinkImage src={drink.imageUrl} alt={drink.name} size="md" />
-                    <span className="font-poppins min-w-0 flex-1 truncate text-sm font-medium text-black">{drink.name}</span>
-                    <span className="flex shrink-0 items-center gap-1.5">
-                      <IconButton label={t('website:featured.up')} disabled={index === 0} onClick={() => move(index, -1)}>
-                        <path d="m18 15-6-6-6 6" />
-                      </IconButton>
-                      <IconButton label={t('website:featured.down')} disabled={index === picked.length - 1} onClick={() => move(index, 1)}>
-                        <path d="m6 9 6 6 6-6" />
-                      </IconButton>
-                      <IconButton danger label={t('website:featured.remove')} onClick={() => remove(drink.drinkId)}>
-                        <path d="M18 6 6 18M6 6l12 12" />
-                      </IconButton>
-                    </span>
-                  </li>
+                    drink={drink}
+                    position={index + 1}
+                    isFirst={index === 0}
+                    isLast={index === picked.length - 1}
+                    onMove={(step) => move(index, step)}
+                    onRemove={() => remove(drink.drinkId)}
+                  />
                 ))}
               </ol>
             ) : (

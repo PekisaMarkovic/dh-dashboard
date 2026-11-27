@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
+import CategoryTag from '@/src/components/drinks/CategoryTag'
 import DrinkImage from '@/src/components/drinks/DrinkImage'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
@@ -192,64 +193,55 @@ const DrinkModal = () => {
             maxChar={DESCRIPTION_MAX}
           />
 
-          <InputText
-            isRequired
-            name="price"
-            initValue={drink ? formatPrice(drink.price) : undefined}
-            label={t('warehouse:drinkModal.price')}
-            placeholder={t('warehouse:drinkModal.pricePlh')}
-          />
+          {/* short numbers: two per row */}
+          <div className="grid grid-cols-2 gap-4">
+            <InputText
+              isRequired
+              name="price"
+              initValue={drink ? formatPrice(drink.price) : undefined}
+              label={t('warehouse:drinkModal.price')}
+              placeholder={t('warehouse:drinkModal.pricePlh')}
+            />
 
-          <InputText
-            isRequired
-            name="quantity"
-            initValue={drink ? String(drink.quantity) : undefined}
-            label={t('warehouse:drinkModal.quantity')}
-            placeholder={t('warehouse:drinkModal.quantityPlh')}
-          />
+            <InputText
+              isRequired
+              name="quantity"
+              initValue={drink ? String(drink.quantity) : undefined}
+              label={t('warehouse:drinkModal.quantity')}
+              placeholder={t('warehouse:drinkModal.quantityPlh')}
+            />
 
-          <InputText
-            isRequired
-            name="warningQuantity"
-            initValue={String(drink?.warningQuantity ?? 0)}
-            label={t('warehouse:drinkModal.warningQuantity')}
-            placeholder={t('warehouse:drinkModal.warningQuantityPlh')}
-          />
+            <InputText
+              isRequired
+              name="warningQuantity"
+              initValue={String(drink?.warningQuantity ?? 0)}
+              label={t('warehouse:drinkModal.warningQuantity')}
+              placeholder={t('warehouse:drinkModal.warningQuantityPlh')}
+            />
 
-          <InputText
-            isRequired
-            name="criticalQuantity"
-            initValue={String(drink?.criticalQuantity ?? 0)}
-            label={t('warehouse:drinkModal.criticalQuantity')}
-            placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
-          />
+            <InputText
+              isRequired
+              name="criticalQuantity"
+              initValue={String(drink?.criticalQuantity ?? 0)}
+              label={t('warehouse:drinkModal.criticalQuantity')}
+              placeholder={t('warehouse:drinkModal.criticalQuantityPlh')}
+            />
+          </div>
 
           <div className="flex flex-col gap-y-2">
             <span className="text-sm font-medium text-gray-700">{t('warehouse:drinkModal.categories')}</span>
             {categories.length ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {categories.map((category) => {
                   const isOn = categoryIds.includes(category.categoryId)
 
                   return (
-                    <button
+                    <CategoryTag
                       key={category.categoryId}
-                      type="button"
-                      aria-pressed={isOn}
-                      onClick={() =>
-                        setCategoryIds((ids) => (isOn ? ids.filter((id) => id !== category.categoryId) : [...ids, category.categoryId]))
-                      }
-                      className={`font-poppins flex items-center gap-1 rounded-full border-1 border-solid px-3 py-1 text-sm transition-colors ${
-                        isOn ? 'border-green bg-green text-white' : 'border-light-grey-alt bg-white text-grey-secondary hover:border-green hover:text-green'
-                      }`}
-                    >
-                      {isOn && (
-                        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="m5 12 5 5 9-10" />
-                        </svg>
-                      )}
-                      {category.name}
-                    </button>
+                      name={category.name}
+                      isOn={isOn}
+                      onClick={() => setCategoryIds((ids) => (isOn ? ids.filter((id) => id !== category.categoryId) : [...ids, category.categoryId]))}
+                    />
                   )
                 })}
               </div>

@@ -3,9 +3,8 @@ import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm, useWatch }
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import Checkbox from '@/src/components/core/checkbox/Checkbox'
-import InputText from '@/src/components/core/input/InputText'
-import InputTextarea from '@/src/components/core/input/InputTextarea'
 import DataSection from '@/src/components/section/DataSection'
+import SectionFieldInput from '@/src/components/website/SectionFieldInput'
 
 export type SectionField = {
   name: string
@@ -57,16 +56,11 @@ const SectionTab = ({ title, subtitle, fields, saved, onSave, validation, toggle
     <DataSection title={title} subtitle={subtitle}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
-          {fields.map(({ name, label, isTextarea, placeholder, maxChar }) => (
-            <Fragment key={name}>
+          {fields.map((field) => (
+            <Fragment key={field.name}>
               {/* the switch is right above the fields it shows (e.g. "show the button" above the text of the button) */}
-              {toggle?.fields[0] === name && <Checkbox name={toggle.name} initValue={isSavedOn} label={t(toggle.label)} />}
-              {isShown(name) &&
-                (isTextarea ? (
-                  <InputTextarea isRequired name={name} initValue={texts[name]} label={t(label)} placeholder={placeholder && t(placeholder)} rows={4} maxChar={maxChar} />
-                ) : (
-                  <InputText isRequired name={name} initValue={texts[name]} label={t(label)} placeholder={placeholder && t(placeholder)} />
-                ))}
+              {toggle?.fields[0] === field.name && <Checkbox name={toggle.name} initValue={isSavedOn} label={t(toggle.label)} />}
+              {isShown(field.name) && <SectionFieldInput field={field} initValue={texts[field.name]} />}
             </Fragment>
           ))}
           {children}

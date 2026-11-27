@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import SidebarItem from '@/src/components/website/SidebarItem'
 import { useWebsiteAction } from '@/src/hooks/use-save-website'
 import { IWebsite } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
@@ -15,14 +16,6 @@ type Props = {
   onSiteSettings: () => void
   onContacts: () => void
 }
-
-const Dot = ({ label }: { label: string }) => <span aria-label={label} className="ml-auto inline-block h-2 w-2 shrink-0 rounded-full bg-orange" />
-
-const Icon = ({ d }: { d: string }) => (
-  <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d={d} />
-  </svg>
-)
 
 const HOME_ICON = 'M3 11 12 3l9 8M5 9v12h14V9'
 const PAGE_ICON = 'M6 3h9l4 4v14H6zM9 12h6M9 16h6'
@@ -61,20 +54,16 @@ const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSetting
     }
   }
 
-  const itemClass = (isActive: boolean) =>
-    `font-poppins flex w-full items-center gap-2 rounded-md px-3 py-3 text-left text-sm ${isActive ? 'bg-green-transparent text-green' : 'text-black hover:bg-light-grey-transparent'}`
-
   return (
     <aside className="flex flex-col rounded-sm bg-light-grey-transparent p-3">
-      <button type="button" onClick={onSiteSettings} className={itemClass(activeSite === 'general')}>
-        <Icon d={SETTINGS_ICON} />
-        <span>{t('website:pages.siteSettings')}</span>
-        {website.completeness.missing.some((key) => key.startsWith('general.')) && <Dot label={t('website:content.incomplete')} />}
-      </button>
-      <button type="button" onClick={onContacts} className={itemClass(activeSite === 'contacts')}>
-        <Icon d={MESSAGES_ICON} />
-        <span>{t('website:tabs.contacts')}</span>
-      </button>
+      <SidebarItem
+        icon={SETTINGS_ICON}
+        label={t('website:pages.siteSettings')}
+        isActive={activeSite === 'general'}
+        onClick={onSiteSettings}
+        hasWarning={website.completeness.missing.some((key) => key.startsWith('general.'))}
+      />
+      <SidebarItem icon={MESSAGES_ICON} label={t('website:tabs.contacts')} isActive={activeSite === 'contacts'} onClick={onContacts} />
 
       <div className="my-3 border-t-1 border-solid border-light-grey-alt" />
 
@@ -114,12 +103,15 @@ const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSetting
 
       <nav aria-label={t('website:pages.title')} className="flex flex-col gap-1">
         {website.pages.map((page) => (
-          <button key={page.pageId} type="button" onClick={() => onPage(page.pageId)} className={itemClass(page.pageId === activePageId)}>
-            <Icon d={page.slug === '' ? HOME_ICON : PAGE_ICON} />
-            <span className="truncate">{page.title}</span>
-            {page.status === 'draft' && <span className="text-xs text-dark-grey">({t('website:pages.draft')})</span>}
-            {isPageMissing(website, page) && <Dot label={t('website:content.incomplete')} />}
-          </button>
+          <SidebarItem
+            key={page.pageId}
+            icon={page.slug === '' ? HOME_ICON : PAGE_ICON}
+            label={page.title}
+            isActive={page.pageId === activePageId}
+            onClick={() => onPage(page.pageId)}
+            note={page.status === 'draft' ? t('website:pages.draft') : undefined}
+            hasWarning={isPageMissing(website, page)}
+          />
         ))}
       </nav>
 

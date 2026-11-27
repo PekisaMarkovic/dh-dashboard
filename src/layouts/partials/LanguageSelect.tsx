@@ -4,6 +4,7 @@ import { useErrorToast } from '@/src/hooks/use-error-toast'
 import { useClickAway } from '@/src/hooks/use-click-outside'
 import GeneralIcons from '@/src/icons/general'
 import FlagIcon from '@/src/icons/flags/FlagIcon'
+import LanguageOption from '@/src/layouts/partials/LanguageOption'
 import { useUserService } from '@/src/services/use-user-service'
 import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHooks'
 import { selectAuthUser, setUserProfileData } from '@/src/state/user/authSlice'
@@ -71,17 +72,7 @@ const LanguageSelect = () => {
           className="absolute left-0 top-full mt-1.5 z-10 w-full bg-white rounded-xs-plus border-1 border-light-grey-alt border-solid shadow-drop-down overflow-hidden"
         >
           {LANGUAGES.map(({ value, label }) => (
-            <li key={value} role="option" aria-selected={value === current}>
-              <button
-                type="button"
-                title={label}
-                aria-label={label}
-                onClick={handleSelect(value)}
-                className={`flex w-full items-center justify-center py-2 hover:bg-light-grey-transparent ${value === current ? 'bg-light-grey-transparent' : ''}`}
-              >
-                <FlagIcon language={value} className="h-4 w-6 block rounded-[2px]" />
-              </button>
-            </li>
+            <LanguageOption key={value} language={value} label={label} isCurrent={value === current} onClick={handleSelect(value)} />
           ))}
         </ul>
       )}

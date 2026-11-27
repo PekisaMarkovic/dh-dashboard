@@ -9,12 +9,6 @@
     "warning": "Warning",
     "critical": "Critical"
   },
-  "sortBy": "Sort",
-  "sortByName": "By name",
-  "sort": {
-    "price_asc": "Price: low to high",
-    "price_desc": "Price: high to low"
-  },
   "filterWarehouse": "Warehouse",
   "search": "Search drinks by name or code..",
   "table": {

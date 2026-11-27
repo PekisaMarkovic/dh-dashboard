@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
@@ -23,7 +24,6 @@ import DrinksList from '@/src/modules/drinks/DrinksList'
 
 const NO_WAREHOUSES: IWarehouse[] = []
 const STOCK_FILTERS: DrinkStockFilter[] = ['warning', 'critical']
-const SORTS: DrinkSort[] = ['price_asc', 'price_desc']
 const NO_DRINKS: IDrink[] = []
 const NO_CATEGORIES: ICategory[] = []
 
@@ -42,8 +42,8 @@ const Drinks = () => {
   // the drinks in any of the picked categories, as "1,4" (also the key of the cached page)
   const selectedCategories: SelectOption[] | undefined = useWatch({ control: filterForm.control, name: 'categories' })
   const categoryIds = (selectedCategories ?? []).map((c) => c.value).join(',')
-  // cleared by picking the selected option again: sorted by name
-  const sort: DrinkSort | undefined = useWatch({ control: filterForm.control, name: 'sort' })?.value || undefined
+  // set by the arrows in the price column; without it the drinks are sorted by name
+  const [sort, setSort] = useState<DrinkSort>()
   const [page, setPage] = usePageState([search, warehouseId, stockLevel, categoryIds, sort])
   // the warehouses are cached; the drinks come a page at a time, every page and search is cached too
   const warehousesQuery = useWarehousesQuery()
@@ -105,15 +105,6 @@ const Drinks = () => {
               options={STOCK_FILTERS.map((s) => ({ id: s, name: t(`drink:stock.${s}`), value: s }))}
             />
           </div>
-
-          <div className="w-full sm:w-56">
-            <SingleSelect
-              name="sort"
-              label={t('drink:sortBy')}
-              placeholder={t('drink:sortByName')}
-              options={SORTS.map((s) => ({ id: s, name: t(`drink:sort.${s}`), value: s }))}
-            />
-          </div>
         </FormProvider>
 
         {isAdmin && (
@@ -128,7 +119,11 @@ const Drinks = () => {
           <TableSkeleton columns={[1, 2, 1, 1, 1]} rows={8} />
         ) : (
           <>
-            {drinks.length ? <DrinksList drinks={drinks} warehouses={warehouses} /> : <Paragraph text={t('drink:empty')} size="sm" />}
+            {drinks.length ? (
+              <DrinksList drinks={drinks} warehouses={warehouses} sort={sort} onSortChange={setSort} />
+            ) : (
+              <Paragraph text={t('drink:empty')} size="sm" />
+            )}
             <ListPagination page={page} totalPages={drinksQuery.data?.meta.totalPages ?? 1} onPageChange={setPage} />
           </>
         )}

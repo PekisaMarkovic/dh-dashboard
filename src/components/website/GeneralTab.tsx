@@ -75,12 +75,24 @@ const GeneralTab = ({ website }: Props) => {
 
       <DataSection title={t('website:image.logo')}>
         <WebsiteImageField
-          path="logo"
+          path="images/logo"
           kind="logo"
           image={website.logoImage}
           label={t('website:image.logo')}
           hint={t('website:image.hintLogo', { maxMb: 5 })}
           previewClass="h-20 w-48"
+        />
+      </DataSection>
+
+      <DataSection title={t('website:image.map')} subtitle={t('website:image.mapSubtitle')}>
+        <WebsiteImageField
+          path="images/map"
+          kind="map"
+          image={website.mapImage}
+          label={t('website:image.map')}
+          hint={t('website:image.hintMap', { maxMb: 5 })}
+          previewClass="aspect-[4/3] w-64"
+          isRequired={false}
         />
       </DataSection>
 

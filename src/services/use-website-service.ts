@@ -27,7 +27,7 @@ export const useWebsiteService = () => {
       return data
     }
 
-    // the api makes a WebP of any jpg / png / webp and replaces the old picture (path: 'logo', 'sections/<id>/image', 'pages/<id>/seo/image')
+    // the api makes a WebP of any jpg / png / webp and replaces the old picture (path: 'images/logo', 'images/map', 'sections/<id>/image', 'pages/<id>/seo/image')
     const uploadImage = async (path: string, file: File) => {
       const body = new FormData()
       body.append('file', file)

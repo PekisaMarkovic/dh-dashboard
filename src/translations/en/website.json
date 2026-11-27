@@ -76,7 +76,10 @@
     "open": "Open the picture in full size",
     "og": "Sharing picture",
     "hintOg": "Best: 1200 × 630 px (ratio 1.91:1), the main content in the middle. JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP.",
-    "hintInfo": "Best: an upright picture of 960 × 1200 px (4:5). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px."
+    "hintInfo": "Best: an upright picture of 960 × 1200 px (4:5). JPG, PNG or WebP, up to {{maxMb}} MB. Saved as an optimized WebP, at most 1200 px.",
+    "map": "Picture of the map (optional)",
+    "mapSubtitle": "The Google map loads on the site only after the visitor accepts the cookies. Until then this picture is shown, without it a drawn map.",
+    "hintMap": "E.g. a screenshot of Google Maps with your location, about 1200 × 900 px (4:3). JPG, PNG or WebP, up to {{maxMb}} MB."
   },
   "contacts": {
     "title": "Who contacted you",

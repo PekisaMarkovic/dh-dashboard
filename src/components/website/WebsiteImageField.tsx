@@ -16,10 +16,10 @@ const IMAGE_MAX_MB = 5
 const IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp'
 
 // what the picture is, it sets how big the preview is
-export type ImageKind = 'logo' | 'hero' | 'story' | 'info' | 'og'
+export type ImageKind = 'logo' | 'map' | 'hero' | 'story' | 'info' | 'og'
 
 type Props = {
-  // where the api keeps it: 'logo', 'sections/<id>/image' or 'pages/<id>/seo/image'
+  // where the api keeps it: 'images/logo', 'images/map', 'sections/<id>/image' or 'pages/<id>/seo/image'
   path: string
   kind: ImageKind
   image: IWebsiteImage | null
@@ -34,7 +34,7 @@ type Props = {
 }
 
 // how wide the picture is shown after it is uploaded: the whole picture, in its own proportions (it is not cropped)
-const MAX_PREVIEW_WIDTH: Record<ImageKind, string> = { logo: 'max-w-sm', hero: 'max-w-xl', story: 'max-w-md', info: 'max-w-[260px]', og: 'max-w-md' }
+const MAX_PREVIEW_WIDTH: Record<ImageKind, string> = { logo: 'max-w-sm', map: 'max-w-md', hero: 'max-w-xl', story: 'max-w-md', info: 'max-w-[260px]', og: 'max-w-md' }
 
 // a checkerboard behind the picture, so a transparent logo is visible
 const CHECKERBOARD = {

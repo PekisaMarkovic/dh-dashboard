@@ -76,7 +76,10 @@
     "open": "Otvori sliku u punoj veličini",
     "og": "Slika za deljenje",
     "hintOg": "Najbolje: 1200 × 630 px (odnos 1.91:1), glavni sadržaj u sredini. JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP.",
-    "hintInfo": "Najbolje: uspravna slika 960 × 1200 px (4:5). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px."
+    "hintInfo": "Najbolje: uspravna slika 960 × 1200 px (4:5). JPG, PNG ili WebP, do {{maxMb}} MB. Čuva se kao optimizovan WebP, najviše 1200 px.",
+    "map": "Slika mape (nije obavezno)",
+    "mapSubtitle": "Google mapa se na sajtu učitava tek kad posetilac prihvati kolačiće. Do tada se prikazuje ova slika, a ako je nema, nacrtana mapa.",
+    "hintMap": "Npr. snimak ekrana sa Google mapa sa vašom lokacijom, oko 1200 × 900 px (4:3). JPG, PNG ili WebP, do {{maxMb}} MB."
   },
   "contacts": {
     "title": "Ko vas je kontaktirao",

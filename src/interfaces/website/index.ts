@@ -77,6 +77,8 @@ export interface IWebsite {
   instagram: string | null
   workingHours: string | null
   logoImage: IWebsiteImage | null
+  // optional: a picture of the map, the site shows it until the visitor accepts the cookies of Google (else a drawn map)
+  mapImage: IWebsiteImage | null
   // the pages in the order of the menu
   pages: IWebsitePage[]
   // every section of the site, also the ones on no page

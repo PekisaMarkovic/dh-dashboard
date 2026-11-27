@@ -6,6 +6,7 @@ import TableCell from '@/src/components/table/TableCell'
 import { CustomDropdown, IDrink } from '@/src/interfaces'
 import { formatPrice } from '@/src/utils/money'
 import { getStockLevel, STOCK_ROW_CLASS, STOCK_TEXT_CLASS } from '@/src/utils/stock'
+import Tag from '@/src/components/core/indicators/Tag'
 
 type Props = {
   drink: IDrink
@@ -33,9 +34,7 @@ const DrinkRow = ({ drink, warehouseName, dropdownOptions }: Props) => {
             {[...drink.categories]
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((category) => (
-                <span key={category.categoryId} className="font-poppins rounded-full bg-green-transparent px-2 py-0.5 text-xs text-green">
-                  {category.name}
-                </span>
+                <Tag key={category.categoryId} text={category.name} />
               ))}
           </div>
         )}

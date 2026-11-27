@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import SingleSelect from '@/src/components/core/select/SingleSelect'
-import CategoryTag from '@/src/components/drinks/CategoryTag'
+import Tag from '@/src/components/core/indicators/Tag'
 import DrinkImage from '@/src/components/drinks/DrinkImage'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import InputText from '@/src/components/core/input/InputText'
@@ -239,9 +239,9 @@ const DrinkModal = () => {
                   const isOn = categoryIds.includes(category.categoryId)
 
                   return (
-                    <CategoryTag
+                    <Tag
                       key={category.categoryId}
-                      name={category.name}
+                      text={category.name}
                       isOn={isOn}
                       onClick={() => setCategoryIds((ids) => (isOn ? ids.filter((id) => id !== category.categoryId) : [...ids, category.categoryId]))}
                     />

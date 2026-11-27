@@ -5,6 +5,7 @@ import TableCell from '@/src/components/table/TableCell'
 import { CustomDropdown, IProforma } from '@/src/interfaces'
 import { formatDate } from '@/src/utils/date'
 import { formatMoney } from '@/src/utils/money'
+import Badge from '@/src/components/core/indicators/Badge'
 
 type Props = {
   proforma: IProforma
@@ -33,7 +34,7 @@ const ProformaRow = ({ proforma, dropdownOptions, onClick }: Props) => {
         <Paragraph text={formatMoney(proforma.totalWithVat)} size="sm" color="black" />
       </TableCell>
       <TableCell label={t('proforma:saved.status')}>
-        <Paragraph text={t(`proforma:status.${proforma.status}`)} size="sm" color={proforma.status === 'returned' ? 'orange' : 'green'} />
+        <Badge text={t(`proforma:status.${proforma.status}`)} tone={proforma.status === 'returned' ? 'orange' : 'green'} />
       </TableCell>
     </DefaultTableRowContainer>
   )

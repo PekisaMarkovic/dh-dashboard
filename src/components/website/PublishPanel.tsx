@@ -2,6 +2,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
 import customToast from '@/src/components/core/toast/CustomToast'
+import Badge from '@/src/components/core/indicators/Badge'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import DataSection from '@/src/components/section/DataSection'
 import { ConfirmModalData } from '@/src/components/modal/ConfirmModal'
@@ -38,14 +39,6 @@ const groupMissing = (website: IWebsite, t: TFunction) => {
 
   return [...groups]
 }
-
-const StatusBadge = ({ isPublished, text }: { isPublished: boolean; text: string }) => (
-  <span
-    className={`font-poppins text-xs rounded-xl px-3 py-1 ${isPublished ? 'bg-green-transparent text-green' : 'bg-orange-transparent text-dark-orange'}`}
-  >
-    {text}
-  </span>
-)
 
 /**
  * The state of the site (draft or published) and what is missing before it can be published.
@@ -90,7 +83,7 @@ const PublishPanel = ({ website }: { website: IWebsite }) => {
       title={t('website:publish.title')}
       element={
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <StatusBadge isPublished={isPublished} text={t(`website:status.${website.status}`)} />
+          <Badge text={t(`website:status.${website.status}`)} tone={isPublished ? 'green' : 'orange'} />
           {isPublished ? (
             <MainButton text={t('website:publish.unpublish')} variant="alternative" size="small" htmlType="button" onClick={handleUnpublish} />
           ) : (
@@ -109,8 +102,10 @@ const PublishPanel = ({ website }: { website: IWebsite }) => {
           <Paragraph text={isPublished ? t('website:publish.incompletePublished') : t('website:publish.missingTitle')} size="sm" color="red" weight="medium" />
           <ul className="mt-2 flex flex-col gap-y-1">
             {groupMissing(website, t).map(([group, items]) => (
-              <li key={group} className="font-poppins text-sm text-red">
-                <span className="font-medium">{group}:</span> {items.join(', ')}
+              <li key={group}>
+                <Paragraph size="sm" color="red">
+                  <strong>{group}:</strong> {items.join(', ')}
+                </Paragraph>
               </li>
             ))}
           </ul>

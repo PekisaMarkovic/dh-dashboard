@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 import SectionTypeIcon from '@/src/components/website/SectionTypeIcon'
 import { IWebsiteSection } from '@/src/interfaces'
 import { sectionLabel } from '@/src/utils/website'
@@ -19,11 +20,13 @@ const ExistingSectionItem = ({ section, disabled, onClick }: Props) => {
         type="button"
         disabled={disabled}
         onClick={onClick}
-        className="font-poppins flex w-full items-center gap-3 rounded-md border-1 border-solid border-light-grey-alt px-3 py-2 text-left text-sm text-black hover:border-green disabled:opacity-50"
+        className="flex w-full items-center gap-3 rounded-md border-1 border-solid border-light-grey-alt px-3 py-2 text-left hover:border-green disabled:opacity-50"
       >
         <SectionTypeIcon type={section.type} />
-        <span className="flex-1">{sectionLabel(section, t)}</span>
-        <span className="text-xs text-dark-grey">{t(`website:types.${section.type}`)}</span>
+        <div className="min-w-0 flex-1">
+          <Paragraph text={sectionLabel(section, t)} size="sm" color="black" noWrap />
+        </div>
+        <Paragraph text={t(`website:types.${section.type}`)} color="dark-grey" />
       </button>
     </li>
   )

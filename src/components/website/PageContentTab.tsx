@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import MainButton from '@/src/components/core/buttons/MainButton'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import ExistingSectionItem from '@/src/components/website/ExistingSectionItem'
@@ -107,18 +108,14 @@ const PageContentTab = ({ website, page, onEditSection }: Props) => {
             </>
           )}
 
-          <button type="button" onClick={() => setIsAdding(false)} className="font-poppins mt-4 text-sm text-dark-grey hover:text-black">
-            {t('website:content.cancel')}
-          </button>
+          <div className="mt-4">
+            <MainButton text={t('website:content.cancel')} variant="text" size="extra-small" onClick={() => setIsAdding(false)} />
+          </div>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => setIsAdding(true)}
-          className="font-poppins mt-3 w-full rounded-lg border-1 border-dashed border-green py-4 text-sm text-green hover:bg-green-transparent"
-        >
-          + {t('website:content.add')}
-        </button>
+        <div className="mt-3">
+          <MainButton text={`+ ${t('website:content.add')}`} variant="dashed" size="full" onClick={() => setIsAdding(true)} />
+        </div>
       )}
     </div>
   )

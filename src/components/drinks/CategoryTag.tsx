@@ -1,3 +1,6 @@
+import LineIcon from '@/src/components/core/icons/LineIcon'
+import { ICONS } from '@/src/components/core/icons/paths'
+
 type Props = {
   name: string
   isOn: boolean
@@ -15,11 +18,7 @@ const CategoryTag = ({ name, isOn, onClick }: Props) => (
       isOn ? 'border-green bg-green-transparent font-medium text-green' : 'border-light-grey-alt bg-light-grey-transparent text-dark-grey hover:border-green hover:text-green'
     }`}
   >
-    {isOn && (
-      <svg viewBox="0 0 24 24" className="h-3 w-3 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="m5 12 5 5 9-10" />
-      </svg>
-    )}
+    {isOn && <LineIcon d={ICONS.check} className="h-3 w-3" strokeWidth={3} />}
     {name}
   </button>
 )

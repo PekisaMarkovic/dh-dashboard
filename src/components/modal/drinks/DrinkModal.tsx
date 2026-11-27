@@ -18,6 +18,9 @@ import { useAppDispatch, useAppSelector } from '@/src/state/redux-hooks/reduxHoo
 import { removeModal, selectModal } from '@/src/state/shared/modal'
 import { formatPrice, parsePriceInput } from '@/src/utils/money'
 import { DRINK_VALIDATION } from '@/src/validations/inventory/drink'
+import ErrorMessage from '@/src/components/core/typography/ErrorMessage'
+import FieldTitle from '@/src/components/core/typography/FieldTitle'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 
 const NO_WAREHOUSES: IWarehouse[] = []
 const NO_CATEGORIES: ICategory[] = []
@@ -229,7 +232,7 @@ const DrinkModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-2">
-            <span className="text-sm font-medium text-gray-700">{t('warehouse:drinkModal.categories')}</span>
+            <FieldTitle text={t('warehouse:drinkModal.categories')} />
             {categories.length ? (
               <div className="flex flex-wrap gap-1.5">
                 {categories.map((category) => {
@@ -246,12 +249,12 @@ const DrinkModal = () => {
                 })}
               </div>
             ) : (
-              <p className="text-xs text-gray-500">{t('warehouse:drinkModal.noCategories')}</p>
+              <Paragraph text={t('warehouse:drinkModal.noCategories')} color="dark-grey" />
             )}
           </div>
 
           <div className="flex flex-col gap-y-2">
-            <span className="text-sm font-medium text-gray-700">{t('warehouse:drinkModal.image')}</span>
+            <FieldTitle text={t('warehouse:drinkModal.image')} />
             <div className="flex items-start gap-x-4">
               <DrinkImage size="lg" src={shownImage} alt={(!preview && drink?.image?.altText) || drink?.name || ''} />
               <div className="flex flex-col gap-y-2">
@@ -267,10 +270,8 @@ const DrinkModal = () => {
                     <MainButton text={t('warehouse:drinkModal.imageRemove')} variant="outlined" size="small" htmlType="button" onClick={handleRemoveImage} />
                   )}
                 </div>
-                <p className="text-xs text-gray-500">
-                  {t('warehouse:drinkModal.imageHint', { size: IMAGE_RECOMMENDED_SIZE, maxMb: IMAGE_MAX_MB })}
-                </p>
-                {imageError && <p className="text-xs text-red-600">{imageError}</p>}
+                <Paragraph text={t('warehouse:drinkModal.imageHint', { size: IMAGE_RECOMMENDED_SIZE, maxMb: IMAGE_MAX_MB })} color="dark-grey" />
+                {imageError && <ErrorMessage message={imageError} />}
               </div>
             </div>
             <input ref={imageInput} type="file" accept={IMAGE_ACCEPT} onChange={handleImage} className="hidden" />

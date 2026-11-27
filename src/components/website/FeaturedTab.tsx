@@ -2,7 +2,11 @@ import { KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from 'reac
 import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import MainButton from '@/src/components/core/buttons/MainButton'
+import LineIcon from '@/src/components/core/icons/LineIcon'
+import { ICONS } from '@/src/components/core/icons/paths'
+import Badge from '@/src/components/core/indicators/Badge'
 import InputText from '@/src/components/core/input/InputText'
+import FieldTitle from '@/src/components/core/typography/FieldTitle'
 import Paragraph from '@/src/components/core/typography/Paragraph'
 import DataSection from '@/src/components/section/DataSection'
 import { useDrinksQuery } from '@/src/hooks/queries/use-drink-queries'
@@ -148,24 +152,16 @@ const FeaturedTab = ({ section }: { section: IWebsiteSection }) => {
 
           <div className="flex flex-col gap-y-3">
             <div className="flex items-center justify-between gap-2">
-              <span className="font-poppins text-sm font-medium text-black">
-                {t('website:featured.picked')}
-                <span className="text-red"> *</span>
-              </span>
-              <span className={`font-poppins rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                  isOdd ? 'bg-red-transparent text-red' : isFull ? 'bg-green text-white' : 'bg-green-transparent text-green'
-                }`}>
-                {picked.length}/{MAX_PICKED}
-              </span>
+              <FieldTitle text={t('website:featured.picked')} isRequired />
+              <Badge text={`${picked.length}/${MAX_PICKED}`} tone={isOdd ? 'red' : isFull ? 'solid-green' : 'green'} />
             </div>
 
             {/* the drink picker: opens on focus with the first drinks, typing searches */}
             <div ref={boxRef} className="relative">
               <div className="relative">
-                <svg viewBox="0 0 24 24" className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-grey" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-3.5-3.5" />
-                </svg>
+                <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-grey">
+                  <LineIcon d={ICONS.search} />
+                </span>
                 <input
                   type="search"
                   role="combobox"
@@ -184,30 +180,23 @@ const FeaturedTab = ({ section }: { section: IWebsiteSection }) => {
                   placeholder={t('website:featured.search')}
                   className="font-poppins h-12 w-full rounded-xs-plus border-1 border-solid border-grey bg-white pl-11 pr-10 text-sm text-black focus:border-green focus:outline-none"
                 />
-                <svg
-                  viewBox="0 0 24 24"
-                  className={`pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-grey transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
+                <span className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-grey transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+                  <LineIcon d={ICONS.down} />
+                </span>
               </div>
 
               {isOpen && (
                 <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-sm border-1 border-solid border-light-grey-alt bg-white shadow-lg">
                   {!debouncedSearch && options.length > 0 && (
-                    <p className="font-poppins border-b-1 border-solid border-light-grey-alt bg-light-grey-transparent px-3 py-2 text-xs text-dark-grey">
-                      {t('website:featured.firstDrinks')}
-                    </p>
+                    <div className="border-b-1 border-solid border-light-grey-alt bg-light-grey-transparent px-3 py-2">
+                      <Paragraph text={t('website:featured.firstDrinks')} color="dark-grey" />
+                    </div>
                   )}
                   <ul id={listId} role="listbox" aria-multiselectable="true" className="max-h-80 overflow-y-auto">
                     {drinksQuery.isLoading ? (
-                      <li className="font-poppins px-3 py-3 text-sm text-dark-grey">{t('website:featured.loading')}</li>
+                      <li className="px-3 py-3">
+                        <Paragraph text={t('website:featured.loading')} size="sm" color="dark-grey" />
+                      </li>
                     ) : options.length ? (
                       options.map((drink, index) => {
                         const isAdded = isPicked(drink.drinkId)
@@ -225,13 +214,15 @@ const FeaturedTab = ({ section }: { section: IWebsiteSection }) => {
                         )
                       })
                     ) : (
-                      <li className="font-poppins px-3 py-3 text-sm text-dark-grey">{t('website:featured.noResults')}</li>
+                      <li className="px-3 py-3">
+                        <Paragraph text={t('website:featured.noResults')} size="sm" color="dark-grey" />
+                      </li>
                     )}
                   </ul>
                   {isFull && (
-                    <p className="font-poppins border-t-1 border-solid border-light-grey-alt bg-light-grey-transparent px-3 py-2 text-xs text-dark-grey">
-                      {t('website:featured.pickedLimit', { max: MAX_PICKED })}
-                    </p>
+                    <div className="border-t-1 border-solid border-light-grey-alt bg-light-grey-transparent px-3 py-2">
+                      <Paragraph text={t('website:featured.pickedLimit', { max: MAX_PICKED })} color="dark-grey" />
+                    </div>
                   )}
                 </div>
               )}

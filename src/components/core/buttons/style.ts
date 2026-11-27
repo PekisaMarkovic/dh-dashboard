@@ -53,6 +53,11 @@ export const style = ({
       classes.push('text-green bg-white hover:text-white hover:bg-green border-green border-1 border-solid')
       break
 
+    // an empty place to add something new (e.g. "+ Dodaj sekciju")
+    case 'dashed':
+      classes.push('text-green bg-white hover:bg-green-transparent border-green border-1 border-dashed')
+      break
+
     case 'alternative':
       classes.push('text-black border-grey border-1 bg-transparent  hover:bg-lighy-grey border-solid')
       break

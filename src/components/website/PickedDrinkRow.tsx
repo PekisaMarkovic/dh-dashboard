@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next'
+import IconButton from '@/src/components/core/buttons/IconButton'
+import { ICONS } from '@/src/components/core/icons/paths'
+import Badge from '@/src/components/core/indicators/Badge'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 import DrinkImage from '@/src/components/drinks/DrinkImage'
-import IconButton from '@/src/components/website/IconButton'
 import { IWebsiteSection } from '@/src/interfaces'
 
 type Props = {
@@ -19,21 +22,15 @@ const PickedDrinkRow = ({ drink, position, isFirst, isLast, onMove, onRemove }: 
 
   return (
     <li className="flex items-center gap-3 rounded-lg border-1 border-solid border-light-grey-alt bg-white p-2 pr-3 transition-shadow hover:shadow-md">
-      <span className="font-poppins flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-transparent text-xs font-semibold text-green">
-        {position}
-      </span>
+      <Badge text={String(position)} tone="green" />
       <DrinkImage src={drink.imageUrl} alt={drink.name} size="md" />
-      <span className="font-poppins min-w-0 flex-1 truncate text-sm font-medium text-black">{drink.name}</span>
+      <div className="min-w-0 flex-1">
+        <Paragraph text={drink.name} size="sm" color="black" weight="medium" noWrap />
+      </div>
       <span className="flex shrink-0 items-center gap-1.5">
-        <IconButton label={t('website:featured.up')} disabled={isFirst} onClick={() => onMove(-1)}>
-          <path d="m18 15-6-6-6 6" />
-        </IconButton>
-        <IconButton label={t('website:featured.down')} disabled={isLast} onClick={() => onMove(1)}>
-          <path d="m6 9 6 6 6-6" />
-        </IconButton>
-        <IconButton danger label={t('website:featured.remove')} onClick={onRemove}>
-          <path d="M18 6 6 18M6 6l12 12" />
-        </IconButton>
+        <IconButton label={t('website:featured.up')} icon={ICONS.up} disabled={isFirst} onClick={() => onMove(-1)} />
+        <IconButton label={t('website:featured.down')} icon={ICONS.down} disabled={isLast} onClick={() => onMove(1)} />
+        <IconButton danger label={t('website:featured.remove')} icon={ICONS.close} onClick={onRemove} />
       </span>
     </li>
   )

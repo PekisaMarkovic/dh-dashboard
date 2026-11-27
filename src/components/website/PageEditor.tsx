@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import Badge from '@/src/components/core/indicators/Badge'
 import TabBar from '@/src/components/core/navigation/TabBar'
 import Heading from '@/src/components/core/typography/Heading'
 import Paragraph from '@/src/components/core/typography/Paragraph'
@@ -29,10 +30,7 @@ const PageEditor = ({ website, page, tab, onTab, onEditSection, onDeleted }: Pro
           <Heading variant="2" text={page.title} size="lg" color="black" />
           <Paragraph text={`/${page.slug}`} size="sm" className="mt-1" />
         </div>
-        <span className={`font-poppins flex items-center gap-2 text-sm ${isPublished ? 'text-green' : 'text-dark-orange'}`}>
-          <span className={`h-2 w-2 rounded-full ${isPublished ? 'bg-green' : 'bg-orange'}`} />
-          {isPublished ? t('website:page.statusPublished') : t('website:page.statusDraft')}
-        </span>
+        <Badge text={isPublished ? t('website:page.statusPublished') : t('website:page.statusDraft')} tone={isPublished ? 'green' : 'orange'} />
       </div>
 
       <div className="mt-4">

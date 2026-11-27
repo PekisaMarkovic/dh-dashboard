@@ -1,16 +1,17 @@
-import { ReactNode } from 'react'
+import LineIcon from '@/src/components/core/icons/LineIcon'
 
 type Props = {
+  // for screen readers and the tooltip
   label: string
+  // the path of a 24 x 24 line icon
+  icon: string
   onClick: () => void
   disabled?: boolean
   danger?: boolean
-  // the paths of a 24 x 24 stroke icon
-  children: ReactNode
 }
 
-// a small square button with a line icon (move, show, edit, remove)
-const IconButton = ({ label, onClick, disabled, danger, children }: Props) => (
+// a small square button with a line icon (move, show, edit, remove, add)
+const IconButton = ({ label, icon, onClick, disabled, danger }: Props) => (
   <button
     type="button"
     onClick={onClick}
@@ -21,9 +22,7 @@ const IconButton = ({ label, onClick, disabled, danger, children }: Props) => (
       danger ? 'text-red hover:border-red hover:bg-red/5' : 'text-grey-secondary hover:border-green hover:text-green'
     }`}
   >
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {children}
-    </svg>
+    <LineIcon d={icon} />
   </button>
 )
 

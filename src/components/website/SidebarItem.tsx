@@ -1,4 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import LineIcon from '@/src/components/core/icons/LineIcon'
+import WarningDot from '@/src/components/core/indicators/WarningDot'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 
 type Props = {
   // the path of a 24 x 24 line icon
@@ -15,21 +18,18 @@ type Props = {
 // one item of the left column of "Web sajt": the settings of the site, the messages or a page
 const SidebarItem = ({ icon, label, isActive, onClick, note, hasWarning }: Props) => {
   const { t } = useTranslation(['website'])
+  const color = isActive ? 'green' : 'black'
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`font-poppins flex w-full items-center gap-2 rounded-md px-3 py-3 text-left text-sm ${
-        isActive ? 'bg-green-transparent text-green' : 'text-black hover:bg-light-grey-transparent'
-      }`}
+      className={`flex w-full items-center gap-2 rounded-md px-3 py-3 text-left ${isActive ? 'bg-green-transparent text-green' : 'text-black hover:bg-light-grey-transparent'}`}
     >
-      <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d={icon} />
-      </svg>
-      <span className="truncate">{label}</span>
-      {note && <span className="text-xs text-dark-grey">({note})</span>}
-      {hasWarning && <span aria-label={t('website:content.incomplete')} className="ml-auto inline-block h-2 w-2 shrink-0 rounded-full bg-orange" />}
+      <LineIcon d={icon} />
+      <Paragraph text={label} size="sm" color={color} noWrap />
+      {note && <Paragraph text={`(${note})`} color="dark-grey" />}
+      {hasWarning && <WarningDot label={t('website:content.incomplete')} className="ml-auto" />}
     </button>
   )
 }

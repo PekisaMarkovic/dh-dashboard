@@ -2,6 +2,8 @@ import { EditorContent, useEditor, useEditorState } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { ReactNode, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import ErrorMessage from '@/src/components/core/typography/ErrorMessage'
+import FieldTitle from '@/src/components/core/typography/FieldTitle'
 
 type Props = {
   // HTML
@@ -81,10 +83,7 @@ const RichTextEditor = ({ value, onChange, label, isRequired, error }: Props) =>
 
   return (
     <div className="flex flex-col gap-y-2">
-      <span className="font-poppins text-sm font-medium text-black">
-        {label}
-        {isRequired && <span className="text-red"> *</span>}
-      </span>
+      <FieldTitle text={label} isRequired={isRequired} />
       <div className={`overflow-hidden rounded-xs-plus border-1 border-solid bg-white ${error ? 'border-red' : 'border-grey focus-within:border-green'}`}>
         <div role="toolbar" aria-label={label} className="flex flex-wrap gap-1 border-b-1 border-solid border-light-grey-alt bg-grey-100 p-1">
           <ToolButton label={t('g:richText.h2')} isActive={active?.h2} onClick={() => chain().toggleHeading({ level: 2 }).run()}>
@@ -123,7 +122,7 @@ const RichTextEditor = ({ value, onChange, label, isRequired, error }: Props) =>
         </div>
         <EditorContent editor={editor} />
       </div>
-      {error && <p className="font-poppins text-xs text-red">{error}</p>}
+      {error && <ErrorMessage message={error} />}
     </div>
   )
 }

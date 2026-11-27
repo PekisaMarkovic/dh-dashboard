@@ -3,7 +3,7 @@ import { style } from '@/src/components/core/buttons/style'
 import { FontFamily } from '@/src/interfaces'
 import GeneralIcons from '@/src/icons/general'
 
-export type Variant = 'contained' | 'outlined' | 'text' | 'alternative' | 'primary' | 'error'
+export type Variant = 'contained' | 'outlined' | 'text' | 'alternative' | 'primary' | 'error' | 'dashed'
 
 export type Size = 'extra-small' | 'small' | 'medium' | 'large' | 'full'
 

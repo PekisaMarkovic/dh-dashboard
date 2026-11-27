@@ -58,3 +58,6 @@ export const PAGE_VALIDATION = yupResolver(
     slug: Yup.string().trim().max(100, 'slug').matches(SLUG_PATTERN, { message: 'slug', excludeEmptyString: true }),
   }),
 )
+
+// a new page: only its name, the address is made from it
+export const NEW_PAGE_VALIDATION = yupResolver(Yup.object({ title: required('pageTitle', 100) }))

@@ -32,7 +32,7 @@ const ContactRow = ({ contact }: { contact: IWebsiteContact }) => {
         )}
       </TableCell>
       <TableCell label={t('website:contacts.message')} className="col-span-2">
-        <p className="font-poppins text-sm text-black whitespace-pre-wrap break-words">{contact.message || t('website:contacts.noMessage')}</p>
+        <Paragraph text={contact.message || t('website:contacts.noMessage')} size="sm" color="black" className="whitespace-pre-wrap break-words" />
       </TableCell>
     </DefaultTableRowContainer>
   )

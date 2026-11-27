@@ -1,4 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import LineIcon from '@/src/components/core/icons/LineIcon'
+import { ICONS } from '@/src/components/core/icons/paths'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 import DrinkImage from '@/src/components/drinks/DrinkImage'
 import { IDrink } from '@/src/interfaces'
 
@@ -32,19 +35,14 @@ const FeaturedDrinkOption = ({ drink, isAdded, isDisabled, isActive, onToggle, o
       }`}
     >
       <DrinkImage src={drink.image?.url} alt={drink.name} />
-      <span className="flex min-w-0 flex-1 flex-col">
-        <span className="font-poppins truncate text-sm font-medium text-black">{drink.name}</span>
-        <span className="font-poppins truncate text-xs text-dark-grey">{drink.code}</span>
-      </span>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <Paragraph text={drink.name} size="sm" color="black" weight="medium" noWrap />
+        <Paragraph text={drink.code} color="dark-grey" noWrap />
+      </div>
       {isAdded ? (
-        <span className="font-poppins flex items-center gap-1 text-xs font-medium text-green">
-          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="m5 12 5 5 9-10" />
-          </svg>
-          {t('website:featured.added')}
-        </span>
+        <Paragraph text={t('website:featured.added')} color="green" weight="medium" leftIcon={<LineIcon d={ICONS.check} strokeWidth={2.5} />} />
       ) : (
-        !isDisabled && <span className="font-poppins text-xs font-medium text-green">+ {t('website:featured.add')}</span>
+        !isDisabled && <Paragraph text={`+ ${t('website:featured.add')}`} color="green" weight="medium" />
       )}
     </li>
   )

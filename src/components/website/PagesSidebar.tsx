@@ -1,10 +1,17 @@
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
+import { FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import IconButton from '@/src/components/core/buttons/IconButton'
+import MainButton from '@/src/components/core/buttons/MainButton'
+import { ICONS } from '@/src/components/core/icons/paths'
+import InputText from '@/src/components/core/input/InputText'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 import SidebarItem from '@/src/components/website/SidebarItem'
 import { useWebsiteAction } from '@/src/hooks/use-save-website'
 import { IWebsite } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 import { isPageMissing } from '@/src/utils/website'
+import { NEW_PAGE_VALIDATION } from '@/src/validations/website/website'
 
 type Props = {
   website: IWebsite
@@ -28,28 +35,19 @@ const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSetting
   const run = useWebsiteAction()
   const { createPage } = useWebsiteService()
   const [isAdding, setIsAdding] = useState(false)
-  const [title, setTitle] = useState('')
-  const [isBusy, setIsBusy] = useState(false)
+  const methods = useForm<FieldValues>({ resolver: NEW_PAGE_VALIDATION as unknown as Resolver<FieldValues>, defaultValues: { title: '' } })
 
-  const handleAdd = async (event: FormEvent) => {
-    event.preventDefault()
-
-    if (!title.trim()) return
-
-    setIsBusy(true)
-
+  const handleAdd: SubmitHandler<FieldValues> = async ({ title }) => {
     let created: number | undefined
     const isDone = await run(async () => {
-      const site = await createPage(title.trim())
+      const site = await createPage(String(title).trim())
       // the new page is the one with the highest id
       created = Math.max(...site.pages.map((page) => page.pageId))
     }, t('website:pages.created'))
 
-    setIsBusy(false)
-
     if (isDone && created) {
       setIsAdding(false)
-      setTitle('')
+      methods.reset({ title: '' })
       onPage(created)
     }
   }
@@ -68,37 +66,17 @@ const PagesSidebar = ({ website, activePageId, activeSite, onPage, onSiteSetting
       <div className="my-3 border-t-1 border-solid border-light-grey-alt" />
 
       <div className="flex items-center justify-between px-1 pb-2">
-        <span className="font-poppins text-xs font-medium uppercase tracking-wide text-dark-grey">{t('website:pages.title')}</span>
-        <button
-          type="button"
-          onClick={() => setIsAdding((value) => !value)}
-          aria-label={t('website:pages.add')}
-          title={t('website:pages.add')}
-          className="font-poppins flex h-7 w-7 items-center justify-center rounded-md text-lg text-black hover:bg-white"
-        >
-          +
-        </button>
+        <Paragraph text={t('website:pages.title')} color="dark-grey" weight="medium" textTransform="uppercase" />
+        <IconButton label={t('website:pages.add')} icon={ICONS.plus} onClick={() => setIsAdding((value) => !value)} />
       </div>
 
       {isAdding && (
-        <form onSubmit={(event) => void handleAdd(event)} className="mb-2 flex flex-col gap-2 px-1">
-          <input
-            autoFocus
-            value={title}
-            maxLength={100}
-            onChange={(event) => setTitle(event.target.value)}
-            placeholder={t('website:pages.titlePlh')}
-            aria-label={t('website:pages.titlePlh')}
-            className="font-poppins h-10 w-full rounded-xs-plus border-1 border-solid border-grey bg-white px-3 text-sm text-black focus:border-green focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={isBusy || !title.trim()}
-            className="font-poppins h-9 rounded-md bg-green text-sm text-white disabled:opacity-50"
-          >
-            {t('website:pages.create')}
-          </button>
-        </form>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(handleAdd)} className="mb-3 flex flex-col gap-3 px-1 pt-2">
+            <InputText isRequired name="title" label={t('website:pages.titlePlh')} placeholder={t('website:page.titlePlh')} />
+            <MainButton text={t('website:pages.create')} variant="contained" size="full" htmlType="submit" disabled={methods.formState.isSubmitting} />
+          </form>
+        </FormProvider>
       )}
 
       <nav aria-label={t('website:pages.title')} className="flex flex-col gap-1">

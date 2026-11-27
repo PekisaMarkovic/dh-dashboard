@@ -7,6 +7,9 @@ import { useRefreshData } from '@/src/hooks/queries/use-refresh-data'
 import { IWebsiteImage } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 import { formatFileSize } from '@/src/utils/files'
+import ErrorMessage from '@/src/components/core/typography/ErrorMessage'
+import FieldTitle from '@/src/components/core/typography/FieldTitle'
+import Paragraph from '@/src/components/core/typography/Paragraph'
 
 // the same numbers as the api (storage.constants.ts)
 const IMAGE_MAX_MB = 5
@@ -90,10 +93,7 @@ const WebsiteImageField = ({ path, kind, image, label, hint, previewClass = 'asp
 
   return (
     <div className="flex flex-col gap-y-3">
-      <span className="font-poppins text-sm font-medium text-black">
-        {label}
-        {isRequired && <span className="text-red"> *</span>}
-      </span>
+      <FieldTitle text={label} isRequired={isRequired} />
       <div className="flex flex-wrap items-start gap-4">
         {image ? (
           <div className={`w-full ${MAX_PREVIEW_WIDTH[kind]} flex flex-col gap-y-1`}>
@@ -108,15 +108,13 @@ const WebsiteImageField = ({ path, kind, image, label, hint, previewClass = 'asp
                 className="block h-auto w-full object-contain"
               />
             </a>
-            <span className="font-poppins text-xs text-dark-grey">
-              {t('website:image.info', { width: image.width, height: image.height, size: formatFileSize(image.size) })}
-            </span>
+            <Paragraph text={t('website:image.info', { width: image.width, height: image.height, size: formatFileSize(image.size) })} color="dark-grey" />
           </div>
         ) : (
           <div
             className={`${previewClass} flex items-center justify-center overflow-hidden rounded-sm border-1 border-solid bg-grey-100 ${isRequired ? 'border-red' : 'border-light-grey-alt'}`}
           >
-            <span className="font-poppins text-xs text-grey">{t('website:image.noImage')}</span>
+            <Paragraph text={t('website:image.noImage')} color="grey" />
           </div>
         )}
         <div className="flex min-w-[220px] flex-1 flex-col gap-y-2">
@@ -140,9 +138,9 @@ const WebsiteImageField = ({ path, kind, image, label, hint, previewClass = 'asp
               />
             )}
           </div>
-          <p className="font-poppins text-xs text-dark-grey">{hint}</p>
-          {!image && isRequired && <p className="font-poppins text-sm text-red">{t('website:image.required')}</p>}
-          {error && <p className="font-poppins text-xs text-red">{error}</p>}
+          <Paragraph text={hint} color="dark-grey" />
+          {!image && isRequired && <ErrorMessage message={t('website:image.required')} />}
+          {error && <ErrorMessage message={error} />}
         </div>
       </div>
       <input ref={input} type="file" accept={IMAGE_ACCEPT} onChange={handleFile} className="hidden" />

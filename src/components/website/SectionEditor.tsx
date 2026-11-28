@@ -24,7 +24,7 @@ type TextsConfig = {
 }
 
 // the texts and the picture of every kind of section, except the recommended drinks and the free text (they have their own forms)
-const TEXTS: Record<Exclude<SectionType, 'featured' | 'text'>, TextsConfig> = {
+const TEXTS: Record<Exclude<SectionType, 'featured' | 'text' | 'contact'>, TextsConfig> = {
   hero: {
     fields: [
       { name: 'title', label: 'website:fields.title', placeholder: 'website:placeholders.hero.title' },
@@ -71,7 +71,7 @@ const SectionEditor = ({ section, pages, onBack }: Props) => {
   const run = useWebsiteAction()
   const dispatch = useAppDispatch()
   const { updateSection, deleteSection } = useWebsiteService()
-  const config = section.type === 'featured' || section.type === 'text' ? null : TEXTS[section.type]
+  const config = section.type === 'featured' || section.type === 'text' || section.type === 'contact' ? null : TEXTS[section.type]
 
   const handleDelete = () =>
     dispatch(
@@ -126,6 +126,11 @@ const SectionEditor = ({ section, pages, onBack }: Props) => {
             />
           </DataSection>
         </>
+      ) : section.type === 'contact' ? (
+        // nothing to edit: the phone, Instagram and map come from the general data of the site
+        <DataSection title={t('website:types.contact')}>
+          <Paragraph text={t('website:typeHints.contact')} size="sm" color="grey" />
+        </DataSection>
       ) : section.type === 'text' ? (
         <TextSectionForm section={section} />
       ) : (

@@ -181,14 +181,16 @@
     "featured": "Recommended",
     "story": "Story",
     "info": "Info",
-    "text": "Text"
+    "text": "Text",
+    "contact": "Contact"
   },
   "typeHints": {
     "hero": "The first thing a visitor sees at the top: a big title, a text and a button over the background picture.",
     "featured": "The title of the section with drinks on the home page and the drinks it shows.",
     "story": "The section that introduces your store: a title, two paragraphs, a button and a picture.",
     "info": "A section that calls visitors to action (a deal, an event, a service, a message): a title, a text, a button and a picture.",
-    "text": "Free text: headings, bold and italic text, lists, quotes and links. Write here or paste text from another site or Word, the formatting stays."
+    "text": "Free text: headings, bold and italic text, lists, quotes and links. Write here or paste text from another site or Word, the formatting stays.",
+    "contact": "The contact details (phone, Instagram, map) and the contact form, the same as at the bottom of the home page. Nothing to set: the details come from the general data of the site."
   },
   "section": {
     "back": "Back to the page",

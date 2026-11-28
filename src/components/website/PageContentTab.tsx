@@ -11,7 +11,7 @@ import { IWebsite, IWebsitePage, SectionType } from '@/src/interfaces'
 import { useWebsiteService } from '@/src/services/use-website-service'
 import { isSectionMissing } from '@/src/utils/website'
 
-const SECTION_TYPES: SectionType[] = ['hero', 'featured', 'story', 'info', 'text']
+const SECTION_TYPES: SectionType[] = ['hero', 'featured', 'story', 'info', 'text', 'contact']
 
 type Props = {
   website: IWebsite
@@ -46,7 +46,11 @@ const PageContentTab = ({ website, page, onEditSection }: Props) => {
 
   const toggle = (index: number) => void save(items.map((item, i) => (i === index ? { ...item, isVisible: !item.isVisible } : item)))
 
-  const remove = (index: number) => void save(items.filter((_, i) => i !== index), t('website:content.removed'))
+  const remove = (index: number) =>
+    void save(
+      items.filter((_, i) => i !== index),
+      t('website:content.removed'),
+    )
 
   const addNew = async (type: SectionType) => {
     setIsBusy(true)
@@ -102,7 +106,12 @@ const PageContentTab = ({ website, page, onEditSection }: Props) => {
               <Paragraph text={t('website:content.existingHint')} size="sm" className="mt-1" />
               <ul className="mt-2 flex flex-col gap-2">
                 {others.map((section) => (
-                  <ExistingSectionItem key={section.sectionId} section={section} disabled={isBusy} onClick={() => void addExisting(section.sectionId)} />
+                  <ExistingSectionItem
+                    key={section.sectionId}
+                    section={section}
+                    disabled={isBusy}
+                    onClick={() => void addExisting(section.sectionId)}
+                  />
                 ))}
               </ul>
             </>

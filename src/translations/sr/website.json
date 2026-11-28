@@ -181,14 +181,16 @@
     "featured": "Preporučeno",
     "story": "Priča",
     "info": "Info",
-    "text": "Tekst"
+    "text": "Tekst",
+    "contact": "Kontakt"
   },
   "typeHints": {
     "hero": "Prvo što posetilac vidi na vrhu stranice: veliki naslov, tekst i dugme preko slike u pozadini.",
     "featured": "Naslov sekcije sa pićima na početnoj strani i pića koja se u njoj prikazuju.",
     "story": "Sekcija koja predstavlja vašu prodavnicu: naslov, dva pasusa, dugme i slika.",
     "info": "Sekcija koja poziva posetioce na akciju (akcija, događaj, usluga, poruka): naslov, tekst, dugme i slika.",
-    "text": "Slobodan tekst: naslovi, podebljan i iskošen tekst, liste, citati i linkovi. Možete pisati ovde ili nalepiti tekst sa drugog sajta ili iz Word-a, formatiranje ostaje."
+    "text": "Slobodan tekst: naslovi, podebljan i iskošen tekst, liste, citati i linkovi. Možete pisati ovde ili nalepiti tekst sa drugog sajta ili iz Word-a, formatiranje ostaje.",
+    "contact": "Kontakt podaci (telefon, Instagram, mapa) i kontakt forma, isto kao na dnu početne strane. Nema šta da se podešava: podaci se uzimaju iz opštih podataka sajta."
   },
   "section": {
     "back": "Nazad na stranicu",

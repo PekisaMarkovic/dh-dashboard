@@ -10,7 +10,7 @@ export interface IWebsiteImage {
   altText: string | null
 }
 
-export type SectionType = 'hero' | 'featured' | 'story' | 'info' | 'text'
+export type SectionType = 'hero' | 'featured' | 'story' | 'info' | 'text' | 'contact'
 
 // the texts of a section (only the ones of its type), a missing text means the site leaves it out
 export interface ISectionContent {

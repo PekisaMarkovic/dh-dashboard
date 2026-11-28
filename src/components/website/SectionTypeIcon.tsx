@@ -8,6 +8,7 @@ const TYPE_ICONS: Record<SectionType, string> = {
   story: 'M4 6h16M4 10h16M4 14h10M4 18h12',
   info: 'M3 11v2l13 5V6L3 11zM16 9h2a3 3 0 0 1 0 6h-2',
   text: 'M4 7V4h16v3M9 20h6M12 4v16',
+  contact: 'M3 6h18v12H3zM3 6l9 7 9-7',
 }
 
 const SectionTypeIcon = ({ type }: { type: SectionType }) => (
